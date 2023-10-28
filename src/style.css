@@ -1,0 +1,170 @@
+/* Montserrat Light */
+@font-face {
+  font-family: 'Montserrat Light';
+  font-style: normal;
+  font-weight: 300;
+  src: local(''),
+       url('/fonts/Montserrat-Light.ttf') format('truetype');
+}
+
+/* Dark mode */
+
+:root {
+  font-family: 'Montserrat Light';
+  line-height: 1.5;
+  font-weight: 400;
+
+  --page-background: #FFFFFF;
+
+  color-scheme: light dark; /* light dark */
+  color: rgba(0, 0,0 , 0.87);
+  background-color: var(--page-background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  font-weight: 400;
+  color: darkslategrey;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: dimgrey;
+}
+
+:fullscreen, ::backdrop {
+  background-color: var(--page-background)
+}
+
+/*
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+*/
+
+/* Light mode */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: var(--page-background);
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+#app {
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+
+.logo {
+  height: 3em;
+  padding: 3em;
+  will-change: filter;
+  transition: filter 200ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em dimgrey);
+}
+.logo.vanilla:hover {
+  filter: drop-shadow(0 0 2em #00000073);
+}
+
+
+#pageOverlay {
+  z-index: 100;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+  height: 100%;
+	text-align: center;
+
+  padding-top: 3em;
+}
+
+div#intro {
+
+	z-index: 100;
+  padding-top: 0;
+
+}
+
+div#controls {
+
+  z-index: 1000;
+  position: fixed;
+  left: 5vw;
+  bottom: 10vh;
+  opacity: 0;
+  visibility: hidden;
+
+}
+
+#scene {
+  z-index: 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100vh;
+  width: 100%;
+}
+
+#openCloseControlPanelButton {
+
+  background-color: whitesmoke;
+  border: solid .5em pink;
+  box-shadow: 0 0 .5em .5em purple
+
+}
+
+#openCloseControlPanelButton:hover {
+
+  background-color: whitesmoke;
+  border-color: rgb(255, 134, 154);
+
+}
+
+p#datenschutz:hover {
+  opacity: 1;
+  transition:opacity 1s;
+}
