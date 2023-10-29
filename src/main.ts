@@ -60,7 +60,8 @@ import { KreiseTorus } from './kreiseTorus.ts'
 // End of imports
 //
 
-document.title = 'Krei.se 0.1.7'
+document.title = 'Krei.se 0.1.8 Doh!'
+
 
 const appDiv = document.querySelector<HTMLDivElement>('#app') as HTMLDivElement
 
@@ -86,6 +87,9 @@ logoImg.classList.add('vanilla')
 
 introDiv.append(logoImg)
 
+const infoParagraph: HTMLParagraphElement = document.createElement('p')
+infoParagraph.setAttribute('id', 'info')
+
 const datenschutzParagraph: HTMLParagraphElement = document.createElement('p')
 datenschutzParagraph.setAttribute('id', 'datenschutz')
 const datenschutzLink: HTMLAnchorElement = document.createElement('a')
@@ -95,6 +99,7 @@ datenschutzLink.innerHTML = 'Impressum · Datenschutz'
 datenschutzParagraph.append(datenschutzLink)
 
 introDiv.append(datenschutzParagraph)
+introDiv.append(infoParagraph)
 
 // And last but not least ...
 
@@ -104,8 +109,8 @@ canvas.setAttribute('id', 'scene')
 appDiv.append(canvas)
 
 function hideDatenschutz (): any {
-  datenschutzParagraph.style.cssText = 'opacity : 0.3; transition:opacity 60s;'
-  // document.querySelector('button#muteButton').style = 'opacity : 0.2; transition:opacity 60s;'
+  datenschutzParagraph.style.cssText = 'opacity : 0.6; transition:opacity 60s;'
+  nameParagraph.style.cssText = 'opacity : 0.0; transition:opacity 60s;'
 }
 
 setTimeout(hideDatenschutz, 5000)
@@ -222,10 +227,10 @@ ColorSchemes.BaseColors = ['ff0000', '00ff00', '0000ff', 'ffff00', '00ffff', 'ff
 
 let ColorScheme: string = 'FourColours'
 const randomScheme: number = Math.random()
-if (randomScheme >= 0.20) ColorScheme = 'Autumn'
-if (randomScheme >= 0.40) ColorScheme = 'Cyber'
-if (randomScheme >= 0.60) ColorScheme = 'Phoenix'
-if (randomScheme >= 0.80) ColorScheme = 'PurplePath'
+// if (randomScheme >= 0.20) ColorScheme = 'Autumn'
+if (randomScheme >= 0.25) ColorScheme = 'Cyber'
+if (randomScheme >= 0.50) ColorScheme = 'Phoenix'
+if (randomScheme >= 0.75) ColorScheme = 'PurplePath'
 // if (randomScheme >= 0.75) ColorScheme = 'Toxic'
 // if (randomScheme >= 0.90) ColorScheme = 'BaseColors'
 
@@ -234,20 +239,30 @@ if (randomScheme >= 0.80) ColorScheme = 'PurplePath'
 
 // Torus
 
+const TorusZero = new KreiseTorus({
+  identity: 'TorusZero',
+  radius: 6,
+  tube: 1.5,
+  color: new Color(parseInt('0xffffff')),
+  facing: 'inverse'
+})
+
 const TorusOne = new KreiseTorus({
   identity: 'TorusOne',
-  radius: 5,
-  tube: 0.5,
+  radius: 6,
+  tube: 0.8,
   color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][0])),
   facing: 'inverse'
 })
 
 const TorusTwo = new KreiseTorus({
   identity: 'TorusTwo',
-  radius: 6.5,
-  tube: 0.5,
-  color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][1]))
+  radius: 6,
+  tube: 0.4,
+  color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][1])),
+  facing: 'normal'
 })
+
 
 const TorusThree = new KreiseTorus({
   identity: 'TorusThree',
@@ -261,7 +276,8 @@ const TorusFour = new KreiseTorus({
   identity: 'TorusFour',
   radius: 9,
   tube: 0.4,
-  color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][3]))
+  color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][3])),
+  facing: 'inverse'
 })
 
 const TorusFive = new KreiseTorus({
@@ -276,8 +292,12 @@ const TorusSix = new KreiseTorus({
   identity: 'TorusSix',
   radius: 13,
   tube: 0.5,
-  color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][5]))  
+  color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][5]))
 })
+
+
+TorusZero.material.transparent = true
+TorusZero.material.opacity = 0.2
 
 const turboTexture = new TextureLoader().load(turboTextureImage)
 turboTexture.wrapS = MirroredRepeatWrapping
@@ -292,6 +312,7 @@ TorusSix.material = new MeshDepthMaterial({ alphaMap: turboTexture })
 
 TorusSix.updateMesh()
 
+scene.add(TorusZero.getMesh())
 scene.add(TorusOne.getMesh())
 scene.add(TorusTwo.getMesh())
 scene.add(TorusThree.getMesh())
@@ -414,8 +435,8 @@ let ticks: number = 0
 
 // FLYCURVE
 
-const longCurve: number = 11
-const shortCurve: number = 3
+const longCurve: number = 10.0
+const shortCurve: number = 3.5
 
 const flyCurveVectors: CatmullRomCurve3 = new CatmullRomCurve3([
 
@@ -474,7 +495,7 @@ const flyCurveMaterial: MeshLambertMaterial = new MeshLambertMaterial({
   emissive: 0x888800, map: turboTexture
 })
 
-const flyCurveGeometry: TubeGeometry = new TubeGeometry(flyCurveVectors, 200, 0.2, 16)
+const flyCurveGeometry: TubeGeometry = new TubeGeometry(flyCurveVectors, 500, 0.2, 16)
 
 const flyCurveMesh: Mesh = new Mesh(flyCurveGeometry, flyCurveMaterial)
 
@@ -606,20 +627,35 @@ let rate: number = 0
 for (i = 0; i <= TorusOne.tubularSegments; i++) {
   // from 0 to 1
   rate = (i / 24) // anything 48
-  rate = Math.sin(rate * Math.PI * 2)
-  TorusOne.pulseTubularLine(i, rate * .05)
+  rate = Math.sin(rate * Math.PI * 2) + Math.cos(rate * Math.PI * 2)
+  TorusOne.pulseTubularLine(i, rate * 0.1)
 }
+
+TorusOne.material.transparent = true
+TorusOne.material.opacity = 0.3
 
 for (i = 0; i <= TorusTwo.tubularSegments; i++) {
   // from 0 to 1
-  rate = (i / 24) // anything 48
+  rate = (i / 48) // anything 48
   rate = Math.sin(rate * Math.PI * 2)
-  TorusTwo.pulseTubularLine(i, rate * .05)
+  TorusTwo.pulseTubularLine(i, rate * 0.2)
 }
 
+TorusTwo.material.transparent = true
+TorusTwo.material.opacity = 0.8
 
 // TorusSix.material.wireframe = true
 
+console.log(TorusSix.geometry.groups)
+
+for (i = 0; i <= TorusSix.geometry.groups.length; i++) {
+  if (i % 12 === 1) TorusSix.geometry.groups[i].materialIndex = 1
+  if (i % 12 === 3) TorusSix.geometry.groups[i].materialIndex = 1
+  if (i % 12 === 6) TorusSix.geometry.groups[i].materialIndex = 1
+  if (i % 12 === 8) TorusSix.geometry.groups[i].materialIndex = 1
+  if (i % 12 === 10) TorusSix.geometry.groups[i].materialIndex = 1
+}
+TorusSix.updateMesh()
 
 renderer.setAnimationLoop(function () {
   // console.log(clock.getElapsedTime())
@@ -630,6 +666,9 @@ renderer.setAnimationLoop(function () {
 
   if (episode === 1) {
     if (animation.enabled && animation.play) {
+
+      TorusZero.getMesh().rotation.x = ticks * 0.00001
+
       TorusOne.getMesh().rotation.x = ticks * 0.00001
       TorusOne.getMesh().rotation.z = ticks * 0.0001
 
@@ -639,7 +678,6 @@ renderer.setAnimationLoop(function () {
       TorusThree.getMesh().rotation.x = ticks * 0.00002
       TorusThree.getMesh().rotation.y = ticks * -0.00002
       TorusThree.getMesh().rotation.z = ticks * 0.0001
-
 
       TorusFour.getMesh().rotation.x = ticks * -0.00002
       TorusFour.getMesh().rotation.y = ticks * 0.00002

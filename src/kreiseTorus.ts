@@ -8,7 +8,8 @@ import {
   Vector3,
   Float32BufferAttribute,
   TextureLoader,
-  DynamicDrawUsage
+  DynamicDrawUsage,
+  MeshBasicMaterial
 } from 'three'
 
 import turboTextureImage from './textures/turbo.png'
@@ -53,8 +54,9 @@ class KreiseTorus {
     this.color = new Color(parameters.color ?? new Color(0xffffff))
     this.material = new Material()
     this.material = new MeshPhongMaterial({ color: this.color, shininess: 150 })
+    this.material.receiveShadow = true
     const turboTexture = new TextureLoader().load(turboTextureImage)
-    this.material2 = new MeshDepthMaterial({ alphaMap: turboTexture, map: turboTexture })
+    this.material2 = new MeshBasicMaterial({ color: new Color(0xffffff) })
 
     this.mesh = new Mesh()
     // this.mesh = new Mesh(this.geometry, this.material)
