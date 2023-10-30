@@ -60,8 +60,7 @@ import { KreiseTorus } from './kreiseTorus.ts'
 // End of imports
 //
 
-document.title = 'Krei.se 0.1.8 Doh!'
-
+document.title = 'Krei.se 0.1.9 It won`t matter if it`s black or white'
 
 const appDiv = document.querySelector<HTMLDivElement>('#app') as HTMLDivElement
 
@@ -110,7 +109,7 @@ appDiv.append(canvas)
 
 function hideDatenschutz (): any {
   datenschutzParagraph.style.cssText = 'opacity : 0.6; transition:opacity 60s;'
-  nameParagraph.style.cssText = 'opacity : 0.0; transition:opacity 60s;'
+  infoParagraph.style.cssText = 'opacity : 0.0; transition:opacity 60s;'
 }
 
 setTimeout(hideDatenschutz, 5000)
@@ -258,16 +257,15 @@ const TorusOne = new KreiseTorus({
 const TorusTwo = new KreiseTorus({
   identity: 'TorusTwo',
   radius: 6,
-  tube: 0.4,
+  tube: 0.6,
   color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][1])),
   facing: 'normal'
 })
 
-
 const TorusThree = new KreiseTorus({
   identity: 'TorusThree',
   radius: 8,
-  tube: 0.4,
+  tube: 0.5,
   color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][2])),
   facing: 'inverse'
 })
@@ -275,7 +273,7 @@ const TorusThree = new KreiseTorus({
 const TorusFour = new KreiseTorus({
   identity: 'TorusFour',
   radius: 9,
-  tube: 0.4,
+  tube: 0.5,
   color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][3])),
   facing: 'inverse'
 })
@@ -283,18 +281,19 @@ const TorusFour = new KreiseTorus({
 const TorusFive = new KreiseTorus({
   identity: 'TorusFive',
   radius: 11,
-  tube: 0.5,
+  tube: 0.8,
   color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][4])),
   facing: 'inverse'
 })
 
 const TorusSix = new KreiseTorus({
   identity: 'TorusSix',
-  radius: 13,
-  tube: 0.5,
+  radius: 14,
+  tubularSegments: 88,
+  radialSegments: 32,
+  tube: 0.7,
   color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][5]))
 })
-
 
 TorusZero.material.transparent = true
 TorusZero.material.opacity = 0.2
@@ -309,7 +308,6 @@ TorusFive.material.map = turboTexture
 TorusFive.updateMesh()
 
 TorusSix.material = new MeshDepthMaterial({ alphaMap: turboTexture })
-
 TorusSix.updateMesh()
 
 scene.add(TorusZero.getMesh())
@@ -646,27 +644,32 @@ TorusTwo.material.opacity = 0.8
 
 // TorusSix.material.wireframe = true
 
-console.log(TorusSix.geometry.groups)
+// console.log(TorusSix.geometry.groups)
 
-for (i = 0; i <= TorusSix.geometry.groups.length; i++) {
-  if (i % 12 === 1) TorusSix.geometry.groups[i].materialIndex = 1
-  if (i % 12 === 3) TorusSix.geometry.groups[i].materialIndex = 1
-  if (i % 12 === 6) TorusSix.geometry.groups[i].materialIndex = 1
-  if (i % 12 === 8) TorusSix.geometry.groups[i].materialIndex = 1
-  if (i % 12 === 10) TorusSix.geometry.groups[i].materialIndex = 1
+for (i = 0; i < TorusSix.geometry.groups.length; i++) {
+  if (i % 12 === 0) TorusSix.geometry.groups[i].materialIndex = 1
+  if (i % 12 === 2) TorusSix.geometry.groups[i].materialIndex = 1
+  if (i % 12 === 4) TorusSix.geometry.groups[i].materialIndex = 1
+  if (i % 12 === 5) TorusSix.geometry.groups[i].materialIndex = 1
+  if (i % 12 === 7) TorusSix.geometry.groups[i].materialIndex = 1
+  if (i % 12 === 9) TorusSix.geometry.groups[i].materialIndex = 1
+  if (i % 12 === 11) TorusSix.geometry.groups[i].materialIndex = 1
 }
-TorusSix.updateMesh()
+
+TorusSix.material.transparent = true
+TorusSix.material.opacity = 0.5
+TorusSix.material2.transparent = true
+TorusSix.material2.opacity = 0.4
+
+//TorusSix.updateMesh()
 
 renderer.setAnimationLoop(function () {
-  // console.log(clock.getElapsedTime())
-  const timeDelta = clock.getDelta() // do not use delta, use absolute unixms time instead for updates
-  // console.log(timeDelta)
+  const timeDelta = clock.getDelta()
 
   ticks += (timeDelta * 1000)
 
   if (episode === 1) {
     if (animation.enabled && animation.play) {
-
       TorusZero.getMesh().rotation.x = ticks * 0.00001
 
       TorusOne.getMesh().rotation.x = ticks * 0.00001
@@ -684,9 +687,11 @@ renderer.setAnimationLoop(function () {
 
       TorusFive.getMesh().rotation.y = ticks * -0.00003
       // Rainbow Flow
-      TorusFive.getMesh().rotation.z = ticks * -0.0002
+      TorusFive.getMesh().rotation.z = ticks * -0.00015
 
       TorusSix.getMesh().rotation.y = ticks * 0.00003
+      // Piano Flow
+      TorusSix.getMesh().rotation.z = ticks * 0.00015
 
       /*
 

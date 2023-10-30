@@ -57,6 +57,7 @@ class KreiseTorus {
     this.material.receiveShadow = true
     const turboTexture = new TextureLoader().load(turboTextureImage)
     this.material2 = new MeshBasicMaterial({ color: new Color(0xffffff) })
+    // this.material2.wireframe = true
 
     this.mesh = new Mesh()
     // this.mesh = new Mesh(this.geometry, this.material)
@@ -64,7 +65,7 @@ class KreiseTorus {
   }
 
   updateMesh (): void {
-    this.mesh = new Mesh(this.geometry, this.material)
+    this.mesh = new Mesh(this.geometry, [this.material, this.material2])
   }
 
   getMesh (): Mesh {
