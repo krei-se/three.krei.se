@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 package-lock.json
+src/listOfNames.ts
+src/mainOld.ts
+src/unusedstuff.ts.txt
