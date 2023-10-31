@@ -25,10 +25,11 @@ import {
   PointLightHelper,
   AxesHelper,
   MirroredRepeatWrapping,
-  TubeGeometry
+  TubeGeometry,
+  MeshPhongMaterial
 } from 'three'
 
-import SunCalc from 'suncalc'
+import SunCalc, { GetTimesResult } from 'suncalc'
 
 import turboTextureImage from './textures/turbo.png'
 
@@ -51,7 +52,6 @@ import { resizeRendererToDisplaySize } from './helpers/responsiveness'
 
 import { debugDiv } from './buttons.ts' // controlPanelDiv
 import { KreiseTorus } from './kreiseTorus.ts'
-import { setUncaughtExceptionCaptureCallback } from 'process'
 
 //
 // End of imports
@@ -164,12 +164,8 @@ if (import.meta.env.DEV) {
   hour = Math.floor(Math.random() * 24)
 }
 
-const suncalc: SunCalc = SunCalc.getTimes(new Date(), 50.84852106503032, 12.923759828615541)
+const suncalc: GetTimesResult = SunCalc.getTimes(new Date(), 50.84852106503032, 12.923759828615541)
 console.log(suncalc)
-
-
-
-// console.log(suncalc.getTimes())
 
 const brightness: number = 255 - (2 * (Math.abs(12 - hour)) * 10)
 
@@ -303,19 +299,21 @@ const TorusSix = new KreiseTorus({
   color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][5]))
 })
 
-TorusZero.material.transparent = true
-TorusZero.material.opacity = 0.2
+TorusZero.materials[0].transparent = true
+TorusZero.materials[0].opacity = 0.2
 
 const turboTexture = new TextureLoader().load(turboTextureImage)
 turboTexture.wrapS = MirroredRepeatWrapping
 turboTexture.repeat.set(4, 1)
 
-TorusFive.material.transparent = true
-TorusFive.material.opacity = 0.85
-TorusFive.material.map = turboTexture
+TorusFive.materials[0].transparent = true
+TorusFive.materials[0].opacity = 0.85
+TorusFive.materials[0].map = turboTexture
 TorusFive.updateMesh()
 
-TorusSix.material = new MeshDepthMaterial({ alphaMap: turboTexture })
+// TorusSix.materials[0] = new MeshDepthMaterial({ alphaMap: turboTexture })
+TorusSix.materials[0] = new MeshPhongMaterial({ color: 0x000000, shininess: 200 })
+TorusSix.materials[1] = new MeshPhongMaterial({ color: 0xffffff, shininess: 200 })
 TorusSix.updateMesh()
 
 scene.add(TorusZero.getMesh())
@@ -637,8 +635,8 @@ for (i = 0; i <= TorusOne.tubularSegments; i++) {
   TorusOne.pulseTubularLine(i, rate * 0.1)
 }
 
-TorusOne.material.transparent = true
-TorusOne.material.opacity = 0.3
+TorusOne.materials[0].transparent = true
+TorusOne.materials[0].opacity = 0.3
 
 for (i = 0; i <= TorusTwo.tubularSegments; i++) {
   // from 0 to 1
@@ -647,10 +645,10 @@ for (i = 0; i <= TorusTwo.tubularSegments; i++) {
   TorusTwo.pulseTubularLine(i, rate * 0.2)
 }
 
-TorusTwo.material.transparent = true
-TorusTwo.material.opacity = 0.8
+TorusTwo.materials[0].transparent = true
+TorusTwo.materials[0].opacity = 0.8
 
-// TorusSix.material.wireframe = true
+// TorusSix.materials[0].wireframe = true
 
 // console.log(TorusSix.geometry.groups)
 
@@ -664,10 +662,12 @@ for (i = 0; i < TorusSix.geometry.groups.length; i++) {
   if (i % 12 === 11) TorusSix.geometry.groups[i].materialIndex = 1
 }
 
-TorusSix.material.transparent = true
-TorusSix.material.opacity = 0.5
-TorusSix.material2.transparent = true
-TorusSix.material2.opacity = 0.4
+/*
+TorusSix.materials[0].transparent = true
+TorusSix.materials[0].opacity = 0.5
+TorusSix.materials[1].transparent = true
+TorusSix.materials[1].opacity = 0.4
+*/
 
 // TorusSix.updateMesh()
 

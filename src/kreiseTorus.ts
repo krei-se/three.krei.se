@@ -9,7 +9,9 @@ import {
   Float32BufferAttribute,
   TextureLoader,
   DynamicDrawUsage,
-  MeshBasicMaterial
+  MeshBasicMaterial,
+  BufferAttribute,
+  InterleavedBufferAttribute
 } from 'three'
 
 import turboTextureImage from './textures/turbo.png'
@@ -26,8 +28,7 @@ class KreiseTorus {
   arc: number
 
   geometry: KreiseTorusGeometry
-  material: any
-  material2: any
+  materials: any = []
   mesh: Mesh
 
   constructor (parameters: any) {
@@ -52,20 +53,16 @@ class KreiseTorus {
     }
 
     this.color = new Color(parameters.color ?? new Color(0xffffff))
-    this.material = new Material()
-    this.material = new MeshPhongMaterial({ color: this.color, shininess: 150 })
-    this.material.receiveShadow = true
+    this.materials.push(new Material())
+    this.materials[0] = new MeshPhongMaterial({ color: this.color, shininess: 150 })
+    this.materials[0].receiveShadow = true
     const turboTexture = new TextureLoader().load(turboTextureImage)
-    this.material2 = new MeshBasicMaterial({ color: new Color(0xffffff) })
-    // this.material2.wireframe = true
 
-    this.mesh = new Mesh()
-    // this.mesh = new Mesh(this.geometry, this.material)
-    this.mesh = new Mesh(this.geometry, [this.material, this.material2])
+    this.updateMesh()
   }
 
   updateMesh (): void {
-    this.mesh = new Mesh(this.geometry, [this.material, this.material2])
+    this.mesh = new Mesh(this.geometry, this.materials)
   }
 
   getMesh (): Mesh {
@@ -78,25 +75,30 @@ class KreiseTorus {
   }
 
   pulseTubularLine (tubularLine: number, height: number): void {
+    const positionAttribute: BufferAttribute | InterleavedBufferAttribute = this.geometry.getAttribute('position')
+    const normalAttribute: BufferAttribute | InterleavedBufferAttribute = this.geometry.getAttribute('normal')
 
-    let positionAttribute: Float32BufferAttribute = this.geometry.getAttribute('position')
-    let normalAttribute: Float32BufferAttribute = this.geometry.getAttribute('normal')
-
-    //console.log(positionAttribute)
+    // console.log(positionAttribute)
 
     const offset: number = tubularLine * (this.radialSegments + 1)
 
     let radialSegment: number = 0
     for (radialSegment = 0; radialSegment <= this.radialSegments; radialSegment++) {
-      let normal: Vector3 = new Vector3().fromBufferAttribute(normalAttribute, offset + radialSegment)
-      let point: Vector3 = new Vector3().fromBufferAttribute(positionAttribute, offset + radialSegment)
+      const normal: Vector3 = new Vector3().fromBufferAttribute(normalAttribute, offset + radialSegment)
+      const point: Vector3 = new Vector3().fromBufferAttribute(positionAttribute, offset + radialSegment)
 
-      let newPoint: Vector3 = point.add(normal.multiplyScalar(height))
+      const newPoint: Vector3 = point.add(normal.multiplyScalar(height))
 
       positionAttribute.setXYZ(offset + radialSegment, newPoint.x, newPoint.y, newPoint.z)
     }
     positionAttribute.needsUpdate = true
   }
+
+}
+
+class KlavierTorus extends KreiseTorus {
+
+
 
 }
 
