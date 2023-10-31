@@ -28,11 +28,7 @@ import {
   TubeGeometry
 } from 'three'
 
-/*
-import {
-  SunCalc
-} from 'suncalc3'
-*/
+import SunCalc from 'suncalc'
 
 import turboTextureImage from './textures/turbo.png'
 
@@ -55,12 +51,13 @@ import { resizeRendererToDisplaySize } from './helpers/responsiveness'
 
 import { debugDiv } from './buttons.ts' // controlPanelDiv
 import { KreiseTorus } from './kreiseTorus.ts'
+import { setUncaughtExceptionCaptureCallback } from 'process'
 
 //
 // End of imports
 //
 
-document.title = 'Krei.se 0.1.9 It won`t matter if it`s black or white'
+document.title = 'Krei.se 0.1.9'
 
 const appDiv = document.querySelector<HTMLDivElement>('#app') as HTMLDivElement
 
@@ -167,7 +164,10 @@ if (import.meta.env.DEV) {
   hour = Math.floor(Math.random() * 24)
 }
 
-// const suncalc: any = SunCalc.getSunTimes(new Date(), 50.84852106503032, 12.923759828615541)
+const suncalc: SunCalc = SunCalc.getTimes(new Date(), 50.84852106503032, 12.923759828615541)
+console.log(suncalc)
+
+
 
 // console.log(suncalc.getTimes())
 
@@ -235,6 +235,14 @@ if (randomScheme >= 0.75) ColorScheme = 'PurplePath'
 
 // console.log(ColorSchemes)
 // console.log(ColorScheme)
+
+// Google referrer
+
+// console.log(document.referrer)
+
+if (document.referrer.includes('google')) {
+  ColorScheme = 'FourColours'
+}
 
 // Torus
 
@@ -661,7 +669,7 @@ TorusSix.material.opacity = 0.5
 TorusSix.material2.transparent = true
 TorusSix.material2.opacity = 0.4
 
-//TorusSix.updateMesh()
+// TorusSix.updateMesh()
 
 renderer.setAnimationLoop(function () {
   const timeDelta = clock.getDelta()

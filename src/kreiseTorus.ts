@@ -82,7 +82,7 @@ class KreiseTorus {
     let positionAttribute: Float32BufferAttribute = this.geometry.getAttribute('position')
     let normalAttribute: Float32BufferAttribute = this.geometry.getAttribute('normal')
 
-    console.log(positionAttribute)
+    //console.log(positionAttribute)
 
     const offset: number = tubularLine * (this.radialSegments + 1)
 
