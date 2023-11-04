@@ -20,16 +20,14 @@ import {
   CatmullRomCurve3,
   SphereGeometry,
   Color,
-  MeshDepthMaterial,
   TextureLoader,
   PointLightHelper,
   AxesHelper,
   MirroredRepeatWrapping,
-  TubeGeometry,
-  MeshPhongMaterial
+  TubeGeometry
 } from 'three'
 
-import SunCalc, { GetTimesResult } from 'suncalc'
+import SunCalc from 'suncalc'
 
 import turboTextureImage from './textures/turbo.png'
 
@@ -51,7 +49,7 @@ import { resizeRendererToDisplaySize } from './helpers/responsiveness'
 //  import { buttonSwitchSBS } from './buttons.ts'
 
 import { debugDiv } from './buttons.ts' // controlPanelDiv
-import { KreiseTorus } from './kreiseTorus.ts'
+import { KreiseTorus, KlavierTorus, KreiseShaderedTorus } from './kreiseTorus.ts'
 
 //
 // End of imports
@@ -164,7 +162,7 @@ if (import.meta.env.DEV) {
   hour = Math.floor(Math.random() * 24)
 }
 
-const suncalc: GetTimesResult = SunCalc.getTimes(new Date(), 50.84852106503032, 12.923759828615541)
+const suncalc = SunCalc.getTimes(new Date(), 50.84852106503032, 12.923759828615541)
 console.log(suncalc)
 
 const brightness: number = 255 - (2 * (Math.abs(12 - hour)) * 10)
@@ -290,17 +288,18 @@ const TorusFive = new KreiseTorus({
   facing: 'inverse'
 })
 
-const TorusSix = new KreiseTorus({
-  identity: 'TorusSix',
-  radius: 14,
-  tubularSegments: 88,
-  radialSegments: 32,
-  tube: 0.7,
-  color: new Color(parseInt('0x' + ColorSchemes[ColorScheme][5]))
+const TorusSix = new KlavierTorus()
+
+const TorusSeven = new KreiseShaderedTorus({
+  identity: 'TorusSeven',
+  radius: 16,
+  tube: 1,
+  tubularSegments: 32,
+  radialSegments: 4
 })
 
-TorusZero.materials[0].transparent = true
-TorusZero.materials[0].opacity = 0.2
+//TorusZero.materials[0].transparent = true
+//TorusZero.materials[0].opacity = 0.2
 
 const turboTexture = new TextureLoader().load(turboTextureImage)
 turboTexture.wrapS = MirroredRepeatWrapping
@@ -311,12 +310,8 @@ TorusFive.materials[0].opacity = 0.85
 TorusFive.materials[0].map = turboTexture
 TorusFive.updateMesh()
 
-// TorusSix.materials[0] = new MeshDepthMaterial({ alphaMap: turboTexture })
-TorusSix.materials[0] = new MeshPhongMaterial({ color: 0x000000, shininess: 200 })
-TorusSix.materials[1] = new MeshPhongMaterial({ color: 0xffffff, shininess: 200 })
-TorusSix.updateMesh()
-
-scene.add(TorusZero.getMesh())
+// scene.add(TorusZero.getMesh())
+/*
 scene.add(TorusOne.getMesh())
 scene.add(TorusTwo.getMesh())
 scene.add(TorusThree.getMesh())
@@ -324,13 +319,13 @@ scene.add(TorusFour.getMesh())
 scene.add(TorusFive.getMesh())
 scene.add(TorusSix.getMesh())
 
+*/
+
+scene.add(TorusSeven.getMesh())
+
 const gridHelperInstance: GridHelper = new GridHelper(100, 100, 'skyblue', 'bisque')
 gridHelperInstance.position.y = -0.01
 
-if (import.meta.env.DEV) {
-  scene.add(gridHelperInstance)
-  scene.add(plane)
-}
 
 // ===== 🎥 CAMERA =====
 
@@ -366,12 +361,6 @@ cameraControls.update(clock.getDelta())
 const axesHelper: AxesHelper = new AxesHelper(4)
 const pointLightHelper: PointLightHelper = new PointLightHelper(pointLight, undefined, 'orange')
 
-if (import.meta.env.DEV) {
-  pointLightHelper.visible = true
-  scene.add(pointLightHelper)
-  axesHelper.visible = true
-  scene.add(axesHelper)
-}
 
 // ===== Mouse Events =====
 
@@ -384,7 +373,7 @@ window.addEventListener('dblclick', (event) => {
 
 // ===== Keyboard Events =====
 
-let helpersDisplay: boolean = true
+let helpersDisplay: boolean = false
 
 document.onkeydown = function (e) {
   switch (e.keyCode) {
@@ -515,10 +504,6 @@ const flyCurveNormal = new Vector3()
 // console.log(flyCurveSegments)
 // console.log(flyCurveTicks)
 
-if (import.meta.env.DEV) {
-  scene.add(flyCurveMesh)
-}
-
 const cameraEye: Mesh = new Mesh(
   new SphereGeometry(1),
   new MeshBasicMaterial({ color: 0xdddddd })
@@ -648,29 +633,6 @@ for (i = 0; i <= TorusTwo.tubularSegments; i++) {
 TorusTwo.materials[0].transparent = true
 TorusTwo.materials[0].opacity = 0.8
 
-// TorusSix.materials[0].wireframe = true
-
-// console.log(TorusSix.geometry.groups)
-
-for (i = 0; i < TorusSix.geometry.groups.length; i++) {
-  if (i % 12 === 0) TorusSix.geometry.groups[i].materialIndex = 1
-  if (i % 12 === 2) TorusSix.geometry.groups[i].materialIndex = 1
-  if (i % 12 === 4) TorusSix.geometry.groups[i].materialIndex = 1
-  if (i % 12 === 5) TorusSix.geometry.groups[i].materialIndex = 1
-  if (i % 12 === 7) TorusSix.geometry.groups[i].materialIndex = 1
-  if (i % 12 === 9) TorusSix.geometry.groups[i].materialIndex = 1
-  if (i % 12 === 11) TorusSix.geometry.groups[i].materialIndex = 1
-}
-
-/*
-TorusSix.materials[0].transparent = true
-TorusSix.materials[0].opacity = 0.5
-TorusSix.materials[1].transparent = true
-TorusSix.materials[1].opacity = 0.4
-*/
-
-// TorusSix.updateMesh()
-
 renderer.setAnimationLoop(function () {
   const timeDelta = clock.getDelta()
 
@@ -686,20 +648,20 @@ renderer.setAnimationLoop(function () {
       TorusTwo.getMesh().rotation.x = ticks * 0.00001
       TorusTwo.getMesh().rotation.z = ticks * -0.0001
 
-      TorusThree.getMesh().rotation.x = ticks * 0.00002
-      TorusThree.getMesh().rotation.y = ticks * -0.00002
-      TorusThree.getMesh().rotation.z = ticks * 0.0001
+      // TorusThree.getMesh().rotation.x = ticks * 0.00002
+      // TorusThree.getMesh().rotation.y = ticks * -0.00002
+      // TorusThree.getMesh().rotation.z = ticks * 0.0001
 
-      TorusFour.getMesh().rotation.x = ticks * -0.00002
-      TorusFour.getMesh().rotation.y = ticks * 0.00002
+      // TorusFour.getMesh().rotation.x = ticks * -0.00002
+      // TorusFour.getMesh().rotation.y = ticks * 0.00002
 
-      TorusFive.getMesh().rotation.y = ticks * -0.00003
-      // Rainbow Flow
-      TorusFive.getMesh().rotation.z = ticks * -0.00015
+      // TorusFive.getMesh().rotation.y = ticks * -0.00003
+        // Rainbow Flow
+      // TorusFive.getMesh().rotation.z = ticks * -0.00015
 
-      TorusSix.getMesh().rotation.y = ticks * 0.00003
-      // Piano Flow
-      TorusSix.getMesh().rotation.z = ticks * 0.00015
+      // TorusSix.getMesh().rotation.y = ticks * 0.00003
+        // Piano Flow
+      // TorusSix.getMesh().rotation.z = ticks * 0.00015
 
       /*
 

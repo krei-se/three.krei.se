@@ -2,7 +2,7 @@ import { EventDispatcher, Quaternion, Vector3 } from 'three'
 
 const _changeEvent = { type: 'change' }
 
-class FlyControls extends EventDispatcher {
+class KreiseControls extends EventDispatcher {
   constructor (object, domElement) {
     super()
 
@@ -188,7 +188,7 @@ class FlyControls extends EventDispatcher {
     this.pointermove = function (event) {
       if (!this.enabled) return
 
-      if (!this.dragToLook || this.status == 1) {
+      if (!this.dragToLook || this.status >= 1) {
         const container = this.getContainerDimensions()
         const halfWidth = container.size[0] / 2
         const halfHeight = container.size[1] / 2
@@ -348,4 +348,4 @@ class FlyControls extends EventDispatcher {
   }
 }
 
-export { FlyControls }
+export { KreiseControls }

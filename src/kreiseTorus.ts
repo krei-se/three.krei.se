@@ -4,18 +4,18 @@ import {
   Color,
   Material,
   MeshPhongMaterial,
-  MeshDepthMaterial,
   Vector3,
   Float32BufferAttribute,
   TextureLoader,
   DynamicDrawUsage,
-  MeshBasicMaterial,
   BufferAttribute,
-  InterleavedBufferAttribute
+  InterleavedBufferAttribute,
+  MeshBasicMaterial,
+  ShaderMaterial,
+  Int32BufferAttribute
 } from 'three'
 
 import turboTextureImage from './textures/turbo.png'
-import { positionGeometry } from 'three/examples/jsm/nodes/Nodes.js'
 
 class KreiseTorus {
   identity: string
@@ -54,7 +54,7 @@ class KreiseTorus {
 
     this.color = new Color(parameters.color ?? new Color(0xffffff))
     this.materials.push(new Material())
-    this.materials[0] = new MeshPhongMaterial({ color: this.color, shininess: 150 })
+    this.materials[0] = new MeshBasicMaterial({ color: this.color })
     this.materials[0].receiveShadow = true
     const turboTexture = new TextureLoader().load(turboTextureImage)
 
@@ -93,22 +93,143 @@ class KreiseTorus {
     }
     positionAttribute.needsUpdate = true
   }
-
 }
 
 class KlavierTorus extends KreiseTorus {
+  constructor (parameters: any = {}) {
+    super({
+      identity: 'KlavierTorus',
+      radius: 14,
+      tube: 0.7,
+      tubularSegments: 88,
+      radialSegments: 32,
+      color: new Color(0xffffff),
+      ...parameters
+    })
 
+    this.materials.push(new MeshPhongMaterial({ color: 0x000000 }))
 
+    const blackWhite: any = [0, 1, 0,
+      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
+      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
+      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
+      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, // <- startet mit C
+      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
+      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
+      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
+      0]
 
+    console.log(blackWhite.length)
+
+    let i: number = 0
+    for (i = 0; i < this.geometry.groups.length; i++) {
+      this.geometry.groups[i].materialIndex = blackWhite[i]
+    }
+
+    for (i = 0; i <= this.tubularSegments; i++) {
+      if ((i-3) % 12 === 0) this.pulseTubularLine(i, 0.1)
+    }
+
+    this.updateMesh()
+  }
+}
+
+class KreiseShaderedTorus extends KreiseTorus {
+  constructor (parameters: any = []) {
+    super({
+      ...parameters
+    })
+
+    this.materials[0] = new ShaderMaterial({
+
+      uniforms: {
+        center: { value: this.mesh.position },
+        radius: { value: this.radius },
+        tube: { value: this.tube },
+        tubularSegments: { value: this.tubularSegments },
+        radialSegments: { value: this.radialSegments }
+      },
+
+      /*
+
+      Uniforms are variables that have the same value for all vertices - lighting, fog, and shadow maps
+      are examples of data that would be stored in uniforms. Uniforms can be accessed by both the vertex
+      shader and the fragment shader.
+
+      // = object.matrixWorld
+      uniform mat4 modelMatrix;
+
+      // = camera.matrixWorldInverse * object.matrixWorld
+      uniform mat4 modelViewMatrix;
+
+      // = camera.projectionMatrix
+      uniform mat4 projectionMatrix;
+
+      // = camera.matrixWorldInverse
+      uniform mat4 viewMatrix;
+
+      // = inverse transpose of modelViewMatrix
+      uniform mat3 normalMatrix;
+
+      // = camera position in world space
+      uniform vec3 cameraPosition;
+
+      Attributes are variables associated with each vertex---for instance, the vertex position,
+      face normal, and vertex color are all examples of data that would be stored in attributes.
+      Attributes can only be accessed within the vertex shader. 
+
+      // default vertex attributes provided by BufferGeometry
+      attribute vec3 position;
+      attribute vec3 normal;
+      attribute vec2 uv;
+
+      */
+      vertexShader: `
+
+        attribute float vertexIndex
+
+        float tubularSegment = 
+
+        varying vec3 v_Normal;
+
+        void main() {
+          vec3 scale = vec3(4.0, 1.0, 1.0);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          v_Normal = normal;
+        }
+      `,
+
+      /*
+
+      uniform mat4 viewMatrix;
+      uniform vec3 cameraPosition;
+
+      */
+
+      fragmentShader: /* glsl */
+      `
+
+        varying vec3 v_Normal;
+
+        void main() {
+          gl_FragColor = vec4(v_Normal, 1.0);
+        }
+      
+      `
+
+    })
+  }
 }
 
 class KreiseTorusGeometry extends BufferGeometry {
   type: string
   parameters: any
+  tubularSegmentIndices: any
   indices: any
   vertices: any
   normals: any
   uvs: any
+  verticesIndex: any
 
   constructor (radius = 1, tube = 0.4, radialSegments = 12, tubularSegments = 48, facing = 'normal', arc = Math.PI * 2) {
     super()
@@ -116,10 +237,13 @@ class KreiseTorusGeometry extends BufferGeometry {
     this.type = 'KreiseTorusGeometry'
 
     // buffers
+    this.tubularSegmentIndices = []
+
     this.indices = []
     this.vertices = []
     this.normals = []
     this.uvs = []
+    this.verticesIndex = []
 
     this.parameters = {
       radius,
@@ -196,7 +320,14 @@ class KreiseTorusGeometry extends BufferGeometry {
           this.indices.push(a, c, d) // counter clockwise to face to camera!!!
           this.indices.push(a, d, b)
         }
+        this.tubularSegmentIndices.push(tubularSegment, tubularSegment, tubularSegment)
+        this.tubularSegmentIndices.push(tubularSegment, tubularSegment, tubularSegment)
       }
+    }
+
+    // generate verticesIndex
+    for (let i = 0; i < this.vertices.length / 3; i++) {
+      this.verticesIndex[i] = i
     }
 
     // build geometry
@@ -209,6 +340,7 @@ class KreiseTorusGeometry extends BufferGeometry {
     this.setAttribute('position', positionAttribute)
     this.setAttribute('normal', new Float32BufferAttribute(this.normals, 3))
     this.setAttribute('uv', new Float32BufferAttribute(this.uvs, 2))
+    this.setAttribute('vertexIndex', new Int32BufferAttribute(this.verticesIndex, 1))
   }
 
   copy (source: any): any {
@@ -224,4 +356,4 @@ class KreiseTorusGeometry extends BufferGeometry {
   }
 }
 
-export { KreiseTorus, KreiseTorusGeometry }
+export { KreiseTorus, KreiseShaderedTorus, KlavierTorus, KreiseTorusGeometry }
