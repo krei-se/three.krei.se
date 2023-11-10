@@ -6,16 +6,19 @@ import {
   MeshPhongMaterial,
   Vector3,
   Float32BufferAttribute,
-  TextureLoader,
+  // TextureLoader,
   DynamicDrawUsage,
-  BufferAttribute,
-  InterleavedBufferAttribute,
   MeshBasicMaterial,
   ShaderMaterial,
   Int32BufferAttribute
 } from 'three'
 
-import turboTextureImage from './textures/turbo.png'
+import type {
+  BufferAttribute,
+  InterleavedBufferAttribute
+} from 'three'
+
+// import turboTextureImage from './textures/turbo.png'
 
 class KreiseTorus {
   identity: string
@@ -39,6 +42,7 @@ class KreiseTorus {
     this.radialSegments = parameters.radialSegments ?? Math.floor(this.tube * 96)
     this.facing = parameters.facing ?? 'normal'
     this.arc = parameters.arc ?? Math.PI * 2
+    this.mesh = parameters.mesh ?? new Mesh()
 
     // this.radialSegments = 12
     // this.tubularSegments= 100
@@ -56,7 +60,6 @@ class KreiseTorus {
     this.materials.push(new Material())
     this.materials[0] = new MeshBasicMaterial({ color: this.color })
     this.materials[0].receiveShadow = true
-    const turboTexture = new TextureLoader().load(turboTextureImage)
 
     this.updateMesh()
   }
@@ -126,8 +129,9 @@ class KlavierTorus extends KreiseTorus {
       this.geometry.groups[i].materialIndex = blackWhite[i]
     }
 
+    // old and disabled: raise every octave
     for (i = 0; i <= this.tubularSegments; i++) {
-      if ((i-3) % 12 === 0) this.pulseTubularLine(i, 0.1)
+      // if ((i - 3) % 12 === 0) this.pulseTubularLine(i, 0.1)
     }
 
     this.updateMesh()
@@ -176,7 +180,7 @@ class KreiseShaderedTorus extends KreiseTorus {
 
       Attributes are variables associated with each vertex---for instance, the vertex position,
       face normal, and vertex color are all examples of data that would be stored in attributes.
-      Attributes can only be accessed within the vertex shader. 
+      Attributes can only be accessed within the vertex shader.
 
       // default vertex attributes provided by BufferGeometry
       attribute vec3 position;

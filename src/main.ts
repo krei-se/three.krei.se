@@ -1,7 +1,5 @@
 import './style.css'
 
-import kreiseLogo from './kreise.svg'
-
 import {
   AmbientLight,
   Clock,
@@ -38,6 +36,7 @@ import turboTextureImage from './textures/turbo.png'
 import { FlyControls } from 'three/addons/controls/FlyControls.js'
 
 // import { StereoEffect } from 'three/addons/effects/StereoEffect.js' fcks with autoresize
+
 // @ts-expect-errors module without declarations
 import Stats from 'three/examples/jsm/libs/stats.module'
 // import * as animations from './helpers/animations'
@@ -49,68 +48,28 @@ import { resizeRendererToDisplaySize } from './helpers/responsiveness'
 //  import { buttonSwitchSBS } from './buttons.ts'
 
 import { debugDiv } from './buttons.ts' // controlPanelDiv
+import { getPageOverlayDiv, fadeoutDatenschutzAndInfoParagraphs } from './htmlincludes.ts'
 import { KreiseTorus, KlavierTorus, KreiseShaderedTorus } from './kreiseTorus.ts'
 
 //
 // End of imports
 //
 
-document.title = 'Krei.se 0.1.9'
-
+document.title = 'Krei.se'
 const appDiv = document.querySelector<HTMLDivElement>('#app') as HTMLDivElement
 
-const pageOverlayDiv: HTMLDivElement = document.createElement('div')
-pageOverlayDiv.setAttribute('id', 'pageOverlay')
-appDiv.append(pageOverlayDiv)
+appDiv.innerHTML = ''
 
-const introDiv: HTMLDivElement = document.createElement('div')
-introDiv.setAttribute('id', 'introDiv')
-pageOverlayDiv.append(introDiv)
-
-const logoLink: HTMLAnchorElement = document.createElement('a')
-logoLink.setAttribute('href', 'https://krei.se')
-
-introDiv.append(logoLink)
-
-const logoImg: HTMLImageElement = document.createElement('img')
-logoImg.setAttribute('src', kreiseLogo)
-logoImg.setAttribute('alt', 'Krei.se Logo')
-
-logoImg.classList.add('logo')
-logoImg.classList.add('vanilla')
-
-introDiv.append(logoImg)
-
-const infoParagraph: HTMLParagraphElement = document.createElement('p')
-infoParagraph.setAttribute('id', 'info')
-
-const datenschutzParagraph: HTMLParagraphElement = document.createElement('p')
-datenschutzParagraph.setAttribute('id', 'datenschutz')
-const datenschutzLink: HTMLAnchorElement = document.createElement('a')
-datenschutzLink.setAttribute('href', 'datenschutz.html')
-datenschutzLink.innerHTML = 'Impressum · Datenschutz'
-
-datenschutzParagraph.append(datenschutzLink)
-
-introDiv.append(datenschutzParagraph)
-introDiv.append(infoParagraph)
-
-// And last but not least ...
+appDiv.append(getPageOverlayDiv())
 
 const canvas: HTMLCanvasElement = document.createElement('canvas')
 canvas.setAttribute('id', 'scene')
 
 appDiv.append(canvas)
 
-function hideDatenschutz (): any {
-  datenschutzParagraph.style.cssText = 'opacity : 0.6; transition:opacity 60s;'
-  infoParagraph.style.cssText = 'opacity : 0.0; transition:opacity 60s;'
-}
-
-setTimeout(hideDatenschutz, 5000)
+setTimeout(fadeoutDatenschutzAndInfoParagraphs, 5000)
 
 //  setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
-
 //  import GUI from 'lil-gui'
 
 let stats: Stats

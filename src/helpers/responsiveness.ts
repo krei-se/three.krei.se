@@ -2,8 +2,8 @@ export function resizeRendererToDisplaySize (
   renderer: THREE.WebGLRenderer
 ): boolean {
   const canvas = renderer.domElement
-  let width = canvas.clientWidth
-  let height = canvas.clientHeight
+  const width = canvas.clientWidth
+  const height = canvas.clientHeight
   const needResize = canvas.width !== width || canvas.height !== height
 
   // console.log(width, canvas.clientWidth)
