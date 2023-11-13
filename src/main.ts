@@ -179,7 +179,8 @@ console.log(suncalc.sunset.getTime() - suncalc.sunsetStart.getTime()) // millise
 
 document.body.style.setProperty('--page-background', 'rgba(' + brightness + ',' + brightness + ',' + brightness + ',0)')
 scene.background = new Color('rgb(' + brightness + ', ' + brightness + ', ' + brightness + ')')
-ambientLight.intensity = brightness / 50
+ambientLight.intensity = (255 - brightness) / 50
+pointLight.intensity = (255 - brightness)
 
 if (brightness <= 128) {
   const introDiv: HTMLDivElement = document.querySelector('#introDiv') ?? document.createElement('div')
@@ -294,10 +295,10 @@ const TorusSix = new KlavierTorus()
 
 const TorusSeven = new KreiseShaderedTorus({
   identity: 'TorusSeven',
-  radius: 16,
+  radius: 6,
   tube: 1,
-  tubularSegments: 32,
-  radialSegments: 4
+  tubularSegments: 256,
+  radialSegments: 32
 })
 
 // TorusZero.materials[0].transparent = true
@@ -321,12 +322,10 @@ scene.add(TorusFour.getMesh())
 scene.add(TorusFive.getMesh())
 scene.add(TorusSix.getMesh())
 
-
-// scene.add(TorusSeven.getMesh())
+scene.add(TorusSeven.getMesh())
 
 const gridHelperInstance: GridHelper = new GridHelper(100, 100, 'skyblue', 'bisque')
 gridHelperInstance.position.y = -0.01
-
 
 // ===== 🎥 CAMERA =====
 
@@ -640,6 +639,11 @@ renderer.setAnimationLoop(function () {
 
   if (episode === 1) {
     if (animation.enabled && animation.play) {
+
+      TorusSeven.getMesh().rotation.x = ticks * 0.00001
+      TorusSeven.getMesh().rotation.z = ticks * -0.00001
+
+
       TorusZero.getMesh().rotation.x = ticks * 0.00001
 
       TorusOne.getMesh().rotation.x = ticks * 0.00001

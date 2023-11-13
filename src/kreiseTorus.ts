@@ -10,7 +10,8 @@ import {
   DynamicDrawUsage,
   MeshBasicMaterial,
   ShaderMaterial,
-  Int32BufferAttribute
+  Int32BufferAttribute,
+  MeshLambertMaterial
 } from 'three'
 
 import type {
@@ -58,7 +59,7 @@ class KreiseTorus {
 
     this.color = new Color(parameters.color ?? new Color(0xffffff))
     this.materials.push(new Material())
-    this.materials[0] = new MeshBasicMaterial({ color: this.color })
+    this.materials[0] = new MeshPhongMaterial({ color: this.color, shininess: 200 })
     this.materials[0].receiveShadow = true
 
     this.updateMesh()
