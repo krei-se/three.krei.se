@@ -13,7 +13,7 @@ import {
   PlaneGeometry,
   PointLight,
   Scene,
-  WebGL1Renderer,
+  WebGLRenderer,
   Vector3,
   CatmullRomCurve3,
   SphereGeometry,
@@ -69,6 +69,22 @@ appDiv.append(canvas)
 
 setTimeout(fadeoutDatenschutzAndInfoParagraphs, 5000)
 
+//
+// End of HTML
+//
+
+/*
+
+*/
+
+/*
+
+*/
+
+/*
+
+*/
+
 //  setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
 //  import GUI from 'lil-gui'
 
@@ -80,7 +96,7 @@ const animation = { enabled: false, play: true }
 
 // ===== 🖼️ CANVAS, RENDERER, & SCENE =====
 
-const renderer: WebGL1Renderer = new WebGL1Renderer({
+const renderer: WebGLRenderer = new WebGLRenderer({
   canvas,
   antialias: true,
   alpha: true,
@@ -115,31 +131,58 @@ scene.add(pointLight)
 const now = new Date()
 // console.log(now.getUTCHours())
 
-let hour: number = now.getUTCHours()
-
-if (import.meta.env.DEV) {
-  hour = Math.floor(Math.random() * 24)
-}
-
 const suncalc = SunCalc.getTimes(new Date(), 50.84852106503032, 12.923759828615541)
 console.log(suncalc)
 
-const brightness: number = 255 - (2 * (Math.abs(12 - hour)) * 10)
+const sunPosition = SunCalc.getPosition(new Date(), 50.84852106503032, 12.923759828615541)
+console.log(sunPosition)
+let brightness: number = 255
 
-// brightness = 255
-// console.log(brightness)
-
-document.body.style.setProperty('--page-background', 'rgba(' + brightness + ',' + brightness + ',' + brightness + ',0)')
-
-// console.log(brightness)
-if (hour >= 16 || hour <= 9) {
-  scene.background = new Color('rgb(' + brightness + ', ' + brightness + ', ' + brightness + ')')
-  ambientLight.intensity = brightness / 50
+if (sunPosition.altitude < -0.1) {
+  brightness = 0
 }
 
-// ambientLight.intensity = 15
+if (sunPosition.altitude > 0.1) {
+  brightness = 255
+}
 
-if (hour >= 16 || hour <= 7) {
+let altitude: number = sunPosition.altitude // in radians, so µ/2 at highest point
+
+altitude = +0.1
+
+// @TODO check this in anmation every minute
+if (altitude < 0.1 && altitude > -0.1) {
+  brightness = Math.floor(255 * ((altitude + 0.1) * 5))
+}
+/*
+if (now > suncalc.night || now < suncalc.nightEnd) {
+  brightness = 0
+}
+
+// Sunrise
+if (now > suncalc.sunrise && now < suncalc.sunriseEnd) {
+  brightness = (now.getTime() - suncalc.sunrise.getTime()) / (suncalc.sunriseEnd.getTime() - suncalc.sunrise.getTime())
+  brightness = Math.floor(brightness * 255)
+}
+
+// Sunset
+if (now > suncalc.sunsetStart && now < suncalc.night) {
+  brightness = (now.getTime() - suncalc.sunrise.getTime()) / (suncalc.sunriseEnd.getTime() - suncalc.sunrise.getTime())
+  brightness = Math.floor(brightness * 255)
+}
+*/
+
+console.log(brightness)
+
+console.log(suncalc.sunriseEnd.getTime() - suncalc.sunrise.getTime()) // milliseconds
+console.log(suncalc.sunset.getTime() - suncalc.sunsetStart.getTime()) // milliseconds
+
+document.body.style.setProperty('--page-background', 'rgba(' + brightness + ',' + brightness + ',' + brightness + ',0)')
+scene.background = new Color('rgb(' + brightness + ', ' + brightness + ', ' + brightness + ')')
+ambientLight.intensity = brightness / 50
+
+if (brightness <= 128) {
+  const introDiv: HTMLDivElement = document.querySelector('#introDiv') ?? document.createElement('div')
   introDiv.style.cssText = 'filter: invert(1);'
 }
 
@@ -257,8 +300,8 @@ const TorusSeven = new KreiseShaderedTorus({
   radialSegments: 4
 })
 
-//TorusZero.materials[0].transparent = true
-//TorusZero.materials[0].opacity = 0.2
+// TorusZero.materials[0].transparent = true
+// TorusZero.materials[0].opacity = 0.2
 
 const turboTexture = new TextureLoader().load(turboTextureImage)
 turboTexture.wrapS = MirroredRepeatWrapping
@@ -270,7 +313,7 @@ TorusFive.materials[0].map = turboTexture
 TorusFive.updateMesh()
 
 // scene.add(TorusZero.getMesh())
-/*
+
 scene.add(TorusOne.getMesh())
 scene.add(TorusTwo.getMesh())
 scene.add(TorusThree.getMesh())
@@ -278,9 +321,8 @@ scene.add(TorusFour.getMesh())
 scene.add(TorusFive.getMesh())
 scene.add(TorusSix.getMesh())
 
-*/
 
-scene.add(TorusSeven.getMesh())
+// scene.add(TorusSeven.getMesh())
 
 const gridHelperInstance: GridHelper = new GridHelper(100, 100, 'skyblue', 'bisque')
 gridHelperInstance.position.y = -0.01
@@ -319,7 +361,6 @@ cameraControls.update(clock.getDelta())
 // ===== 🪄 HELPERS =====
 const axesHelper: AxesHelper = new AxesHelper(4)
 const pointLightHelper: PointLightHelper = new PointLightHelper(pointLight, undefined, 'orange')
-
 
 // ===== Mouse Events =====
 
@@ -607,20 +648,20 @@ renderer.setAnimationLoop(function () {
       TorusTwo.getMesh().rotation.x = ticks * 0.00001
       TorusTwo.getMesh().rotation.z = ticks * -0.0001
 
-      // TorusThree.getMesh().rotation.x = ticks * 0.00002
-      // TorusThree.getMesh().rotation.y = ticks * -0.00002
-      // TorusThree.getMesh().rotation.z = ticks * 0.0001
+      TorusThree.getMesh().rotation.x = ticks * 0.00002
+      TorusThree.getMesh().rotation.y = ticks * -0.00002
+      TorusThree.getMesh().rotation.z = ticks * 0.0001
 
-      // TorusFour.getMesh().rotation.x = ticks * -0.00002
-      // TorusFour.getMesh().rotation.y = ticks * 0.00002
+      TorusFour.getMesh().rotation.x = ticks * -0.00002
+      TorusFour.getMesh().rotation.y = ticks * 0.00002
 
-      // TorusFive.getMesh().rotation.y = ticks * -0.00003
-        // Rainbow Flow
-      // TorusFive.getMesh().rotation.z = ticks * -0.00015
+      TorusFive.getMesh().rotation.y = ticks * -0.00003
+      // Rainbow Flow
+      TorusFive.getMesh().rotation.z = ticks * -0.00015
 
-      // TorusSix.getMesh().rotation.y = ticks * 0.00003
-        // Piano Flow
-      // TorusSix.getMesh().rotation.z = ticks * 0.00015
+      TorusSix.getMesh().rotation.y = ticks * 0.00003
+      // Piano Flow
+      TorusSix.getMesh().rotation.z = ticks * 0.00015
 
       /*
 
@@ -742,6 +783,7 @@ renderer.setAnimationLoop(function () {
       } */
   }
 
+  /*
   if (episode === 2) {
     TorusOne.getMesh().rotation.x = TorusOne.getMesh().rotation.x * 0.997
 
@@ -776,13 +818,12 @@ renderer.setAnimationLoop(function () {
       introDiv.style.transition = 'opacity 10s linear 0s'
       introDiv.style.opacity = '0'
 
-      /* document.querySelector('button#openCloseControlPanelButton')!.onClick =
+       document.querySelector('button#openCloseControlPanelButton')!.onClick =
         function () {
           document.querySelector(
             'button#openCloseControlPanelButton'
           )!.innerHTML = 'Alpha Version'
         }
-        */
       episodeOneShots[2] = true
     }
 
@@ -794,6 +835,7 @@ renderer.setAnimationLoop(function () {
       episode = 1
     }
   }
+  */
 
   // cameraControls.update();
   // cameraControls.update(clock.getDelta());

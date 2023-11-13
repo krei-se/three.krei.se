@@ -116,13 +116,13 @@ class KlavierTorus extends KreiseTorus {
       0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
       0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
       0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
-      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, // <- startet mit C
+      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, // <- startet mit C1
       0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
       0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
       0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
       0]
 
-    console.log(blackWhite.length)
+    // console.log(blackWhite.length)
 
     let i: number = 0
     for (i = 0; i < this.geometry.groups.length; i++) {
@@ -190,9 +190,9 @@ class KreiseShaderedTorus extends KreiseTorus {
       */
       vertexShader: `
 
-        attribute float vertexIndex
+        attribute float vertexIndex;
 
-        float tubularSegment = 
+        // float tubularSegment = 
 
         varying vec3 v_Normal;
 
