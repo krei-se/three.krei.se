@@ -1,0 +1,35 @@
+Globals in three.krei.se
+
+external variables
+	suncalc
+	sunposition
+	brightness
+	(time) 
+	rhythms
+	
+	colorSchemes
+	colorScheme
+
+Status variables
+	autoplay.animation
+	autoplay.camera
+	
+Debug variables
+	debug.helperObjects
+	debug.helperInterface
+	
+
+Client Interface
+	clientInterface.type = "desktop"
+	
+	clientInterface.input.gyro = false
+	clientInterface.input.xbox = false
+	clientInterface.input.keyboard = false
+	clientInterface.input.mouse = false
+
+THREE
+	renderer
+	scene
+	camera
+	
+	clock

@@ -41,7 +41,7 @@ export function getPageOverlayDiv (): HTMLDivElement {
 
 export function fadeoutDatenschutzAndInfoParagraphs (): void {
   const datenschutzParagraph: HTMLParagraphElement = document.querySelector('#datenschutz') ?? document.createElement('p')
-  datenschutzParagraph.style.cssText = 'opacity : 0.6; transition:opacity 60s;'
+  datenschutzParagraph.style.cssText = 'opacity : 0.0; transition:opacity 30s;'
   const infoParagraph: HTMLParagraphElement = document.querySelector('#info') ?? document.createElement('p')
-  infoParagraph.style.cssText = 'opacity : 0.0; transition:opacity 60s;'
+  infoParagraph.style.cssText = 'opacity : 0.0; transition:opacity 30s;'
 }

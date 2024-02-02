@@ -1,3 +1,4 @@
+/*
 export function buttonSwitchSBS(
   element: HTMLButtonElement,
   sbsEnabled: boolean
@@ -12,17 +13,17 @@ export function buttonSwitchSBS(
   }
   element.addEventListener('click', switchSBS())
 }
+*/
 
-export function controlPanelDiv(): HTMLDivElement {
-  let controlPanelDiv: HTMLDivElement = document.createElement('div')
+export function controlPanelDiv (): HTMLDivElement {
+  const controlPanelDiv: HTMLDivElement = document.createElement('div')
   controlPanelDiv.id = 'controlPanelDiv'
   controlPanelDiv.setAttribute(
     'style',
     'position: fixed; bottom: 1em; left: 50%; transform: translate(-50%, 0); opacity: 0; transition: all 10s'
   )
 
-  let openCloseControlPanelButton: HTMLButtonElement =
-    document.createElement('button')
+  const openCloseControlPanelButton: HTMLButtonElement = document.createElement('button')
   openCloseControlPanelButton.id = 'openCloseControlPanelButton'
   openCloseControlPanelButton.setAttribute(
     'style',
@@ -34,7 +35,7 @@ export function controlPanelDiv(): HTMLDivElement {
   return controlPanelDiv
 }
 
-export function debugDiv(): HTMLDivElement {
+export function debugDiv (): HTMLDivElement {
   const debugDiv: HTMLDivElement = document.createElement('div')
   debugDiv.id = 'debugDiv'
   debugDiv.setAttribute('style', 'position: fixed; top: 1em; left: 70%;')

@@ -22,5 +22,26 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
+  },
+  globals: {
+    suncalc: 'writable',
+    sunposition: 'writable',
+    brightness: 'writable',
+    time: 'writable',
+    rhythms: 'writable',
+    colorSchemes: 'writable',
+    colorScheme: 'writable',
+
+    autoplay: 'writable',
+
+    debug: 'writable',
+
+    clientInterface: 'writable',
+
+    renderer: 'writable',
+    scene: 'writable',
+    camera: 'writable',
+    clock: 'writable'
+    /* var2: 'readonly' */
   }
 }

@@ -11,7 +11,8 @@ import {
   MeshBasicMaterial,
   ShaderMaterial,
   Int32BufferAttribute,
-  MeshLambertMaterial
+  MeshLambertMaterial,
+  Object3D
 } from 'three'
 
 import type {
@@ -21,8 +22,7 @@ import type {
 
 // import turboTextureImage from './textures/turbo.png'
 
-class KreiseTorus {
-  identity: string
+class KreiseTorus extends Mesh {
   radius: number
   tube: number
   radialSegments: number
@@ -32,11 +32,13 @@ class KreiseTorus {
   arc: number
 
   geometry: KreiseTorusGeometry
-  materials: any = []
+  materials: Material[]
   mesh: Mesh
 
   constructor (parameters: any) {
-    this.identity = parameters.identity
+    super()
+
+    this.name = parameters.identity // hmm well
     this.radius = parameters.radius
     this.tube = parameters.tube
     this.tubularSegments = parameters.tubularSegments ?? Math.floor(this.radius * 48)
@@ -50,6 +52,7 @@ class KreiseTorus {
 
     // this.geometry = new BufferGeometry()
     this.geometry = new KreiseTorusGeometry(this.radius, this.tube, this.radialSegments, this.tubularSegments, this.facing, this.arc)
+    this.materials = []
 
     let i: number
     for (i = 0; i < this.tubularSegments; i++) {
@@ -62,15 +65,15 @@ class KreiseTorus {
     this.materials[0] = new MeshPhongMaterial({ color: this.color, shininess: 200 })
     this.materials[0].receiveShadow = true
 
-    this.updateMesh()
+    this.material = this.materials
   }
 
   updateMesh (): void {
-    this.mesh = new Mesh(this.geometry, this.materials)
+    // Mesh.call(this, this.geometry, this.materials)
   }
 
   getMesh (): Mesh {
-    return this.mesh
+    return this
   }
 
   updatePositions (positions: Float32BufferAttribute): void {
@@ -111,7 +114,7 @@ class KlavierTorus extends KreiseTorus {
       ...parameters
     })
 
-    this.materials.push(new MeshPhongMaterial({ color: 0x000000 }))
+    this.materials.push(new MeshPhongMaterial({ color: 0x000000, shininess: 200 }))
 
     const blackWhite: any = [0, 1, 0,
       0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
@@ -217,7 +220,7 @@ class KreiseShaderedTorus extends KreiseTorus {
         varying vec3 v_Normal;
 
         void main() {
-          gl_FragColor = vec4(v_Normal, 1.0);
+          gl_FragColor = vec4(v_Normal, v_Normal.x);
         }
       
       `
