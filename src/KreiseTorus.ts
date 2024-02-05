@@ -1,23 +1,19 @@
 import {
   Mesh,
+  type BufferAttribute,
+  type InterleavedBufferAttribute,
   BufferGeometry,
   Color,
   Material,
+  type MeshBasicMaterial,
+  type MeshLambertMaterial,
   MeshPhongMaterial,
   Vector3,
   Float32BufferAttribute,
   // TextureLoader,
   DynamicDrawUsage,
-  MeshBasicMaterial,
   ShaderMaterial,
-  Int32BufferAttribute,
-  MeshLambertMaterial,
-  Object3D
-} from 'three'
-
-import type {
-  BufferAttribute,
-  InterleavedBufferAttribute
+  Int32BufferAttribute
 } from 'three'
 
 // import turboTextureImage from './textures/turbo.png'
@@ -32,7 +28,7 @@ class KreiseTorus extends Mesh {
   arc: number
 
   geometry: KreiseTorusGeometry
-  materials: Material[]
+  materials: Array<Material | MeshBasicMaterial | MeshPhongMaterial | MeshLambertMaterial | ShaderMaterial>
   mesh: Mesh
 
   constructor (parameters: any) {
@@ -49,7 +45,6 @@ class KreiseTorus extends Mesh {
 
     // this.radialSegments = 12
     // this.tubularSegments= 100
-
     // this.geometry = new BufferGeometry()
     this.geometry = new KreiseTorusGeometry(this.radius, this.tube, this.radialSegments, this.tubularSegments, this.facing, this.arc)
     this.materials = []
@@ -60,10 +55,9 @@ class KreiseTorus extends Mesh {
       this.geometry.addGroup(i * 6 * this.radialSegments, 6 * this.radialSegments, 0)
     }
 
-    this.color = new Color(parameters.color ?? new Color(0xffffff))
+    this.color = parameters.color ?? new Color(0xffffff)
     this.materials.push(new Material())
     this.materials[0] = new MeshPhongMaterial({ color: this.color, shininess: 200 })
-    this.materials[0].receiveShadow = true
 
     this.material = this.materials
   }

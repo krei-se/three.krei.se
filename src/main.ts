@@ -4,7 +4,6 @@ import {
   AmbientLight,
   Clock,
   GridHelper,
-  // LoadingManager,
   Mesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
@@ -14,14 +13,11 @@ import {
   PointLight,
   Scene,
   WebGLRenderer,
-  Vector3,
   SphereGeometry,
   Color,
   PointLightHelper,
-  AxesHelper,
-  TubeGeometry
+  AxesHelper
 } from 'three'
-
 
 // GLOBALS
 import Kreise from './Kreise.ts'
@@ -31,17 +27,15 @@ import { FlyControls } from 'three/addons/controls/FlyControls.js'
 // @ts-expect-errors module without declarations
 import Stats from 'three/examples/jsm/libs/stats.module'
 
-import { toggleFullScreen } from './helpers/fullscreen'
 import { resizeRendererToDisplaySize } from './helpers/responsiveness'
 
-import { debugDiv } from './buttons.ts' // controlPanelDiv
 import { getPageOverlayDiv, fadeoutDatenschutzAndInfoParagraphs } from './htmlincludes.ts'
 import * as Tone from 'tone'
 
-// Constants
+// Constants (mostly used in Episodes)
 
-import { ColorSchemes } from './KreiseConsts.ts'
-import { flyCurveVectors } from './KreiseConsts.ts'
+// import { ColorSchemes } from './KreiseConsts.ts'
+// import { flyCurveVectors } from './KreiseConsts.ts'
 
 // Time
 
@@ -58,24 +52,18 @@ import IntroEpisode from './episodes/Intro.ts'
 // GLOBALS
 const kreise = new Kreise()
 
-
-
 document.title = 'Krei.se'
-const appDiv = document.querySelector<HTMLDivElement>('#app') as HTMLDivElement
 
-appDiv.innerHTML = ''
-
-appDiv.append(getPageOverlayDiv())
+document.body.append(getPageOverlayDiv())
 
 const canvas: HTMLCanvasElement = document.createElement('canvas')
 canvas.setAttribute('id', 'scene')
 
-appDiv.append(canvas)
+document.body.append(canvas)
 
 setTimeout(fadeoutDatenschutzAndInfoParagraphs, 5000)
 
 // ===== ☀️ ===== Sunrise and Sunset ===== 🌒 =====
-
 
 if (kreise.sunPosition.altitude < -0.1) {
   kreise.brightness = 0
@@ -101,6 +89,8 @@ if (kreise.brightness <= 128) {
   introDiv.style.cssText = 'filter: invert(1);'
 }
 
+kreise.scene.background = new Color('rgb(' + kreise.brightness + ', ' + kreise.brightness + ', ' + kreise.brightness + ')')
+
 //
 // End of HTML
 //
@@ -119,7 +109,7 @@ kreise.renderer.setPixelRatio(window.devicePixelRatio)
 kreise.renderer.shadowMap.enabled = true
 kreise.renderer.shadowMap.type = PCFSoftShadowMap
 
-// == RHYTHM ==
+// == RHYTHM AND TIME ==
 
 //  Zeit wiederholt sich jeden Tag, jede Stunde, jede halbe Stunde, alle 10 Minuten (10 Minuten --> ein Level)
 kreise.rhythms = [86400, 3600, 1800, 600]
@@ -127,21 +117,13 @@ kreise.rhythms = [86400, 3600, 1800, 600]
 console.log(kreise.rhythms[0])
 
 // Javascript Date Objekt gibt immer die Unix-Zeit ohne Rücksicht auf die Zeitzone aus
-let nowMs: number = new Date().getTime()
-
-let nowS: number = Math.floor(nowMs / 1000)
-
-console.log(nowS)
-
-console.log(nowS % 86400)
-
-// ===== 📈 STATS & CLOCK =====
-
-let stats: Stats
 
 const clock: Clock = new Clock()
-if (import.meta.env.DEV) {
-  stats = new Stats()
+
+// ===== 📈 STATS =====
+
+const stats: Stats = new Stats()
+if (kreise.client.developerMode) {
   document.body.appendChild(stats.dom)
 }
 
@@ -162,18 +144,10 @@ if (randomScheme >= 0.75) kreise.ColorScheme = 'PurplePath'
 // console.log(ColorScheme)
 
 // Google referrer
-
 // console.log(document.referrer)
-
 if (document.referrer.includes('google')) {
   kreise.ColorScheme = 'FourColours'
 }
-
-kreise.scene.background = new Color('rgb(' + kreise.brightness + ', ' + kreise.brightness + ', ' + kreise.brightness + ')')
-
-
-console.log (kreise)
-
 
 // ===== 💡 LIGHTS =====
 
@@ -206,8 +180,6 @@ camera.position.set(0, 0, 0)
 camera.lookAt(0, 0, 0)
 camera.near = 0.05
 camera.far = 40
-
-// SBS support
 
 // ===== 🕹️ CONTROLS =====
 
@@ -254,52 +226,8 @@ kreise.scene.add(cameraEyeHelper)
 
 // ===== Mouse Events =====
 
-window.addEventListener('dblclick', (event) => {
-  if (event.target === canvas) {
-    toggleFullScreen(document.body)
-  }
-})
-
-// ===== Keyboard Events =====
-
-document.onkeydown = function (e) {
-  switch (e.keyCode) {
-    case 80: // P                               Switch Time on off
-      kreise.autoplay.animation = !kreise.autoplay.animation
-      break
-    case 79: // O                               Switch Automatic Camera on off
-      kreise.autoplay.camera = !kreise.autoplay.camera
-      break
-    case 73: // I                               Set Camera to outside view
-      if (import.meta.env.DEV) {
-        kreise.autoplay.camera = false
-        camera.position.set(0, 2, 7)
-        camera.lookAt(0, 5, 0)
-        cameraEyeHelper.visible = true
-      }
-      break
-
-    case 74: // J                               Switch Helpers On Off
-      if (import.meta.env.DEV) {
-        if (kreise.debug.helperObjects) {
-          kreise.scene.remove(planeHelper)
-          kreise.scene.remove(gridHelperInstance)
-          kreise.scene.remove(axesHelper)
-          kreise.scene.remove(pointLightHelper)
-        } else {
-          kreise.scene.add(planeHelper)
-          kreise.scene.add(gridHelperInstance)
-          kreise.scene.add(axesHelper)
-          kreise.scene.add(pointLightHelper)
-        }
-        kreise.debug.helperObjects = !kreise.debug.helperObjects
-      }
-      break
-  }
-}
-
 let ticks: number = 0
-let episode = new IntroEpisode(kreise, new Scene(), camera)
+const episode = new IntroEpisode(kreise, new Scene(), camera)
 
 episode.makeScene()
 episode.addControls()
@@ -308,7 +236,6 @@ episode.addControls()
 kreise.scene.add(episode.scene)
 
 kreise.renderer.setAnimationLoop(function () {
-
   const timeDelta = clock.getDelta()
 
   ticks += (timeDelta * 1000)
@@ -324,9 +251,12 @@ kreise.renderer.setAnimationLoop(function () {
     cameraEyeHelper.visible = true
   }
 
+  if (kreise.debug.helperObjects) {
+    planeHelper.visible = true
+    gridHelperInstance.visible = true
+  }
 
   kreise.renderer.render(kreise.scene, camera)
-
   if (import.meta.env.DEV) {
     stats.update()
     // add debug interfaces

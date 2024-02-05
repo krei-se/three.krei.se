@@ -28,16 +28,74 @@ export default class IntroEpisode extends KreiseEpisode {
   flyCurveTicks: number
   flyCurveDirection: Vector3
   flyCurveNormal: Vector3
+  colorScheme: string
+
+  keydown (event: KeyboardEvent): void { console.log(event) } // stub to shutup linter about event
+  keyup (event: KeyboardEvent): void { console.log(event) }
 
   // remember the kreise scene is the main scene and this one is local to the episode :)
-  constructor (kreise: Kreise, scene: Scene, camera: Camera) {
-    super(kreise, scene, camera)
+  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement = HTMLElement) {
+    super(kreise, scene, camera, domElement)
 
     this.colorScheme = kreise.ColorScheme // set this up in main.ts
 
     this.flyCurveTicks = 0 // set up in makeScene
     this.flyCurveDirection = new Vector3()
     this.flyCurveNormal = new Vector3()
+
+    // Controls
+    this.keydown = function (event) {
+      switch (event.code) {
+        case 'KeyI':
+          if (this.kreise.client.developerMode) {
+            this.kreise.debug.helperObjects = true
+            console.log('keydown')
+            this.objects.flyCurveMesh.visible = true
+          }
+          break
+        case 'KeyO':
+          if (this.kreise.client.developerMode) {
+            this.kreise.autoplay.camera = false
+            this.kreise.autoplay.animation = false
+          }
+          break
+      }
+    }
+
+    this.keyup = function (event) {
+      switch (event.code) {
+        case 'KeyI':
+          if (this.kreise.client.developerMode) {
+            this.kreise.debug.helperObjects = false
+            this.objects.flyCurveMesh.visible = false
+          }
+          break
+        case 'KeyO':
+          if (this.kreise.client.developerMode) {
+            this.kreise.autoplay.camera = true
+            this.kreise.autoplay.animation = true
+          }
+          break
+      }
+    }
+
+    const _keydown = this.keydown.bind(this)
+    const _keyup = this.keyup.bind(this)
+    window.addEventListener('keydown', _keydown)
+    window.addEventListener('keyup', _keyup)
+  }
+
+  dispose (): void {
+    /*
+    this.domElement.removeEventListener( 'contextmenu', _contextmenu );
+    this.domElement.removeEventListener( 'pointerdown', _pointerdown );
+    this.domElement.removeEventListener( 'pointermove', _pointermove );
+    this.domElement.removeEventListener( 'pointerup', _pointerup );
+    this.domElement.removeEventListener( 'pointercancel', _pointercancel );
+    */
+
+    window.removeEventListener('keydown', _keydown)
+    window.removeEventListener('keyup', _keyup)
   }
 
   makeScene (): void { // its stored in this.scene, get it from there
@@ -108,14 +166,14 @@ export default class IntroEpisode extends KreiseEpisode {
     turboTexture.wrapS = MirroredRepeatWrapping
     turboTexture.repeat.set(4, 1)
 
-    const TorusFive = this.scene.getObjectByName('TorusFive')
+    const TorusFive = this.scene.getObjectByName('TorusFive') as KreiseTorus
 
     TorusFive.materials[0].transparent = true
     TorusFive.materials[0].opacity = 0.85
     TorusFive.materials[0].map = turboTexture
     TorusFive.updateMesh()
 
-    const TorusOne = this.scene.getObjectByName('TorusOne')
+    const TorusOne = this.scene.getObjectByName('TorusOne') as KreiseTorus
 
     let i: number = 0
     let rate: number = 0
@@ -129,7 +187,7 @@ export default class IntroEpisode extends KreiseEpisode {
     TorusOne.materials[0].transparent = true
     TorusOne.materials[0].opacity = 0.3
 
-    const TorusTwo = this.scene.getObjectByName('TorusTwo')
+    const TorusTwo = this.scene.getObjectByName('TorusTwo') as KreiseTorus
 
     for (i = 0; i <= TorusTwo.tubularSegments; i++) {
       // from 0 to 1
@@ -150,7 +208,10 @@ export default class IntroEpisode extends KreiseEpisode {
     const flyCurveMesh = new Mesh(flyCurveGeometry, flyCurveMaterial)
     flyCurveMesh.name = 'flyCurveMesh'
 
-    // this.scene.add(flyCurveMesh)
+    this.objects.flyCurveMesh = flyCurveMesh
+
+    this.scene.add(flyCurveMesh)
+    flyCurveMesh.visible = false
 
     // const flyCurveSegments: number = flyCurvePoints.length
     this.flyCurveTicks = Math.floor(Math.random() * 60000) + 900000 // how many ticks for one flythrough
@@ -166,31 +227,18 @@ export default class IntroEpisode extends KreiseEpisode {
   }
 
   addControls (): void {
-    document.onkeydown = function (e) {
-      switch (e.keyCode) {
-        case 74: // J
-          if (this.kreise.debug.helperObjects == false) {
-            this.kreise.scene.remove(flyCurveMesh)
-          } else {
-            this.kreise.scene.add(flyCurveMesh)
-          }
-          break
-      }
-    }
+    console.log('stub')
   }
 
   update (ticks: number): void {
-
-    const TorusOne = this.scene.getObjectByName('TorusOne')
-    const TorusTwo = this.scene.getObjectByName('TorusTwo')
-    const TorusThree = this.scene.getObjectByName('TorusThree')
-    const TorusFour = this.scene.getObjectByName('TorusFour')
-    const TorusFive = this.scene.getObjectByName('TorusFive')
-    const TorusSix = this.scene.getObjectByName('KlavierTorus')
-    const TorusSeven = this.scene.getObjectByName('TorusSeven')
-    
-    
-    const TorusZero = this.scene.getObjectByName('TorusZero')
+    const TorusZero = this.scene.getObjectByName('TorusZero') as KreiseTorus
+    const TorusOne = this.scene.getObjectByName('TorusOne') as KreiseTorus
+    const TorusTwo = this.scene.getObjectByName('TorusTwo') as KreiseTorus
+    const TorusThree = this.scene.getObjectByName('TorusThree') as KreiseTorus
+    const TorusFour = this.scene.getObjectByName('TorusFour') as KreiseTorus
+    const TorusFive = this.scene.getObjectByName('TorusFive') as KreiseTorus
+    const TorusSix = this.scene.getObjectByName('KlavierTorus') as KlavierTorus
+    const TorusSeven = this.scene.getObjectByName('TorusSeven') as KreiseShaderedTorus
 
     TorusSeven.rotation.x = ticks * 0.00001
     TorusSeven.rotation.z = ticks * 0.00001
@@ -217,7 +265,6 @@ export default class IntroEpisode extends KreiseEpisode {
     TorusSix.rotation.z = ticks * 0.00015
 
     if (this.kreise.autoplay.camera) {
-
       const flyCurveProgress: number = (ticks % this.flyCurveTicks) / this.flyCurveTicks
       const flyCurveProgressAhead: number = ((ticks + 500) % this.flyCurveTicks) / this.flyCurveTicks
 
@@ -239,9 +286,8 @@ export default class IntroEpisode extends KreiseEpisode {
       this.camera.lookAt(flyCurvePositionLookAt)
       this.camera.up.copy(this.flyCurveNormal)
     } else {
-
       if (import.meta.env.DEV) {
-        const flyCurveProgress: number = (ticks % flyCurveTicks) / flyCurveTicks
+        const flyCurveProgress: number = (ticks % this.flyCurveTicks) / this.flyCurveTicks
 
         const flyCurvePosition: Vector3 =
           flyCurveVectors.getPointAt(flyCurveProgress)

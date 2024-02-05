@@ -6,10 +6,7 @@ export default class KreiseZeit {
 
   constructor(): any {
 
-    this.nowMs = 
+    //this.nowMs = 
 
   }
-
-  
-
 }
