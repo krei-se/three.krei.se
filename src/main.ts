@@ -153,7 +153,7 @@ if (document.referrer.includes('google')) {
 // ===== 💡 LIGHTS =====
 
 const ambientLight: AmbientLight = new AmbientLight('white', 3)
-const pointLight: PointLight = new PointLight('white', 150, 10)
+const pointLight: PointLight = new PointLight('white', 150, 5)
 pointLight.position.set(0, 0, 0)
 
 pointLight.castShadow = true
@@ -166,7 +166,7 @@ kreise.scene.add(ambientLight)
 kreise.scene.add(pointLight)
 
 ambientLight.intensity = ((255 - kreise.brightness) / 50) + 2
-pointLight.intensity = (255 - kreise.brightness) + 50
+pointLight.intensity = (255 - kreise.brightness) + 10
 
 // ===== 🎥 CAMERA =====
 
@@ -205,8 +205,15 @@ const pointLightHelper: PointLightHelper = new PointLightHelper(pointLight, unde
 // ===== Mouse Events =====
 
 let ticks: number = 0
-//const episode = new IntroEpisode(kreise, new Scene(), camera)
-const episode = new AutobahnEpisode(kreise, new Scene(), camera)
+
+let episode: KreiseEpisode
+
+if (Math.random() > .7) {
+  episode = new IntroEpisode(kreise, new Scene(), camera)
+}
+else {
+  episode = new AutobahnEpisode(kreise, new Scene(), camera)
+}
 
 episode.makeScene()
 episode.addControls()

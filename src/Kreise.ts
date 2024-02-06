@@ -1,14 +1,14 @@
 import SunCalc from 'suncalc'
 import type { GetSunPositionResult, GetTimesResult } from 'suncalc'
 
-import { AxesHelper, GridHelper, Mesh, MeshBasicMaterial, MeshLambertMaterial, PlaneGeometry, PlaneHelper, Scene, SphereGeometry, WebGLRenderer } from 'three'
+import { AxesHelper, EventDispatcher, GridHelper, Mesh, MeshBasicMaterial, MeshLambertMaterial, PlaneGeometry, PlaneHelper, Scene, SphereGeometry, WebGLRenderer } from 'three'
 import { toggleFullScreen } from './helpers/fullscreen'
 import { ObjectInterface } from './episodes/KreiseEpisode'
 
 export interface AutoplayOptionsInterface { camera: boolean, animation: boolean }
 export interface DebugOptionsInterface { helperObjects: boolean, helperInterface: boolean }
 
-export default class Kreise {
+export default class Kreise extends EventDispatcher {
   suncalc: GetTimesResult
   sunPosition: GetSunPositionResult
   brightness: number
@@ -26,6 +26,7 @@ export default class Kreise {
   client: KreiseClient
 
   constructor () {
+    super()
     this.suncalc = SunCalc.getTimes(new Date(), 50.84852106503032, 12.923759828615541)
     this.sunPosition = SunCalc.getPosition(new Date(), 50.84852106503032, 12.923759828615541)
     this.brightness = 255
@@ -104,7 +105,7 @@ export class KreiseClient {
 
     if (this.clientDeviceType === 'desktop') {
       window.addEventListener('dblclick', (event) => {
-        if (event.target === canvas) {
+        if (event.target === document.getElementById('scene')) {
           toggleFullScreen(document.body)
         }
       })

@@ -163,6 +163,10 @@ div#controls {
 
 }
 
+p#datenschutz {
+  font-weight: 800;
+}
+
 p#datenschutz:hover {
   opacity: 1;
   transition:opacity 1s;

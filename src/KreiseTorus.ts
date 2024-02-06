@@ -21,6 +21,7 @@ import {
 class KreiseTorus extends Mesh {
   radius: number
   tube: number
+  lod: number
   radialSegments: number
   tubularSegments: number
   facing: string
@@ -37,8 +38,9 @@ class KreiseTorus extends Mesh {
     this.name = parameters.identity // hmm well
     this.radius = parameters.radius
     this.tube = parameters.tube
-    this.tubularSegments = parameters.tubularSegments ?? Math.floor(this.radius * 48)
-    this.radialSegments = parameters.radialSegments ?? Math.floor(this.tube * 96)
+    this.lod = parameters.lod ?? 48
+    this.tubularSegments = parameters.tubularSegments ?? Math.floor(this.radius * this.lod)
+    this.radialSegments = parameters.radialSegments ?? Math.floor(this.tube * this.lod * 2)
     this.facing = parameters.facing ?? 'normal'
     this.arc = parameters.arc ?? Math.PI * 2
     this.mesh = parameters.mesh ?? new Mesh()

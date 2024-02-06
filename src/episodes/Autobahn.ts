@@ -1,11 +1,12 @@
-import KreiseEpisode from './KreiseEpisode'
+import KreiseEpisode, { ObjectInterface } from './KreiseEpisode'
 
 import {
   Scene,
   Camera,
   Group,
   Object3D,
-  MeshPhongMaterial
+  MeshPhongMaterial,
+  MeshDepthMaterial
 } from 'three'
 
 import {
@@ -60,6 +61,16 @@ export default class AutobahnEpisode extends KreiseEpisode {
             this.kreise.autoplay.animation = !this.kreise.autoplay.animation
           }
           break
+        case 'KeyU':
+          Object.entries(this.objects).forEach(([object, index]) => {
+            console.log(object)
+            if (this.objects[object] instanceof KreiseTorus) {
+              this.objects[object].materials.forEach((material, index) => {
+                console.log(material)
+                material.wireframe = !material.wireframe
+              })
+            }
+          })
       }
     }
 
@@ -85,73 +96,301 @@ export default class AutobahnEpisode extends KreiseEpisode {
   makeScene (): void { // its stored in this.scene, get it from there
   // Tori
 
-    this.scene.add(new KreiseTorus({
+    this.objects.Bahn1 = new KreiseTorus({
       identity: 'Bahn1',
       radius: 20,
-      tube: 1,
+      tube: 0.3,
+      lod: 24,
       color: new Color(parseInt('0xffffff')),
       facing: 'normal'
-    }))
+    })
 
-    this.scene.add(new KreiseTorus({
+    this.objects.Bahn2 = new KreiseTorus({
       identity: 'Bahn2',
       radius: 20,
-      tube: 1,
+      tube: .2,
+      lod: 24,
       color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][0])),
       facing: 'normal'
-    }))
+    })
 
-    this.scene.add(new KreiseTorus({
+    this.objects.Bahn3 = new KreiseTorus({
       identity: 'Bahn3',
       radius: 20,
-      tube: 1,
+      tube: .2,
+      lod: 24,
       color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][1])),
       facing: 'normal'
-    }))
+    })
 
-    this.scene.add(new KreiseTorus({
+    this.objects.Bahn4 = new KreiseTorus({
       identity: 'Bahn4',
       radius: 20,
-      tube: 1,
+      tube: .2,
+      lod: 24,
       color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][2])),
       facing: 'normal'
-    }))
+    })
 
-    this.scene.add(new KreiseTorus({
+    this.objects.Bahn5 = new KreiseTorus({
       identity: 'Bahn5',
       radius: 20,
-      tube: 1,
+      tube: .2,
+      lod: 24,
       color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][3])),
       facing: 'normal'
-    }))
+    })
 
-    this.scene.add(new KreiseTorus({
+    this.objects.Bahn6 = new KreiseTorus({
       identity: 'Bahn6',
       radius: 20,
-      tube: 1,
+      tube: .2,
+      lod: 24,
       color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
       facing: 'normal'
-    }))
+    })
 
-    for (let i: number = 1; i <= 6; i++) {
-      const BahnName = 'Bahn' + i
-      const Bahn: KreiseTorus = this.scene.getObjectByName(BahnName) as KreiseTorus
+    this.objects.Bahn7 = new KreiseTorus({
+      identity: 'Bahn7',
+      radius: 20,
+      tube: .2,
+      lod: 24,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
+      facing: 'normal'
+    })
 
-      Bahn.materials[0] = new MeshPhongMaterial({ color: 0x333333, shininess: 100 })
+    this.objects.Bahn8 = new KreiseTorus({
+      identity: 'Bahn8',
+      radius: 20,
+      tube: .2,
+      lod: 24,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
+      facing: 'normal'
+    })
+
+    this.objects.Autos1 = new KreiseTorus({
+      identity: 'Autos1',
+      radius: 20,
+      tube: 0.8,
+      lod: 24,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
+      facing: 'normal'
+    })
+
+    this.objects.Autos2 = new KreiseTorus({
+      identity: 'Autos2',
+      radius: 20,
+      tube: 0.8,
+      lod: 24,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
+      facing: 'normal'
+    })
+
+    this.objects.Autos3 = new KreiseTorus({
+      identity: 'Autos3',
+      radius: 20,
+      tube: 0.8,
+      lod: 24,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
+      facing: 'normal'
+    })
+
+    this.objects.Autos4 = new KreiseTorus({
+      identity: 'Autos4',
+      radius: 20,
+      tube: 0.8,
+      lod: 24,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
+      facing: 'normal'
+    })
+
+    this.objects.Autos5 = new KreiseTorus({
+      identity: 'Autos5',
+      radius: 20,
+      tube: 0.8,
+      lod: 24,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
+      facing: 'normal'
+    })
+
+    this.objects.Autos6 = new KreiseTorus({
+      identity: 'Autos6',
+      radius: 20,
+      tube: 0.8,
+      lod: 24,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
+      facing: 'normal'
+    })
+
+
+    // Standstreifen
+    const standstreifen: KreiseTorus[] = [this.objects.Bahn1, this.objects.Bahn4, this.objects.Bahn5, this.objects.Bahn8]
+
+    standstreifen.forEach((Bahn, index) => {
+      Bahn.materials[0] = new MeshPhongMaterial({ color: 0xeeeeee, shininess: 300 })
+    })
+    // Leitlinien links
+    const leitlinien: KreiseTorus[] = [this.objects.Bahn2, this.objects.Bahn3, this.objects.Bahn6, this.objects.Bahn7]
+
+    leitlinien.forEach((Bahn, index) => {
+      // Bahn.materials[0] = new MeshPhongMaterial({ color: 0x333333, shininess: 100 })
+      Bahn.materials[0] = new MeshDepthMaterial({})
       Bahn.materials[1] = new MeshPhongMaterial({ color: 0xdddddd, shininess: 150 })
 
-      console.log(Bahn.geometry.groups)
+      // console.log(Bahn.geometry.groups)
 
       for (let j: number = 0; j < Bahn.geometry.groups.length; j++) {
-        Bahn.geometry.groups[j].materialIndex = j % 2
+        Bahn.geometry.groups[j].materialIndex = Math.floor(j / 10) % 2
       }
+    })
+
+    // Und jetzt alle Linien!
+    for (let i: number = 1; i <= 8; i++) {
+      const BahnName = 'Bahn' + i
+      const Bahn: KreiseTorus = this.objects[BahnName] as KreiseTorus
+      // rotate around Y so its in front and behind the camera
+      Bahn.rotateY(Math.PI / 2)
 
       // Position
-      Bahn.position.z = -8 + (3 * i)
+      Bahn.position.x = -13.5 + (3 * i)
+
+      this.scene.add(this.objects[BahnName])
     }
 
-    this.camera.position.set(0, 0, 10)
-    this.camera.lookAt(0, 0, 0)
+    // Jetzt die Autos!
+    let autos: KreiseTorus[] = [this.objects.Autos1, this.objects.Autos6]
+    autos.forEach((Auto, index) => {
+      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 400 }) // rote Rücklichter
+      Auto.materials[1] = new MeshPhongMaterial({ color: 0xd1e2f6, shininess: 400 }) // xenon Frontscheinwerfer
+      Auto.materials[2] = new MeshDepthMaterial() // try
+      Auto.materials[3] = new MeshDepthMaterial() // try
+      Auto.materials[4] = new MeshDepthMaterial() // try
+      Auto.materials[5] = new MeshDepthMaterial() // try
+
+      Auto.materials[6] = new MeshPhongMaterial({ color: 0xcc321b, shininess: 350 }) // rote Rücklichter 2
+      Auto.materials[7] = new MeshPhongMaterial({ color: 0xd3c71b, shininess: 300 }) // normale Frontscheinwerfer
+      Auto.materials[8] = new MeshDepthMaterial() // try
+      Auto.materials[9] = new MeshDepthMaterial() // try
+      Auto.materials[10] = new MeshDepthMaterial() // try
+      Auto.materials[11] = new MeshDepthMaterial() // try
+
+      for (let j: number = 1; j < Auto.tubularSegments; j += 6) {
+        Auto.pulseTubularLine(j, 0.2)
+      }
+
+      for (let k: number = 0; k < Auto.geometry.groups.length; k++) {
+        Auto.geometry.groups[k].materialIndex = k % 12
+      }
+
+      //Auto.rotateY(Math.PI / 2)
+      this.scene.add(Auto)
+    })
+
+    autos = [this.objects.Autos2, this.objects.Autos5]
+    autos.forEach((Auto, index) => {
+      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 400 }) // rote Rücklichter
+      Auto.materials[1] = new MeshPhongMaterial({ color: 0xd1e2f6, shininess: 400 }) // xenon Frontscheinwerfer
+      Auto.materials[2] = new MeshDepthMaterial() // try
+      Auto.materials[3] = new MeshDepthMaterial() // try
+      Auto.materials[4] = new MeshDepthMaterial() // try
+      Auto.materials[5] = new MeshDepthMaterial() // try
+      Auto.materials[6] = new MeshDepthMaterial() // try
+      Auto.materials[7] = new MeshDepthMaterial() // try
+      Auto.materials[8] = new MeshDepthMaterial() // try
+      Auto.materials[9] = new MeshDepthMaterial() // try
+
+      Auto.materials[10] = new MeshPhongMaterial({ color: 0xcc321b, shininess: 350 }) // rote Rücklichter 2
+      Auto.materials[11] = new MeshPhongMaterial({ color: 0xd3c71b, shininess: 300 }) // normale Frontscheinwerfer
+      Auto.materials[12] = new MeshDepthMaterial() // try
+      Auto.materials[13] = new MeshDepthMaterial() // try
+      Auto.materials[14] = new MeshDepthMaterial() // try
+      Auto.materials[15] = new MeshDepthMaterial() // try
+      Auto.materials[16] = new MeshDepthMaterial() // try
+      Auto.materials[17] = new MeshDepthMaterial() // try
+      Auto.materials[18] = new MeshDepthMaterial() // try
+      Auto.materials[19] = new MeshDepthMaterial() // try
+
+      for (let j: number = 1; j < Auto.tubularSegments; j += 10) {
+        Auto.pulseTubularLine(j, 0.2)
+      }
+
+      for (let k: number = 0; k < Auto.geometry.groups.length; k++) {
+        Auto.geometry.groups[k].materialIndex = k % 20
+      }
+
+      //Auto.rotateY(Math.PI / 2)
+      this.scene.add(Auto)
+    })
+
+    autos = [this.objects.Autos3, this.objects.Autos4]
+    autos.forEach((Auto, index) => {
+      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 400 }) // rote Rücklichter
+      Auto.materials[1] = new MeshPhongMaterial({ color: 0xd1e2f6, shininess: 400 }) // xenon Frontscheinwerfer
+      Auto.materials[2] = new MeshDepthMaterial() // try
+      Auto.materials[3] = new MeshDepthMaterial() // try
+      Auto.materials[4] = new MeshDepthMaterial() // try
+      Auto.materials[5] = new MeshDepthMaterial() // try
+      Auto.materials[6] = new MeshDepthMaterial() // try
+      Auto.materials[7] = new MeshDepthMaterial() // try
+      Auto.materials[8] = new MeshDepthMaterial() // try
+      Auto.materials[9] = new MeshDepthMaterial() // try
+      Auto.materials[10] = new MeshDepthMaterial() // try
+      Auto.materials[11] = new MeshDepthMaterial() // try
+      Auto.materials[12] = new MeshDepthMaterial() // try
+      Auto.materials[13] = new MeshDepthMaterial() // try
+      Auto.materials[14] = new MeshDepthMaterial() // try
+
+      Auto.materials[15] = new MeshPhongMaterial({ color: 0xcc321b, shininess: 350 }) // rote Rücklichter 2
+      Auto.materials[16] = new MeshPhongMaterial({ color: 0xd3c71b, shininess: 300 }) // normale Frontscheinwerfer
+      Auto.materials[17] = new MeshDepthMaterial() // try
+      Auto.materials[18] = new MeshDepthMaterial() // try
+      Auto.materials[19] = new MeshDepthMaterial() // try
+      Auto.materials[20] = new MeshDepthMaterial() // try
+      Auto.materials[21] = new MeshDepthMaterial() // try
+      Auto.materials[22] = new MeshDepthMaterial() // try
+      Auto.materials[23] = new MeshDepthMaterial() // try
+      Auto.materials[24] = new MeshDepthMaterial() // try
+      Auto.materials[25] = new MeshDepthMaterial() // try
+      Auto.materials[26] = new MeshDepthMaterial() // try
+      Auto.materials[27] = new MeshDepthMaterial() // try
+      Auto.materials[28] = new MeshDepthMaterial() // try
+      Auto.materials[29] = new MeshDepthMaterial() // try
+
+      for (let j: number = 1; j < Auto.tubularSegments; j += 15) {
+        Auto.pulseTubularLine(j, 0.2)
+      }
+
+      for (let k: number = 0; k < Auto.geometry.groups.length; k++) {
+        Auto.geometry.groups[k].materialIndex = k % 30
+      }
+
+      //Auto.rotateY(Math.PI / 2)
+      this.scene.add(Auto)
+    })
+
+
+    /*
+    for (let i: number = 1; i <= 4; i++) {
+      const AutosName = 'Autos' + i
+      const Autos: KreiseTorus = this.objects[AutosName] as KreiseTorus
+    } */
+
+    this.objects.Autos1.position.x = -9
+    this.objects.Autos1.rotateY(-Math.PI / 2)
+    this.objects.Autos2.position.x = -6
+    this.objects.Autos2.rotateY(-Math.PI / 2)
+    this.objects.Autos3.position.x = -3
+    this.objects.Autos3.rotateY(-Math.PI / 2)
+    this.objects.Autos4.position.x = 3
+    this.objects.Autos4.rotateY(Math.PI / 2)
+    this.objects.Autos5.position.x = 6
+    this.objects.Autos5.rotateY(Math.PI / 2)
+    this.objects.Autos6.position.x = 9
+    this.objects.Autos6.rotateY(Math.PI / 2)
+
+    this.camera.position.set(0, -16.5, 0)
+    this.camera.lookAt(0, -16.5, 0)
+    //this.camera.rotateZ(-Math.PI / 10)
   }
 
   addControls (): void {
@@ -159,19 +398,23 @@ export default class AutobahnEpisode extends KreiseEpisode {
   }
 
   update (ticks: number): void {
-    const Bahn1 = this.scene.getObjectByName('Bahn1') as KreiseTorus
-    const Bahn2 = this.scene.getObjectByName('Bahn2') as KreiseTorus
-    const Bahn3 = this.scene.getObjectByName('Bahn3') as KreiseTorus
-    const Bahn4 = this.scene.getObjectByName('Bahn4') as KreiseTorus
-    const Bahn5 = this.scene.getObjectByName('Bahn5') as KreiseTorus
-    const Bahn6 = this.scene.getObjectByName('Bahn6') as KreiseTorus
+    this.objects.Bahn2.rotation.z = ticks * -0.00005
+    this.objects.Bahn3.rotation.z = ticks * -0.00005
 
-    Bahn1.rotation.y = ticks * 0.00001
-    Bahn2.rotation.y = ticks * 0.00001
-    Bahn3.rotation.y = ticks * 0.00001
-    Bahn4.rotation.y = ticks * 0.00001
-    Bahn5.rotation.y = ticks * 0.00001
-    Bahn6.rotation.y = ticks * 0.00001
+    this.objects.Bahn6.rotation.z = ticks * -0.00005
+    this.objects.Bahn7.rotation.z = ticks * -0.00005
+
+    this.objects.Autos1.rotation.z = ticks * +0.00002
+    this.objects.Autos2.rotation.z = ticks * +0.00008
+    this.objects.Autos3.rotation.z = ticks * +0.00015
+
+    this.objects.Autos4.rotation.z = ticks * +0.00015
+    this.objects.Autos5.rotation.z = ticks * +0.00008
+    this.objects.Autos6.rotation.z = ticks * +0.00002
+
+    this.camera.rotateX(ticks * 0.0000001)
+    this.camera.rotateZ(ticks * 0.00000005)
+
 
     /*
     if (this.kreise.autoplay.camera) {
