@@ -44,6 +44,7 @@ import KreiseZeit from './kreiseZeit.ts'
 // Episodes
 
 import IntroEpisode from './episodes/Intro.ts'
+import AutobahnEpisode from './episodes/Autobahn.ts'
 
 //
 // End of imports
@@ -197,41 +198,18 @@ cameraControls.update(clock.getDelta())
 
 // ===== 🪄 HELPERS AND DEBUG =====
 
-const axesHelper: AxesHelper = new AxesHelper(4)
+// most are in Kreise Class for the main scene
 const pointLightHelper: PointLightHelper = new PointLightHelper(pointLight, undefined, 'orange')
 
-const planeHelperGeometry = new PlaneGeometry(100, 100)
-const planeHelperMaterial = new MeshLambertMaterial({
-  color: 'bisque',
-  emissive: 'skyblue',
-  emissiveIntensity: 0.2,
-  side: 2,
-  transparent: true,
-  opacity: 0.4
-})
-const planeHelper = new Mesh(planeHelperGeometry, planeHelperMaterial)
-planeHelper.rotateX(Math.PI / 2)
-planeHelper.receiveShadow = true
-
-const gridHelperInstance: GridHelper = new GridHelper(100, 100, 'skyblue', 'bisque')
-gridHelperInstance.position.y = -0.01
-
-const cameraEyeHelper: Mesh = new Mesh(
-  new SphereGeometry(1),
-  new MeshBasicMaterial({ color: 0xdddddd })
-)
-cameraEyeHelper.visible = false
-
-kreise.scene.add(cameraEyeHelper)
 
 // ===== Mouse Events =====
 
 let ticks: number = 0
-const episode = new IntroEpisode(kreise, new Scene(), camera)
+//const episode = new IntroEpisode(kreise, new Scene(), camera)
+const episode = new AutobahnEpisode(kreise, new Scene(), camera)
 
 episode.makeScene()
 episode.addControls()
-
 
 kreise.scene.add(episode.scene)
 
@@ -240,20 +218,23 @@ kreise.renderer.setAnimationLoop(function () {
 
   ticks += (timeDelta * 1000)
 
+  // INTRO
+  
   if (episode instanceof IntroEpisode) {
     episode.update(ticks)
   }
 
-  if (kreise.autoplay.camera) {
-    cameraEyeHelper.visible = false
-  } else {
-    cameraControls.update(timeDelta)
-    cameraEyeHelper.visible = true
+  // EPISODE 1: AUTOBAHN
+
+  if (episode instanceof AutobahnEpisode) {
+    episode.update(ticks)
   }
 
-  if (kreise.debug.helperObjects) {
-    planeHelper.visible = true
-    gridHelperInstance.visible = true
+  if (kreise.autoplay.camera) {
+    kreise.objects.cameraEyeHelper.visible = false
+  } else {
+    cameraControls.update(timeDelta)
+    kreise.objects.cameraEyeHelper.visible = true
   }
 
   kreise.renderer.render(kreise.scene, camera)
