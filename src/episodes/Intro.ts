@@ -34,7 +34,7 @@ export default class IntroEpisode extends KreiseEpisode {
   keyup (event: KeyboardEvent): void { console.log(event) }
 
   // remember the kreise scene is the main scene and this one is local to the episode :)
-  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement = HTMLElement) {
+  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: HTMLElement) {
     super(kreise, scene, camera, domElement)
 
     this.colorScheme = kreise.ColorScheme // set this up in main.ts

@@ -6,7 +6,8 @@ import {
   Group,
   Object3D,
   MeshPhongMaterial,
-  MeshDepthMaterial
+  MeshDepthMaterial,
+  MeshPhongMaterial
 } from 'three'
 
 import {
@@ -25,6 +26,7 @@ import turboTextureImage from '../textures/turbo.png'
 
 import { ColorSchemes, flyCurveVectors } from '../KreiseConsts'
 import type Kreise from '../Kreise.ts'
+import { materialOpacity } from 'three/examples/jsm/nodes/Nodes.js'
 
 export default class AutobahnEpisode extends KreiseEpisode {
   flyCurveTicks: number
@@ -36,7 +38,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
   keyup (event: KeyboardEvent): void { console.log(event) }
 
   // remember the kreise scene is the main scene and this one is local to the episode :)
-  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement = HTMLElement) {
+  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: HTMLElement) {
     super(kreise, scene, camera, domElement)
 
     this.colorScheme = kreise.ColorScheme // set this up in main.ts
@@ -234,7 +236,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     leitlinien.forEach((Bahn, index) => {
       // Bahn.materials[0] = new MeshPhongMaterial({ color: 0x333333, shininess: 100 })
-      Bahn.materials[0] = new MeshDepthMaterial({})
+      Bahn.materials[0] = null // new MeshDepthMaterial({})
       Bahn.materials[1] = new MeshPhongMaterial({ color: 0xdddddd, shininess: 150 })
 
       // console.log(Bahn.geometry.groups)
@@ -260,19 +262,19 @@ export default class AutobahnEpisode extends KreiseEpisode {
     // Jetzt die Autos!
     let autos: KreiseTorus[] = [this.objects.Autos1, this.objects.Autos6]
     autos.forEach((Auto, index) => {
-      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 400 }) // rote Rücklichter
-      Auto.materials[1] = new MeshPhongMaterial({ color: 0xd1e2f6, shininess: 400 }) // xenon Frontscheinwerfer
-      Auto.materials[2] = new MeshDepthMaterial() // try
-      Auto.materials[3] = new MeshDepthMaterial() // try
-      Auto.materials[4] = new MeshDepthMaterial() // try
-      Auto.materials[5] = new MeshDepthMaterial() // try
+      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 300 }) // rote Rücklichter
+      Auto.materials[1] = new MeshPhongMaterial({ color: 0x9ac4f5, shininess: 400 }) // xenon Frontscheinwerfer
+      Auto.materials[2] = null
+      Auto.materials[3] = null
+      Auto.materials[4] = null
+      Auto.materials[5] = null
 
-      Auto.materials[6] = new MeshPhongMaterial({ color: 0xcc321b, shininess: 350 }) // rote Rücklichter 2
-      Auto.materials[7] = new MeshPhongMaterial({ color: 0xd3c71b, shininess: 300 }) // normale Frontscheinwerfer
-      Auto.materials[8] = new MeshDepthMaterial() // try
-      Auto.materials[9] = new MeshDepthMaterial() // try
-      Auto.materials[10] = new MeshDepthMaterial() // try
-      Auto.materials[11] = new MeshDepthMaterial() // try
+      Auto.materials[6] = new MeshPhongMaterial({ color: 0xcc5f1b, shininess: 350 }) // rote Rücklichter 2
+      Auto.materials[7] = new MeshPhongMaterial({ color: 0xffba24, shininess: 350 }) // normale Frontscheinwerfer
+      Auto.materials[8] = null
+      Auto.materials[9] = null
+      Auto.materials[10] = null
+      Auto.materials[11] = null
 
       for (let j: number = 1; j < Auto.tubularSegments; j += 6) {
         Auto.pulseTubularLine(j, 0.2)
@@ -288,27 +290,27 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     autos = [this.objects.Autos2, this.objects.Autos5]
     autos.forEach((Auto, index) => {
-      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 400 }) // rote Rücklichter
-      Auto.materials[1] = new MeshPhongMaterial({ color: 0xd1e2f6, shininess: 400 }) // xenon Frontscheinwerfer
-      Auto.materials[2] = new MeshDepthMaterial() // try
-      Auto.materials[3] = new MeshDepthMaterial() // try
-      Auto.materials[4] = new MeshDepthMaterial() // try
-      Auto.materials[5] = new MeshDepthMaterial() // try
-      Auto.materials[6] = new MeshDepthMaterial() // try
-      Auto.materials[7] = new MeshDepthMaterial() // try
-      Auto.materials[8] = new MeshDepthMaterial() // try
-      Auto.materials[9] = new MeshDepthMaterial() // try
+      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 300 }) // rote Rücklichter
+      Auto.materials[1] = new MeshPhongMaterial({ color: 0x9ac4f5, shininess: 400 }) // xenon Frontscheinwerfer
+      Auto.materials[2] = null
+      Auto.materials[3] = null
+      Auto.materials[4] = null
+      Auto.materials[5] = null
+      Auto.materials[6] = null
+      Auto.materials[7] = null
+      Auto.materials[8] = null
+      Auto.materials[9] = null
 
-      Auto.materials[10] = new MeshPhongMaterial({ color: 0xcc321b, shininess: 350 }) // rote Rücklichter 2
-      Auto.materials[11] = new MeshPhongMaterial({ color: 0xd3c71b, shininess: 300 }) // normale Frontscheinwerfer
-      Auto.materials[12] = new MeshDepthMaterial() // try
-      Auto.materials[13] = new MeshDepthMaterial() // try
-      Auto.materials[14] = new MeshDepthMaterial() // try
-      Auto.materials[15] = new MeshDepthMaterial() // try
-      Auto.materials[16] = new MeshDepthMaterial() // try
-      Auto.materials[17] = new MeshDepthMaterial() // try
-      Auto.materials[18] = new MeshDepthMaterial() // try
-      Auto.materials[19] = new MeshDepthMaterial() // try
+      Auto.materials[10] = new MeshPhongMaterial({ color: 0xcc5f1b, shininess: 350 }) // rote Rücklichter 2
+      Auto.materials[11] = new MeshPhongMaterial({ color: 0xffba24, shininess: 300 }) // normale Frontscheinwerfer
+      Auto.materials[12] = null
+      Auto.materials[13] = null
+      Auto.materials[14] = null
+      Auto.materials[15] = null
+      Auto.materials[16] = null
+      Auto.materials[17] = null
+      Auto.materials[18] = null
+      Auto.materials[19] = null
 
       for (let j: number = 1; j < Auto.tubularSegments; j += 10) {
         Auto.pulseTubularLine(j, 0.2)
@@ -324,37 +326,37 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     autos = [this.objects.Autos3, this.objects.Autos4]
     autos.forEach((Auto, index) => {
-      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 400 }) // rote Rücklichter
-      Auto.materials[1] = new MeshPhongMaterial({ color: 0xd1e2f6, shininess: 400 }) // xenon Frontscheinwerfer
-      Auto.materials[2] = new MeshDepthMaterial() // try
-      Auto.materials[3] = new MeshDepthMaterial() // try
-      Auto.materials[4] = new MeshDepthMaterial() // try
-      Auto.materials[5] = new MeshDepthMaterial() // try
-      Auto.materials[6] = new MeshDepthMaterial() // try
-      Auto.materials[7] = new MeshDepthMaterial() // try
-      Auto.materials[8] = new MeshDepthMaterial() // try
-      Auto.materials[9] = new MeshDepthMaterial() // try
-      Auto.materials[10] = new MeshDepthMaterial() // try
-      Auto.materials[11] = new MeshDepthMaterial() // try
-      Auto.materials[12] = new MeshDepthMaterial() // try
-      Auto.materials[13] = new MeshDepthMaterial() // try
-      Auto.materials[14] = new MeshDepthMaterial() // try
+      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 300 }) // rote Rücklichter
+      Auto.materials[1] = new MeshPhongMaterial({ color: 0x9ac4f5, shininess: 400 }) // xenon Frontscheinwerfer
+      Auto.materials[2] = null
+      Auto.materials[3] = null
+      Auto.materials[4] = null
+      Auto.materials[5] = null
+      Auto.materials[6] = null
+      Auto.materials[7] = null
+      Auto.materials[8] = null
+      Auto.materials[9] = null
+      Auto.materials[10] = null
+      Auto.materials[11] = null
+      Auto.materials[12] = null
+      Auto.materials[13] = null
+      Auto.materials[14] = null
 
-      Auto.materials[15] = new MeshPhongMaterial({ color: 0xcc321b, shininess: 350 }) // rote Rücklichter 2
-      Auto.materials[16] = new MeshPhongMaterial({ color: 0xd3c71b, shininess: 300 }) // normale Frontscheinwerfer
-      Auto.materials[17] = new MeshDepthMaterial() // try
-      Auto.materials[18] = new MeshDepthMaterial() // try
-      Auto.materials[19] = new MeshDepthMaterial() // try
-      Auto.materials[20] = new MeshDepthMaterial() // try
-      Auto.materials[21] = new MeshDepthMaterial() // try
-      Auto.materials[22] = new MeshDepthMaterial() // try
-      Auto.materials[23] = new MeshDepthMaterial() // try
-      Auto.materials[24] = new MeshDepthMaterial() // try
-      Auto.materials[25] = new MeshDepthMaterial() // try
-      Auto.materials[26] = new MeshDepthMaterial() // try
-      Auto.materials[27] = new MeshDepthMaterial() // try
-      Auto.materials[28] = new MeshDepthMaterial() // try
-      Auto.materials[29] = new MeshDepthMaterial() // try
+      Auto.materials[15] = new MeshPhongMaterial({ color: 0xcc5f1b, shininess: 350 }) // rote Rücklichter 2
+      Auto.materials[16] = new MeshPhongMaterial({ color: 0xffba24, shininess: 300 }) // normale Frontscheinwerfer
+      Auto.materials[17] = null
+      Auto.materials[18] = null
+      Auto.materials[19] = null
+      Auto.materials[20] = null
+      Auto.materials[21] = null
+      Auto.materials[22] = null
+      Auto.materials[23] = null
+      Auto.materials[24] = null
+      Auto.materials[25] = null
+      Auto.materials[26] = null
+      Auto.materials[27] = null
+      Auto.materials[28] = null
+      Auto.materials[29] = null
 
       for (let j: number = 1; j < Auto.tubularSegments; j += 15) {
         Auto.pulseTubularLine(j, 0.2)
@@ -412,8 +414,8 @@ export default class AutobahnEpisode extends KreiseEpisode {
     this.objects.Autos5.rotation.z = ticks * +0.00008
     this.objects.Autos6.rotation.z = ticks * +0.00002
 
-    this.camera.rotateX(ticks * 0.0000001)
-    this.camera.rotateZ(ticks * 0.00000005)
+    this.camera.rotation.x = ticks * 0.00004
+    this.camera.rotation.z = ticks * 0.00001
 
 
     /*

@@ -53,7 +53,8 @@ import AutobahnEpisode from './episodes/Autobahn.ts'
 // GLOBALS
 const kreise = new Kreise()
 
-document.title = 'Krei.se'
+// @TODO this is not needed
+document.title = 'Krei·se'
 
 document.body.append(getPageOverlayDiv())
 
@@ -62,7 +63,7 @@ canvas.setAttribute('id', 'scene')
 
 document.body.append(canvas)
 
-setTimeout(fadeoutDatenschutzAndInfoParagraphs, 5000)
+setTimeout(fadeoutDatenschutzAndInfoParagraphs, 20000)
 
 // ===== ☀️ ===== Sunrise and Sunset ===== 🌒 =====
 
@@ -82,6 +83,8 @@ const altitude: number = kreise.sunPosition.altitude // in radians, so µ/2 at h
 if (altitude < 0.1 && altitude > -0.1) {
   kreise.brightness = Math.floor(255 * ((altitude + 0.1) * 5))
 }
+
+//kreise.brightness = 255
 
 document.body.style.setProperty('--page-background', 'rgba(' + kreise.brightness + ',' + kreise.brightness + ',' + kreise.brightness + ',0)')
 
@@ -153,7 +156,7 @@ if (document.referrer.includes('google')) {
 // ===== 💡 LIGHTS =====
 
 const ambientLight: AmbientLight = new AmbientLight('white', 3)
-const pointLight: PointLight = new PointLight('white', 150, 5)
+const pointLight: PointLight = new PointLight('white', 300, 150)
 pointLight.position.set(0, 0, 0)
 
 pointLight.castShadow = true
@@ -165,8 +168,9 @@ pointLight.shadow.mapSize.height = 2048
 kreise.scene.add(ambientLight)
 kreise.scene.add(pointLight)
 
-ambientLight.intensity = ((255 - kreise.brightness) / 50) + 2
-pointLight.intensity = (255 - kreise.brightness) + 10
+//ambientLight.intensity = ((255 - kreise.brightness) / 50) + 0.2
+ambientLight.intensity = 0.5
+//pointLight.intensity = (255 - kreise.brightness) + 50
 
 // ===== 🎥 CAMERA =====
 
@@ -208,7 +212,7 @@ let ticks: number = 0
 
 let episode: KreiseEpisode
 
-if (Math.random() > .7) {
+if (Math.random() > .85) {
   episode = new IntroEpisode(kreise, new Scene(), camera)
 }
 else {

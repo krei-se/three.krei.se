@@ -7,12 +7,19 @@
        url('/fonts/Montserrat-Light.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  src: local(''),
+       url('/fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
+}
+
 /* Dark mode */
 
 :root {
-  font-family: 'Montserrat Light';
+  font-family: 'Montserrat';
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: 300;
 
   --page-background: #FFFFFF;
 
@@ -162,9 +169,10 @@ div#controls {
   border-color: rgb(255, 134, 154);
 
 }
+/* note this gets overwritten by .style @TODO */
 
-p#datenschutz {
-  font-weight: 800;
+p#datenschutz.a {
+  font-weight: 400;
 }
 
 p#datenschutz:hover {

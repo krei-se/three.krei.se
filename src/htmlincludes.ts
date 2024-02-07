@@ -27,6 +27,7 @@ export function getPageOverlayDiv (): HTMLDivElement {
 
   const datenschutzParagraph: HTMLParagraphElement = document.createElement('p')
   datenschutzParagraph.setAttribute('id', 'datenschutz')
+  datenschutzParagraph.style.fontWeight = '400'
   const datenschutzLink: HTMLAnchorElement = document.createElement('a')
   datenschutzLink.setAttribute('href', 'datenschutz.html')
   datenschutzLink.innerHTML = 'Impressum · Datenschutz'
@@ -41,7 +42,16 @@ export function getPageOverlayDiv (): HTMLDivElement {
 
 export function fadeoutDatenschutzAndInfoParagraphs (): void {
   const datenschutzParagraph: HTMLParagraphElement = document.querySelector('#datenschutz') ?? document.createElement('p')
-  datenschutzParagraph.style.cssText = 'opacity : 0.0; transition:opacity 30s;'
+  datenschutzParagraph.style.cssText = datenschutzParagraph.style.cssText + 'opacity : 0.0; transition:opacity 60s;'
   const infoParagraph: HTMLParagraphElement = document.querySelector('#info') ?? document.createElement('p')
-  infoParagraph.style.cssText = 'opacity : 0.0; transition:opacity 30s;'
+  infoParagraph.style.cssText = infoParagraph.style.cssText + 'opacity : 0.0; transition:opacity 60s;'
+  window.setTimeout(() => {
+    const introDiv: HTMLDivElement = document.querySelector('#introDiv') ?? document.createElement('div')
+    const datenschutzParagraph: HTMLParagraphElement = document.querySelector('#datenschutz') ?? document.createElement('p')
+    datenschutzParagraph.style.cssText = datenschutzParagraph.style.cssText + 'opacity : 0.0; transition:opacity 60s;'
+    const infoParagraph: HTMLParagraphElement = document.querySelector('#info') ?? document.createElement('p')
+    infoParagraph.style.cssText = infoParagraph.style.cssText + 'opacity : 0.0; transition:opacity 60s;'
+    introDiv.removeChild(datenschutzParagraph)
+    introDiv.removeChild(infoParagraph)
+  }, 60000)
 }
