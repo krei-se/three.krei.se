@@ -89,7 +89,7 @@ if (altitude < 0.1 && altitude > -0.1) {
   kreise.brightness = Math.floor(255 * ((altitude + 0.1) * 5))
 }
 
-kreise.brightness = 0
+// kreise.brightness = 0
 
 document.body.style.setProperty('--page-background', 'rgba(' + kreise.brightness + ',' + kreise.brightness + ',' + kreise.brightness + ',0)')
 
@@ -217,7 +217,7 @@ let ticks: number = 0
 
 let episode: KreiseEpisode
 
-if (Math.random() > .85) {
+if (Math.random() > .65) {
   episode = new IntroEpisode(kreise, new Scene(), camera)
 }
 else {
@@ -232,7 +232,7 @@ kreise.scene.add(episode.scene)
 kreise.renderer.outputColorSpace = SRGBColorSpace
 kreise.renderer.toneMapping = ACESFilmicToneMapping
 
-let renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
+const renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
 renderTarget.samples = 4
 const composer = new EffectComposer(kreise.renderer, renderTarget)
 composer.addPass(new RenderPass(kreise.scene, camera))
