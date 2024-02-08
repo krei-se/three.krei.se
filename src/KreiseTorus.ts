@@ -96,6 +96,13 @@ class KreiseTorus extends Mesh {
     }
     positionAttribute.needsUpdate = true
   }
+
+  addBloomLayer(segments: number = 1) {
+
+    
+
+  }
+
 }
 
 class KlavierTorus extends KreiseTorus {

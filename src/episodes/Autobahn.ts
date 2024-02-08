@@ -60,6 +60,10 @@ export default class AutobahnEpisode extends KreiseEpisode {
         case 'KeyO':
           if (this.kreise.client.developerMode) {
             this.kreise.autoplay.camera = !this.kreise.autoplay.camera
+            if (this.kreise.autoplay.camera) {
+              this.camera.position.set(0, -16.5, 0)
+              this.camera.lookAt(0, -16.5, 0)
+            }
           }
           break
         case 'KeyP':
@@ -68,12 +72,13 @@ export default class AutobahnEpisode extends KreiseEpisode {
           }
           break
         case 'KeyU':
-          Object.entries(this.objects).forEach(([object, index]) => {
+          Object.entries(this.objects).forEach(([object]) => {
             console.log(object)
             if (this.objects[object] instanceof KreiseTorus) {
               this.objects[object].materials.forEach((material, index) => {
-                console.log(material)
-                material.wireframe = !material.wireframe
+                if (material !== null) {
+                  material.wireframe = !material.wireframe
+                }
               })
             }
           })
@@ -264,17 +269,27 @@ export default class AutobahnEpisode extends KreiseEpisode {
     }
 
     // Jetzt die Autos!
+    let intensity: number = 0
+    if (this.kreise.brightness === 0) {
+      intensity = 3
+    }
+    const rotesRuecklicht = { toneMapped: false, color: 0xcc4c34, shininess: 400, emissive: 0xeb4c34, emissiveIntensity: intensity }
+    const rotesRuecklicht2 = { toneMapped: false, color: 0xff2200, shininess: 350, emissive: 0xff2200, emissiveIntensity: intensity }
+
+    const xenonFrontlicht = { toneMapped: false, color: 0x5555ff, shininess: 400, emissive: 0x5555ff, emissiveIntensity: intensity }
+    const normalFrontlicht = { toneMapped: false, color: 0xffba24, shininess: 350, emissive: 0xffba24, emissiveIntensity: intensity }
+
     let autos: KreiseTorus[] = [this.objects.Autos1, this.objects.Autos6]
     autos.forEach((Auto, index) => {
-      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 300 }) // rote Rücklichter
-      Auto.materials[1] = new MeshPhongMaterial({ color: 0x9ac4f5, shininess: 400 }) // xenon Frontscheinwerfer
+      Auto.materials[0] = new MeshPhongMaterial(rotesRuecklicht)
+      Auto.materials[1] = new MeshPhongMaterial(xenonFrontlicht)
       Auto.materials[2] = null
       Auto.materials[3] = null
       Auto.materials[4] = null
       Auto.materials[5] = null
 
-      Auto.materials[6] = new MeshPhongMaterial({ color: 0xcc5f1b, shininess: 350 }) // rote Rücklichter 2
-      Auto.materials[7] = new MeshPhongMaterial({ color: 0xffba24, shininess: 350 }) // normale Frontscheinwerfer
+      Auto.materials[6] = new MeshPhongMaterial(rotesRuecklicht2)
+      Auto.materials[7] = new MeshPhongMaterial(normalFrontlicht)
       Auto.materials[8] = null
       Auto.materials[9] = null
       Auto.materials[10] = null
@@ -294,8 +309,8 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     autos = [this.objects.Autos2, this.objects.Autos5]
     autos.forEach((Auto, index) => {
-      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 300 }) // rote Rücklichter
-      Auto.materials[1] = new MeshPhongMaterial({ color: 0x9ac4f5, shininess: 400 }) // xenon Frontscheinwerfer
+      Auto.materials[0] = new MeshPhongMaterial(rotesRuecklicht)
+      Auto.materials[1] = new MeshPhongMaterial(xenonFrontlicht)
       Auto.materials[2] = null
       Auto.materials[3] = null
       Auto.materials[4] = null
@@ -305,8 +320,8 @@ export default class AutobahnEpisode extends KreiseEpisode {
       Auto.materials[8] = null
       Auto.materials[9] = null
 
-      Auto.materials[10] = new MeshPhongMaterial({ color: 0xcc5f1b, shininess: 350 }) // rote Rücklichter 2
-      Auto.materials[11] = new MeshPhongMaterial({ color: 0xffba24, shininess: 300 }) // normale Frontscheinwerfer
+      Auto.materials[10] = new MeshPhongMaterial(rotesRuecklicht2)
+      Auto.materials[11] = new MeshPhongMaterial(normalFrontlicht)
       Auto.materials[12] = null
       Auto.materials[13] = null
       Auto.materials[14] = null
@@ -330,8 +345,8 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     autos = [this.objects.Autos3, this.objects.Autos4]
     autos.forEach((Auto, index) => {
-      Auto.materials[0] = new MeshPhongMaterial({ color: 0xeb4c34, shininess: 300 }) // rote Rücklichter
-      Auto.materials[1] = new MeshPhongMaterial({ color: 0x9ac4f5, shininess: 400 }) // xenon Frontscheinwerfer
+      Auto.materials[0] = new MeshPhongMaterial(rotesRuecklicht)
+      Auto.materials[1] = new MeshPhongMaterial(xenonFrontlicht)
       Auto.materials[2] = null
       Auto.materials[3] = null
       Auto.materials[4] = null
@@ -346,8 +361,8 @@ export default class AutobahnEpisode extends KreiseEpisode {
       Auto.materials[13] = null
       Auto.materials[14] = null
 
-      Auto.materials[15] = new MeshPhongMaterial({ color: 0xcc5f1b, shininess: 350 }) // rote Rücklichter 2
-      Auto.materials[16] = new MeshPhongMaterial({ color: 0xffba24, shininess: 300 }) // normale Frontscheinwerfer
+      Auto.materials[15] = new MeshPhongMaterial(rotesRuecklicht2)
+      Auto.materials[16] = new MeshPhongMaterial(normalFrontlicht)
       Auto.materials[17] = null
       Auto.materials[18] = null
       Auto.materials[19] = null

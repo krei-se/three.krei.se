@@ -16,7 +16,11 @@ import {
   SphereGeometry,
   Color,
   PointLightHelper,
-  AxesHelper
+  AxesHelper,
+  WebGLRenderTarget,
+  Vector2,
+  SRGBColorSpace,
+  ACESFilmicToneMapping
 } from 'three'
 
 // GLOBALS
@@ -45,6 +49,7 @@ import KreiseZeit from './kreiseZeit.ts'
 
 import IntroEpisode from './episodes/Intro.ts'
 import AutobahnEpisode from './episodes/Autobahn.ts'
+import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 
 //
 // End of imports
@@ -84,7 +89,7 @@ if (altitude < 0.1 && altitude > -0.1) {
   kreise.brightness = Math.floor(255 * ((altitude + 0.1) * 5))
 }
 
-//kreise.brightness = 255
+kreise.brightness = 0
 
 document.body.style.setProperty('--page-background', 'rgba(' + kreise.brightness + ',' + kreise.brightness + ',' + kreise.brightness + ',0)')
 
@@ -168,9 +173,9 @@ pointLight.shadow.mapSize.height = 2048
 kreise.scene.add(ambientLight)
 kreise.scene.add(pointLight)
 
-//ambientLight.intensity = ((255 - kreise.brightness) / 50) + 0.2
+// ambientLight.intensity = ((255 - kreise.brightness) / 50) + 0.2
 ambientLight.intensity = 0.5
-//pointLight.intensity = (255 - kreise.brightness) + 50
+// pointLight.intensity = (255 - kreise.brightness) + 50
 
 // ===== 🎥 CAMERA =====
 
@@ -224,19 +229,30 @@ episode.addControls()
 
 kreise.scene.add(episode.scene)
 
+kreise.renderer.outputColorSpace = SRGBColorSpace
+kreise.renderer.toneMapping = ACESFilmicToneMapping
+
+let renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
+renderTarget.samples = 4
+const composer = new EffectComposer(kreise.renderer, renderTarget)
+composer.addPass(new RenderPass(kreise.scene, camera))
+if (kreise.brightness === 0) {
+  composer.addPass(new UnrealBloomPass(new Vector2(canvas.clientWidth, canvas.clientHeight), .3, .3, 0))
+}
+const outputPass = new OutputPass()
+composer.addPass(outputPass)
+
 kreise.renderer.setAnimationLoop(function () {
   const timeDelta = clock.getDelta()
 
   ticks += (timeDelta * 1000)
 
   // INTRO
-  
   if (episode instanceof IntroEpisode) {
     episode.update(ticks)
   }
 
   // EPISODE 1: AUTOBAHN
-
   if (episode instanceof AutobahnEpisode) {
     episode.update(ticks)
   }
@@ -248,7 +264,9 @@ kreise.renderer.setAnimationLoop(function () {
     kreise.objects.cameraEyeHelper.visible = true
   }
 
-  kreise.renderer.render(kreise.scene, camera)
+  //kreise.renderer.render(kreise.scene, camera)
+  composer.render()
+
   if (import.meta.env.DEV) {
     stats.update()
     // add debug interfaces
