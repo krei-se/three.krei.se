@@ -179,21 +179,21 @@ ambientLight.intensity = 0.5
 
 // ===== 🎥 CAMERA =====
 
-const camera: PerspectiveCamera = new PerspectiveCamera(
+kreise.camera = new PerspectiveCamera(
   90,
   canvas.clientWidth / canvas.clientHeight,
   0.1,
   100
 )
-camera.fov = 120
-camera.position.set(0, 0, 0)
-camera.lookAt(0, 0, 0)
-camera.near = 0.05
-camera.far = 40
+kreise.camera.fov = 120
+kreise.camera.position.set(0, 0, 0)
+kreise.camera.lookAt(0, 0, 0)
+kreise.camera.near = 0.05
+kreise.camera.far = 40
 
 // ===== 🕹️ CONTROLS =====
 
-const cameraControls: FlyControls = new FlyControls(camera, canvas)
+const cameraControls: FlyControls = new FlyControls(kreise.camera, canvas)
 cameraControls.dragToLook = true
 cameraControls.movementSpeed = 5
 cameraControls.autoForward = false
@@ -218,10 +218,10 @@ let ticks: number = 0
 let episode: KreiseEpisode
 
 if (Math.random() > .65) {
-  episode = new IntroEpisode(kreise, new Scene(), camera)
+  episode = new IntroEpisode(kreise, new Scene(), kreise.camera)
 }
 else {
-  episode = new AutobahnEpisode(kreise, new Scene(), camera)
+  episode = new AutobahnEpisode(kreise, new Scene(), kreise.camera)
 }
 
 episode.makeScene()
@@ -232,15 +232,15 @@ kreise.scene.add(episode.scene)
 kreise.renderer.outputColorSpace = SRGBColorSpace
 kreise.renderer.toneMapping = ACESFilmicToneMapping
 
-const renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
-renderTarget.samples = 4
-const composer = new EffectComposer(kreise.renderer, renderTarget)
-composer.addPass(new RenderPass(kreise.scene, camera))
+kreise.renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
+kreise.renderTarget.samples = 2
+kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
+kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
 if (kreise.brightness === 0) {
-  composer.addPass(new UnrealBloomPass(new Vector2(canvas.clientWidth, canvas.clientHeight), .3, .3, 0))
+  kreise.composer.addPass(new UnrealBloomPass(new Vector2(canvas.clientWidth, canvas.clientHeight), 0.3, 0.05, 0))
 }
 const outputPass = new OutputPass()
-composer.addPass(outputPass)
+kreise.composer.addPass(outputPass)
 
 kreise.renderer.setAnimationLoop(function () {
   const timeDelta = clock.getDelta()
@@ -265,7 +265,7 @@ kreise.renderer.setAnimationLoop(function () {
   }
 
   //kreise.renderer.render(kreise.scene, camera)
-  composer.render()
+  kreise.composer.render()
 
   if (import.meta.env.DEV) {
     stats.update()
@@ -275,7 +275,18 @@ kreise.renderer.setAnimationLoop(function () {
   if (resizeRendererToDisplaySize(kreise.renderer)) {
     // console.log('Resized')
     const canvas = kreise.renderer.domElement
-    camera.aspect = canvas.clientWidth / canvas.clientHeight
-    camera.updateProjectionMatrix()
+    kreise.camera.aspect = canvas.clientWidth / canvas.clientHeight
+    kreise.camera.updateProjectionMatrix()
+    if (kreise.brightness === 0) {
+      kreise.renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
+      kreise.renderTarget.samples = 2
+      kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
+      kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
+      if (kreise.brightness === 0) {
+        kreise.composer.addPass(new UnrealBloomPass(new Vector2(canvas.clientWidth, canvas.clientHeight), 0.3, 0.05, 0))
+      }
+      const outputPass = new OutputPass()
+      kreise.composer.addPass(outputPass)
+    }
   }
 })

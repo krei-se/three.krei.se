@@ -1,4 +1,4 @@
-import { EventDispatcher, type Camera, type Object3D, type Scene, Mesh, AxesHelper, GridHelper } from 'three'
+import { EventDispatcher, type Camera, type Object3D, type Scene, Mesh, AxesHelper, GridHelper, Clock } from 'three'
 import type Kreise from '../Kreise.ts'
 import { KlavierTorus, KreiseShaderedTorus, KreiseTorus } from '../KreiseTorus.ts'
 
@@ -10,6 +10,7 @@ export default class KreiseEpisode extends EventDispatcher {
   camera: Camera
   domElement: HTMLElement
   objects: ObjectInterface
+  clock: Clock
   // functions
   dispose (): void {}
   update (ticks: number): void { console.log(ticks) } // stub to shutup linter
@@ -21,6 +22,7 @@ export default class KreiseEpisode extends EventDispatcher {
     this.camera = camera
     this.domElement = domElement
     this.objects = {}
+    this.clock = new Clock(true) // @TODO start clock with episode.start()
   }
 
   // ===== Keyboard Events =====

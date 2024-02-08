@@ -273,7 +273,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
     if (this.kreise.brightness === 0) {
       intensity = 3
     }
-    const rotesRuecklicht = { toneMapped: false, color: 0xcc4c34, shininess: 400, emissive: 0xeb4c34, emissiveIntensity: intensity }
+    const rotesRuecklicht = { toneMapped: false, color: 0xcc4cee, shininess: 400, emissive: 0xcc4cee, emissiveIntensity: intensity }
     const rotesRuecklicht2 = { toneMapped: false, color: 0xff2200, shininess: 350, emissive: 0xff2200, emissiveIntensity: intensity }
 
     const xenonFrontlicht = { toneMapped: false, color: 0x5555ff, shininess: 400, emissive: 0x5555ff, emissiveIntensity: intensity }
@@ -426,13 +426,13 @@ export default class AutobahnEpisode extends KreiseEpisode {
       this.objects.Bahn6.rotation.z = ticks * -0.00005
       this.objects.Bahn7.rotation.z = ticks * -0.00005
 
-      this.objects.Autos1.rotation.z = ticks * +0.00002
+      this.objects.Autos1.rotation.z = ticks * +0.00004
       this.objects.Autos2.rotation.z = ticks * +0.00008
-      this.objects.Autos3.rotation.z = ticks * +0.00015
+      this.objects.Autos3.rotation.z = ticks * +0.00012
 
-      this.objects.Autos4.rotation.z = ticks * +0.00015
+      this.objects.Autos4.rotation.z = ticks * +0.00012
       this.objects.Autos5.rotation.z = ticks * +0.00008
-      this.objects.Autos6.rotation.z = ticks * +0.00002
+      this.objects.Autos6.rotation.z = ticks * +0.00004
     }
 
     if (this.kreise.autoplay.camera) {

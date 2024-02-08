@@ -1,9 +1,10 @@
 import SunCalc from 'suncalc'
 import type { GetSunPositionResult, GetTimesResult } from 'suncalc'
 
-import { AxesHelper, EventDispatcher, GridHelper, Mesh, MeshBasicMaterial, MeshLambertMaterial, PlaneGeometry, PlaneHelper, Scene, SphereGeometry, WebGLRenderer } from 'three'
+import { AxesHelper, Camera, EventDispatcher, GridHelper, Mesh, MeshBasicMaterial, MeshLambertMaterial, PlaneGeometry, PlaneHelper, RenderTarget, Scene, SphereGeometry, WebGLRenderTarget, WebGLRenderer } from 'three'
 import { toggleFullScreen } from './helpers/fullscreen'
 import { ObjectInterface } from './episodes/KreiseEpisode'
+import { EffectComposer } from 'three/examples/jsm/Addons.js'
 
 export interface AutoplayOptionsInterface { camera: boolean, animation: boolean }
 export interface DebugOptionsInterface { helperObjects: boolean, helperInterface: boolean }
@@ -14,7 +15,10 @@ export default class Kreise extends EventDispatcher {
   brightness: number
 
   renderer: WebGLRenderer
+  composer: EffectComposer
+  renderTarget: WebGLRenderTarget
   scene: Scene
+  camera: Camera
   objects: ObjectInterface
 
   autoplay: AutoplayOptionsInterface
@@ -32,6 +36,9 @@ export default class Kreise extends EventDispatcher {
     this.brightness = 255
 
     this.renderer = new WebGLRenderer() // will be overwritten later
+    this.composer = new EffectComposer(this.renderer, this.renderTarget) // will be overwritten in main
+    this.renderTarget = new WebGLRenderTarget() // will be overwritten in main
+    this.camera = new Camera() // will be overwritten in main
     this.scene = new Scene()
     this.objects = {}
 
