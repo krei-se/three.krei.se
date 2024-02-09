@@ -50,6 +50,7 @@ import KreiseZeit from './kreiseZeit.ts'
 import IntroEpisode from './episodes/Intro.ts'
 import AutobahnEpisode from './episodes/Autobahn.ts'
 import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
+import ChemnitzEpisode from './episodes/Chemnitz.ts'
 
 //
 // End of imports
@@ -89,7 +90,7 @@ if (altitude < 0.1 && altitude > -0.1) {
   kreise.brightness = Math.floor(255 * ((altitude + 0.1) * 5))
 }
 
-// kreise.brightness = 0
+kreise.brightness = 0
 
 document.body.style.setProperty('--page-background', 'rgba(' + kreise.brightness + ',' + kreise.brightness + ',' + kreise.brightness + ',0)')
 
@@ -217,12 +218,18 @@ let ticks: number = 0
 
 let episode: KreiseEpisode
 
-if (Math.random() > .65) {
-  episode = new IntroEpisode(kreise, new Scene(), kreise.camera)
+let episodeRand = Math.random()
+
+if (episodeRand > 0.70) {
+  episode = new IntroEpisode(kreise, new Scene(), kreise.camera, window)
 }
-else {
-  episode = new AutobahnEpisode(kreise, new Scene(), kreise.camera)
+if (episodeRand > 0.30 && episodeRand <= 0.70) {
+  episode = new AutobahnEpisode(kreise, new Scene(), kreise.camera, window)
 }
+if (episodeRand > 0.0 && episodeRand <= 0.30) {
+  episode = new ChemnitzEpisode(kreise, new Scene(), kreise.camera, window)
+}
+
 
 episode.makeScene()
 episode.addControls()
@@ -233,11 +240,11 @@ kreise.renderer.outputColorSpace = SRGBColorSpace
 kreise.renderer.toneMapping = ACESFilmicToneMapping
 
 kreise.renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
-kreise.renderTarget.samples = 2
+kreise.renderTarget.samples = 1
 kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
 kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
 if (kreise.brightness === 0) {
-  kreise.composer.addPass(new UnrealBloomPass(new Vector2(canvas.clientWidth, canvas.clientHeight), 0.3, 0.05, 0))
+  kreise.composer.addPass(new UnrealBloomPass(new Vector2(canvas.clientWidth / 2, canvas.clientHeight / 2), 0.3, 0.05, 0))
 }
 const outputPass = new OutputPass()
 kreise.composer.addPass(outputPass)
@@ -257,6 +264,11 @@ kreise.renderer.setAnimationLoop(function () {
     episode.update(ticks)
   }
 
+  // EPISODE 2: CHEMNITZ
+  if (episode instanceof ChemnitzEpisode) {
+    episode.update(ticks)
+  }
+
   if (kreise.autoplay.camera) {
     kreise.objects.cameraEyeHelper.visible = false
   } else {
@@ -264,7 +276,7 @@ kreise.renderer.setAnimationLoop(function () {
     kreise.objects.cameraEyeHelper.visible = true
   }
 
-  //kreise.renderer.render(kreise.scene, camera)
+  //kreise.renderer.render(kreise.scene, kreise.camera)
   kreise.composer.render()
 
   if (import.meta.env.DEV) {
@@ -277,16 +289,43 @@ kreise.renderer.setAnimationLoop(function () {
     const canvas = kreise.renderer.domElement
     kreise.camera.aspect = canvas.clientWidth / canvas.clientHeight
     kreise.camera.updateProjectionMatrix()
+/*
+    kreise.renderer.dispose()
+
+    kreise.renderer = new WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      logarithmicDepthBuffer: true
+    })
+
+    kreise.renderer.setPixelRatio(window.devicePixelRatio)
+
+    kreise.renderer.shadowMap.enabled = true
+    kreise.renderer.shadowMap.type = PCFSoftShadowMap
+
+    kreise.renderTarget.dispose()
+
+    kreise.renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
+    kreise.renderTarget.samples = 0
+*/
+    
+/*
+kreise.composer.dispose()
+    kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
+    kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
+*/
+    
     if (kreise.brightness === 0) {
-      kreise.renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
-      kreise.renderTarget.samples = 2
-      kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
-      kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
-      if (kreise.brightness === 0) {
-        kreise.composer.addPass(new UnrealBloomPass(new Vector2(canvas.clientWidth, canvas.clientHeight), 0.3, 0.05, 0))
-      }
-      const outputPass = new OutputPass()
-      kreise.composer.addPass(outputPass)
+      kreise.composer.passes[1] = new UnrealBloomPass(new Vector2(canvas.clientWidth / 2, canvas.clientHeight / 2), 0.3, 0.05, 0)
     }
+    
+   /*
+    const outputPass = new OutputPass()
+    kreise.composer.addPass(outputPass)
+
+*/
+
+    console.log(kreise.composer.passes)
   }
 })

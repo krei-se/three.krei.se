@@ -13,7 +13,8 @@ import {
   // TextureLoader,
   DynamicDrawUsage,
   ShaderMaterial,
-  Int32BufferAttribute
+  Int32BufferAttribute,
+  TorusGeometry
 } from 'three'
 
 // import turboTextureImage from './textures/turbo.png'
@@ -25,10 +26,11 @@ class KreiseTorus extends Mesh {
   radialSegments: number
   tubularSegments: number
   facing: string
+  geogrouping: string
   color: Color
   arc: number
 
-  geometry: KreiseTorusGeometry
+  geometry: KreiseTorusGeometry | TorusGeometry
   materials: Array<Material | MeshBasicMaterial | MeshPhongMaterial | MeshLambertMaterial | ShaderMaterial>
   mesh: Mesh
 
@@ -42,20 +44,38 @@ class KreiseTorus extends Mesh {
     this.tubularSegments = parameters.tubularSegments ?? Math.floor(this.radius * this.lod)
     this.radialSegments = parameters.radialSegments ?? Math.floor(this.tube * this.lod * 2)
     this.facing = parameters.facing ?? 'normal'
+    this.geogrouping = parameters.geogrouping ?? 'vertical'
     this.arc = parameters.arc ?? Math.PI * 2
     this.mesh = parameters.mesh ?? new Mesh()
 
     // this.radialSegments = 12
     // this.tubularSegments= 100
     // this.geometry = new BufferGeometry()
-    this.geometry = new KreiseTorusGeometry(this.radius, this.tube, this.radialSegments, this.tubularSegments, this.facing, this.arc)
-    this.materials = []
+    if (this.geogrouping === 'vertical') {
+      this.geometry = new KreiseTorusGeometry(this.radius, this.tube, this.radialSegments, this.tubularSegments, this.facing, this.arc)
+      this.materials = []
 
-    let i: number
-    for (i = 0; i < this.tubularSegments; i++) {
-      // in an indexed geometry, use index for triangles. each radial segment is 2 triangles, so 6 vertices.
-      this.geometry.addGroup(i * 6 * this.radialSegments, 6 * this.radialSegments, 0)
+      let i: number
+      for (i = 0; i < this.tubularSegments; i++) {
+        // in an indexed geometry, use index for triangles. each radial segment is 2 triangles, so 6 vertices.
+        this.geometry.addGroup(i * 6 * this.radialSegments, 6 * this.radialSegments, 0)
+      }
     }
+
+    /*
+    if (this.geogrouping === 'horizontal') {
+      this.geometry = new TorusGeometry(this.radius, this.tube, this.radialSegments, this.tubularSegments, this.facing, this.arc)
+      this.materials = []
+
+      let i: number
+      for (i = 0; i < this.radialSegments; i++) {
+        // in an indexed geometry, use index for triangles. each radial segment is 2 triangles, so 6 vertices.
+        this.geometry.addGroup(i * 6 * this.radialSegments, 6 * this.radialSegments, 0)
+      }
+    }
+    */
+
+    
 
     this.color = parameters.color ?? new Color(0xffffff)
     this.materials.push(new Material())
