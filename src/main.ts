@@ -51,6 +51,7 @@ import IntroEpisode from './episodes/Intro.ts'
 import AutobahnEpisode from './episodes/Autobahn.ts'
 import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 import ChemnitzEpisode from './episodes/Chemnitz.ts'
+import KreiseEpisode from './episodes/KreiseEpisode.ts'
 
 //
 // End of imports
@@ -90,7 +91,7 @@ if (altitude < 0.1 && altitude > -0.1) {
   kreise.brightness = Math.floor(255 * ((altitude + 0.1) * 5))
 }
 
-kreise.brightness = 0
+// kreise.brightness = 0
 
 document.body.style.setProperty('--page-background', 'rgba(' + kreise.brightness + ',' + kreise.brightness + ',' + kreise.brightness + ',0)')
 
@@ -162,7 +163,7 @@ if (document.referrer.includes('google')) {
 // ===== 💡 LIGHTS =====
 
 const ambientLight: AmbientLight = new AmbientLight('white', 3)
-const pointLight: PointLight = new PointLight('white', 300, 150)
+const pointLight: PointLight = new PointLight('white', 150, 150)
 pointLight.position.set(0, 0, 0)
 
 pointLight.castShadow = true
@@ -190,7 +191,7 @@ kreise.camera.fov = 120
 kreise.camera.position.set(0, 0, 0)
 kreise.camera.lookAt(0, 0, 0)
 kreise.camera.near = 0.05
-kreise.camera.far = 40
+kreise.camera.far = 50
 
 // ===== 🕹️ CONTROLS =====
 
@@ -216,19 +217,24 @@ const pointLightHelper: PointLightHelper = new PointLightHelper(pointLight, unde
 
 let ticks: number = 0
 
-let episode: KreiseEpisode
+let episodes: any[] = ['Intro', 'Autobahn', 'Chemnitz']
+// episodes = ['Chemnitz']
+const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Math.random is inclusively 0 but never 1
 
-let episodeRand = Math.random()
+console.log(EpisodeRand)
 
-if (episodeRand > 0.70) {
+let episode: KreiseEpisode = null
+
+if (EpisodeRand === 'Intro') {
   episode = new IntroEpisode(kreise, new Scene(), kreise.camera, window)
 }
-if (episodeRand > 0.30 && episodeRand <= 0.70) {
+if (EpisodeRand === 'Autobahn') {
   episode = new AutobahnEpisode(kreise, new Scene(), kreise.camera, window)
 }
-if (episodeRand > 0.0 && episodeRand <= 0.30) {
+if (EpisodeRand === 'Chemnitz') {
   episode = new ChemnitzEpisode(kreise, new Scene(), kreise.camera, window)
 }
+
 
 
 episode.makeScene()
