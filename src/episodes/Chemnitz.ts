@@ -101,7 +101,7 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
     this.objects.Lulatsch = new KreiseTorus({
       identity: 'Lulatsch',
-      radius: 18,
+      radius: 16,
       tube: 12,
       lod: 2,
       facing: 'inverse',
@@ -119,7 +119,7 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
     const Lulatsch = this.objects.Lulatsch as KreiseTorus
 
-    Lulatsch.materials.push(null)
+    Lulatsch.materials[0] = null
     Lulatsch.materials.push(new MeshPhongMaterial({ color: aquamarin, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
     Lulatsch.materials.push(null)
     Lulatsch.materials.push(new MeshPhongMaterial({ color: erdbeerrot, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
@@ -135,8 +135,6 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     Lulatsch.materials.push(new MeshPhongMaterial({ color: verkehrsgelb, shininess: 300, emissive: verkehrsgelb, emissiveIntensity: .05 }))
     Lulatsch.materials.push(null)
     Lulatsch.materials.push(new MeshPhongMaterial({ color: topgold, shininess: 300, emissive: topgold, emissiveIntensity: .1 }))
-    Lulatsch.materials.push(null)
-
 
     for (let k: number = 0; k < Lulatsch.geometry.groups.length; k++) {
       Lulatsch.geometry.groups[k].materialIndex = k % Lulatsch.materials.length

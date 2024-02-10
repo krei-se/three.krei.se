@@ -246,7 +246,7 @@ kreise.renderer.outputColorSpace = SRGBColorSpace
 kreise.renderer.toneMapping = ACESFilmicToneMapping
 
 kreise.renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
-kreise.renderTarget.samples = 1
+kreise.renderTarget.samples = 2
 kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
 kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
 if (kreise.brightness === 0) {
@@ -325,6 +325,9 @@ kreise.composer.dispose()
     if (kreise.brightness === 0) {
       kreise.composer.passes[1] = new UnrealBloomPass(new Vector2(canvas.clientWidth / 2, canvas.clientHeight / 2), 0.3, 0.05, 0)
     }
+    kreise.renderTarget.width = canvas.clientWidth
+    kreise.renderTarget.height = canvas.clientHeight
+    
     
    /*
     const outputPass = new OutputPass()
