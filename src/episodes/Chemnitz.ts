@@ -102,8 +102,8 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     this.objects.Lulatsch = new KreiseTorus({
       identity: 'Lulatsch',
       radius: 16,
-      tube: 12,
-      lod: 2,
+      tube: 8,
+      lod: 3,
       facing: 'inverse',
       geogrouping: 'vertical'
     })
@@ -119,22 +119,33 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
     const Lulatsch = this.objects.Lulatsch as KreiseTorus
 
+    let transparency: boolean
+    let opacity: number
+    if (this.kreise.brightness === 0) {
+      transparency = true
+      opacity = 0.66
+    }
+    else {
+      transparency = false
+      opacity = 1
+    }
+
     Lulatsch.materials[0] = null
-    Lulatsch.materials.push(new MeshPhongMaterial({ color: aquamarin, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: aquamarin, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
     Lulatsch.materials.push(null)
-    Lulatsch.materials.push(new MeshPhongMaterial({ color: erdbeerrot, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: erdbeerrot, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
     Lulatsch.materials.push(null)
-    Lulatsch.materials.push(new MeshPhongMaterial({ color: gelbgruen, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: gelbgruen, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
     Lulatsch.materials.push(null)
-    Lulatsch.materials.push(new MeshPhongMaterial({ color: himmelblau, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: himmelblau, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
     Lulatsch.materials.push(null)
-    Lulatsch.materials.push(new MeshPhongMaterial({ color: melonengelb, shininess: 300, emissive: melonengelb, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: melonengelb, shininess: 300, emissive: melonengelb, emissiveIntensity: .05 }))
     Lulatsch.materials.push(null)
-    Lulatsch.materials.push(new MeshPhongMaterial({ color: signalviolett, shininess: 300, emissive: signalviolett, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: signalviolett, shininess: 300, emissive: signalviolett, emissiveIntensity: .05 }))
     Lulatsch.materials.push(null)
-    Lulatsch.materials.push(new MeshPhongMaterial({ color: verkehrsgelb, shininess: 300, emissive: verkehrsgelb, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: verkehrsgelb, shininess: 300, emissive: verkehrsgelb, emissiveIntensity: .05 }))
     Lulatsch.materials.push(null)
-    Lulatsch.materials.push(new MeshPhongMaterial({ color: topgold, shininess: 300, emissive: topgold, emissiveIntensity: .1 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: topgold, shininess: 300, emissive: topgold, emissiveIntensity: .1 }))
 
     for (let k: number = 0; k < Lulatsch.geometry.groups.length; k++) {
       Lulatsch.geometry.groups[k].materialIndex = k % Lulatsch.materials.length
@@ -145,15 +156,16 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
     this.scene.add(this.objects.Lulatsch)
 
-    this.objects.pointLight = new PointLight('red', 800, 150)
+    this.kreise.objects.pointLight.position.set(0, 0, 30)
+    this.kreise.objects.pointLight.intensity = 600
+
+    this.objects.pointLight = new PointLight('red', 800, 50, 1.5)
     this.objects.pointLight.position.set(0, 0, 10)
-    this.objects.pointLight.castShadow = true
-    this.objects.pointLight.shadow.radius = 20
-    this.objects.pointLight.shadow.camera.near = 0.5
-    this.objects.pointLight.shadow.camera.far = 40
-    this.objects.pointLight.shadow.mapSize.width = 2048
-    this.objects.pointLight.shadow.mapSize.height = 2048
     this.scene.add(this.objects.pointLight)
+
+    this.objects.pointLightTwo = new PointLight('red', 800, 50, 1.5)
+    this.objects.pointLightTwo.position.set(0, 0, 10)
+    this.scene.add(this.objects.pointLightTwo)
 
     this.objects.pointLightHelper = new PointLightHelper(this.objects.pointLight, undefined, 'orange')
     //this.scene.add(this.objects.pointLightHelper)
@@ -171,8 +183,10 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
     if (this.kreise.autoplay.animation) {
 
-      this.objects.Lulatsch.rotation.z = Math.sin(ticks / 8000)
+      this.objects.Lulatsch.rotation.z = 2 * Math.sin(ticks / 10000)
+
       this.objects.pointLight.position.x = 10 * Math.sin((ticks / 1000))
+      this.objects.pointLightTwo.position.x = -10 * Math.sin((ticks / 1000))
       //this.objects.pointLight.position.z = -10 * Math.cos((ticks / 1000))
     }
 

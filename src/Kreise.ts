@@ -5,11 +5,13 @@ import { AxesHelper, Camera, EventDispatcher, GridHelper, Mesh, MeshBasicMateria
 import { toggleFullScreen } from './helpers/fullscreen'
 import { ObjectInterface } from './episodes/KreiseEpisode'
 import { EffectComposer } from 'three/examples/jsm/Addons.js'
+import KreiseZeit from './KreiseZeit'
 
 export interface AutoplayOptionsInterface { camera: boolean, animation: boolean }
 export interface DebugOptionsInterface { helperObjects: boolean, helperInterface: boolean }
 
 export default class Kreise extends EventDispatcher {
+  zeit: KreiseZeit
   suncalc: GetTimesResult
   sunPosition: GetSunPositionResult
   brightness: number
@@ -31,6 +33,7 @@ export default class Kreise extends EventDispatcher {
 
   constructor () {
     super()
+    this.zeit = new KreiseZeit()
     this.suncalc = SunCalc.getTimes(new Date(), 50.84852106503032, 12.923759828615541)
     this.sunPosition = SunCalc.getPosition(new Date(), 50.84852106503032, 12.923759828615541)
     this.brightness = 255
@@ -122,4 +125,11 @@ export class KreiseClient {
   detectAndSetClientDeviceType() {
 
   }
+
+}
+
+export class KreiseMenu {
+  state: string = 'closed'
+
+
 }

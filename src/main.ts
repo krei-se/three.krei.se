@@ -49,7 +49,7 @@ import KreiseZeit from './kreiseZeit.ts'
 
 import IntroEpisode from './episodes/Intro.ts'
 import AutobahnEpisode from './episodes/Autobahn.ts'
-import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
+import { EffectComposer, OutputPass, ParallaxBarrierEffect, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 import ChemnitzEpisode from './episodes/Chemnitz.ts'
 import KreiseEpisode from './episodes/KreiseEpisode.ts'
 
@@ -162,21 +162,22 @@ if (document.referrer.includes('google')) {
 
 // ===== 💡 LIGHTS =====
 
-const ambientLight: AmbientLight = new AmbientLight('white', 3)
-const pointLight: PointLight = new PointLight('white', 150, 150)
-pointLight.position.set(0, 0, 0)
-
-pointLight.castShadow = true
-pointLight.shadow.radius = 20
-pointLight.shadow.camera.near = 0.5
-pointLight.shadow.camera.far = 30
-pointLight.shadow.mapSize.width = 2048
-pointLight.shadow.mapSize.height = 2048
-kreise.scene.add(ambientLight)
-kreise.scene.add(pointLight)
+kreise.objects.ambientLight = new AmbientLight('white', 3)
+kreise.objects.pointLight = new PointLight('white', 150, 150, 1.5)
+kreise.objects.pointLight.position.set(0, 0, 0)
+/*
+kreise.objects.pointLight.castShadow = true
+kreise.objects.pointLight.shadow.radius = 20
+kreise.objects.pointLight.shadow.camera.near = 0.5
+kreise.objects.pointLight.shadow.camera.far = 30
+kreise.objects.pointLight.shadow.mapSize.width = 2048
+kreise.objects.pointLight.shadow.mapSize.height = 2048
+*/
+kreise.scene.add(kreise.objects.ambientLight)
+kreise.scene.add(kreise.objects.pointLight)
 
 // ambientLight.intensity = ((255 - kreise.brightness) / 50) + 0.2
-ambientLight.intensity = 0.5
+kreise.objects.ambientLight.intensity = 0.5
 // pointLight.intensity = (255 - kreise.brightness) + 50
 
 // ===== 🎥 CAMERA =====
@@ -210,7 +211,7 @@ cameraControls.update(clock.getDelta())
 // ===== 🪄 HELPERS AND DEBUG =====
 
 // most are in Kreise Class for the main scene
-const pointLightHelper: PointLightHelper = new PointLightHelper(pointLight, undefined, 'orange')
+// const pointLightHelper: PointLightHelper = new PointLightHelper(pointLight, undefined, 'orange')
 
 
 // ===== Mouse Events =====
@@ -218,7 +219,7 @@ const pointLightHelper: PointLightHelper = new PointLightHelper(pointLight, unde
 let ticks: number = 0
 
 let episodes: any[] = ['Intro', 'Autobahn', 'Chemnitz']
-// episodes = ['Chemnitz']
+episodes = ['Chemnitz']
 const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Math.random is inclusively 0 but never 1
 
 console.log(EpisodeRand)
@@ -242,8 +243,8 @@ episode.addControls()
 
 kreise.scene.add(episode.scene)
 
-kreise.renderer.outputColorSpace = SRGBColorSpace
-kreise.renderer.toneMapping = ACESFilmicToneMapping
+// kreise.renderer.outputColorSpace = SRGBColorSpace
+// kreise.renderer.toneMapping = ACESFilmicToneMapping
 
 kreise.renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
 kreise.renderTarget.samples = 2
@@ -252,13 +253,31 @@ kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
 if (kreise.brightness === 0) {
   kreise.composer.addPass(new UnrealBloomPass(new Vector2(canvas.clientWidth / 2, canvas.clientHeight / 2), 0.3, 0.05, 0))
 }
+
 const outputPass = new OutputPass()
 kreise.composer.addPass(outputPass)
+
+// const effect = new ParallaxBarrierEffect(kreise.renderer)
+// effect.setSize(canvas.clientWidth, canvas.clientHeight)
+
+kreise.zeit.interval[3].direction = 'ccw'
+kreise.zeit.interval[4].direction = 'ccw'
+kreise.zeit.interval[5].direction = 'ccw'
 
 kreise.renderer.setAnimationLoop(function () {
   const timeDelta = clock.getDelta()
 
   ticks += (timeDelta * 1000)
+
+  kreise.zeit.update()
+
+  console.log(kreise.zeit.interval[0])
+  console.log(kreise.zeit.interval[1])
+  console.log(kreise.zeit.interval[2])
+  console.log(kreise.zeit.interval[3])
+  console.log(kreise.zeit.interval[4])
+  console.log(kreise.zeit.interval[5])
+
 
   // INTRO
   if (episode instanceof IntroEpisode) {
@@ -284,6 +303,7 @@ kreise.renderer.setAnimationLoop(function () {
 
   //kreise.renderer.render(kreise.scene, kreise.camera)
   kreise.composer.render()
+  //effect.render(kreise.scene, kreise.camera)
 
   if (import.meta.env.DEV) {
     stats.update()
@@ -327,6 +347,7 @@ kreise.composer.dispose()
     }
     kreise.renderTarget.width = canvas.clientWidth
     kreise.renderTarget.height = canvas.clientHeight
+    //effect.setSize(canvas.clientWidth, canvas.clientHeight)
     
     
    /*

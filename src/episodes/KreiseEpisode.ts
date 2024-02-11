@@ -2,7 +2,7 @@ import { EventDispatcher, type Camera, type Object3D, type Scene, Mesh, AxesHelp
 import type Kreise from '../Kreise.ts'
 import { KlavierTorus, KreiseShaderedTorus, KreiseTorus } from '../KreiseTorus.ts'
 
-export type ObjectInterface = Record<string, Mesh | AxesHelper | GridHelper | KreiseTorus | KreiseShaderedTorus | KlavierTorus>
+export type ObjectInterface = Record<string, AmbientLight | PointLight | Mesh | AxesHelper | GridHelper | KreiseTorus | KreiseShaderedTorus | KlavierTorus>
 
 export default class KreiseEpisode extends EventDispatcher {
   kreise: Kreise
