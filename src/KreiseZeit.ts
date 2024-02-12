@@ -1,4 +1,6 @@
-export interface KreiseZeitInterface { ms: number, interval: number, direction: string }
+export interface KreiseZeitInterface { parent: number, ms: number, interval: number, direction: string }
+
+type KreiseZeitInterval = Record<number, KreiseZeitInterface>
 
 export enum Direction { 'cw', 'ccw' }
 export interface DirectionInterface { direction: keyof typeof Direction }
@@ -6,23 +8,27 @@ export interface DirectionInterface { direction: keyof typeof Direction }
 export interface EpisodeTimeInterface { timeS: number, timeMs: number, startMs: number }
 
 export default class KreiseZeit {
-  interval: KreiseZeitInterface[] = []
+  interval: KreiseZeitInterval = []
   oldTime: number
   constructor () {
-    this.interval[0] = { ms: Date.now(), interval: 0, direction: 'cw' }
+    this.interval[0] = { parent: -1, ms: Date.now(), interval: 0, direction: 'cw' }
     this.oldTime = this.interval[0].ms
 
-    this.addInterval(86400) // day
-    this.addInterval(3600)
-    this.addInterval(900)
-    this.addInterval(300)
-    this.addInterval(60)
+    this.addInterval(86400, 0) // day - relates to global time (which is -1)
+    this.addInterval(3600, 86400)   // hour, relates to day cycle
+    this.addInterval(900, 3600)     // 15 minutes, relates to hour cycle
+    this.addInterval(300, 900)      // 5 minutes, relates to 15 minutes cycle
+    this.addInterval(60, 300)       // 1 minute, relates to 5 minute cycle
 
     console.log(this)
   }
 
-  addInterval (interval: number, direction = 'cw'): void {
-    this.interval.push({ ms: this.interval[0].ms % (interval * 1000), interval, direction })
+  addInterval (interval: number, parent = 0, direction = 'cw'): void {
+    this.interval[interval] = { parent, ms: this.interval[0].ms % (interval * 1000), interval, direction }
+  }
+
+  flipInterval(id) {
+
   }
 
   update (): void {
@@ -32,8 +38,11 @@ export default class KreiseZeit {
     this.oldTime = nowMs
     this.interval[0].ms = nowMs
 
-    this.interval.forEach((interval, index) => {
-      if (index !== 0) {
+    const intervals = Object.entries(this.interval)
+
+    intervals.forEach(([intervalIndex, interval]) => {
+      // console.log(intervalIndex, interval.ms)
+      if (interval.interval !== 0) {        // before you go crazy, this is the same number as intervalIndex
         if (interval.direction === 'cw') {
           interval.ms = (interval.ms + deltaMs) % (interval.interval * 1000)
         }

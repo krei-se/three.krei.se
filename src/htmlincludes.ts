@@ -1,6 +1,7 @@
 import kreiseLogo from './kreise.svg'
 
 export function getPageOverlayDiv (): HTMLDivElement {
+
   const pageOverlayDiv: HTMLDivElement = document.createElement('div')
   pageOverlayDiv.setAttribute('id', 'pageOverlay')
 

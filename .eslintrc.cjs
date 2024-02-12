@@ -22,8 +22,10 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
+    ignoreEOLComments: 0
   },
   globals: {
+    // @TODO this is outdated i guess???
     suncalc: 'writable',
     sunposition: 'writable',
     brightness: 'writable',

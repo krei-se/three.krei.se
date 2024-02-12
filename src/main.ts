@@ -63,6 +63,8 @@ const kreise = new Kreise()
 // @TODO this is not needed
 document.title = 'Krei·se'
 
+const removeMeDiv: HTMLDivElement = document.querySelector('#removeMe') ?? document.createElement('div')
+document.body.removeChild(removeMeDiv)
 document.body.append(getPageOverlayDiv())
 
 const canvas: HTMLCanvasElement = document.createElement('canvas')
@@ -219,7 +221,7 @@ cameraControls.update(clock.getDelta())
 let ticks: number = 0
 
 let episodes: any[] = ['Intro', 'Autobahn', 'Chemnitz']
-episodes = ['Chemnitz']
+//episodes = ['Autobahn']
 const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Math.random is inclusively 0 but never 1
 
 console.log(EpisodeRand)
@@ -260,9 +262,11 @@ kreise.composer.addPass(outputPass)
 // const effect = new ParallaxBarrierEffect(kreise.renderer)
 // effect.setSize(canvas.clientWidth, canvas.clientHeight)
 
-kreise.zeit.interval[3].direction = 'ccw'
-kreise.zeit.interval[4].direction = 'ccw'
-kreise.zeit.interval[5].direction = 'ccw'
+// kreise.composer.renderTarget2 = false
+
+kreise.zeit.interval[900].direction = 'ccw'
+kreise.zeit.interval[300].direction = 'ccw'
+kreise.zeit.interval[60].direction = 'ccw'
 
 kreise.renderer.setAnimationLoop(function () {
   const timeDelta = clock.getDelta()
@@ -270,14 +274,6 @@ kreise.renderer.setAnimationLoop(function () {
   ticks += (timeDelta * 1000)
 
   kreise.zeit.update()
-
-  console.log(kreise.zeit.interval[0])
-  console.log(kreise.zeit.interval[1])
-  console.log(kreise.zeit.interval[2])
-  console.log(kreise.zeit.interval[3])
-  console.log(kreise.zeit.interval[4])
-  console.log(kreise.zeit.interval[5])
-
 
   // INTRO
   if (episode instanceof IntroEpisode) {
@@ -315,47 +311,49 @@ kreise.renderer.setAnimationLoop(function () {
     const canvas = kreise.renderer.domElement
     kreise.camera.aspect = canvas.clientWidth / canvas.clientHeight
     kreise.camera.updateProjectionMatrix()
-/*
-    kreise.renderer.dispose()
+    /*
+      kreise.renderer.dispose()
 
-    kreise.renderer = new WebGLRenderer({
-      canvas,
-      antialias: true,
-      alpha: true,
-      logarithmicDepthBuffer: true
-    })
+      kreise.renderer = new WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true,
+        logarithmicDepthBuffer: true
+      })
 
-    kreise.renderer.setPixelRatio(window.devicePixelRatio)
+      kreise.renderer.setPixelRatio(window.devicePixelRatio)
 
-    kreise.renderer.shadowMap.enabled = true
-    kreise.renderer.shadowMap.type = PCFSoftShadowMap
+      kreise.renderer.shadowMap.enabled = true
+      kreise.renderer.shadowMap.type = PCFSoftShadowMap
 
-    kreise.renderTarget.dispose()
+      kreise.renderTarget.dispose()
 
-    kreise.renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
-    kreise.renderTarget.samples = 0
-*/
-    
-/*
-kreise.composer.dispose()
-    kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
-    kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
-*/
-    
+      kreise.renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
+      kreise.renderTarget.samples = 0
+    */
+
+    /*
+    kreise.composer.dispose()
+        kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
+        kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
+    */
+
+    kreise.composer.setSize(canvas.clientWidth, canvas.clientHeight)
+
     if (kreise.brightness === 0) {
       kreise.composer.passes[1] = new UnrealBloomPass(new Vector2(canvas.clientWidth / 2, canvas.clientHeight / 2), 0.3, 0.05, 0)
     }
-    kreise.renderTarget.width = canvas.clientWidth
-    kreise.renderTarget.height = canvas.clientHeight
-    //effect.setSize(canvas.clientWidth, canvas.clientHeight)
-    
-    
-   /*
+    // all below are replaced with kreise.composer.setSize
+    // kreise.renderer.width = canvas.clientWidth
+    // kreise.renderer.height = canvas.clientHeight
+    // effect.setSize(canvas.clientWidth, canvas.clientHeight)
+
+    /*
     const outputPass = new OutputPass()
     kreise.composer.addPass(outputPass)
 
 */
 
-    console.log(kreise.composer.passes)
+    // console.log(kreise.composer)
   }
 })
