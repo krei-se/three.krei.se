@@ -14,7 +14,7 @@ export default class KreiseZeit {
     this.interval[0] = { parent: -1, ms: Date.now(), interval: 0, direction: 'cw' }
     this.oldTime = this.interval[0].ms
 
-    this.addInterval(86400, 0) // day - relates to global time (which is -1)
+    this.addInterval(86400, 0)      // day - relates to global time (which is -1)
     this.addInterval(3600, 86400)   // hour, relates to day cycle
     this.addInterval(900, 3600)     // 15 minutes, relates to hour cycle
     this.addInterval(300, 900)      // 5 minutes, relates to 15 minutes cycle
@@ -42,7 +42,7 @@ export default class KreiseZeit {
 
     intervals.forEach(([intervalIndex, interval]) => {
       // console.log(intervalIndex, interval.ms)
-      if (interval.interval !== 0) {        // before you go crazy, this is the same number as intervalIndex
+      if (interval.interval !== 0) {              // before you go crazy, this is the same number as intervalIndex
         if (interval.direction === 'cw') {
           interval.ms = (interval.ms + deltaMs) % (interval.interval * 1000)
         }

@@ -22,28 +22,6 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
-    ignoreEOLComments: 0
-  },
-  globals: {
-    // @TODO this is outdated i guess???
-    suncalc: 'writable',
-    sunposition: 'writable',
-    brightness: 'writable',
-    time: 'writable',
-    rhythms: 'writable',
-    colorSchemes: 'writable',
-    colorScheme: 'writable',
-
-    autoplay: 'writable',
-
-    debug: 'writable',
-
-    clientInterface: 'writable',
-
-    renderer: 'writable',
-    scene: 'writable',
-    camera: 'writable',
-    clock: 'writable'
-    /* var2: 'readonly' */
+    'no-multi-spaces': ['error', { ignoreEOLComments: 0 }]
   }
 }

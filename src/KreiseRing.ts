@@ -15,245 +15,53 @@ import {
   ShaderMaterial,
   Int32BufferAttribute,
   TorusGeometry,
-  RingGeometry
+  RingGeometry,
+  Group
 } from 'three'
 
 // import turboTextureImage from './textures/turbo.png'
 
-class KreiseRing extends Mesh {
+class KreiseRing extends Group {
+  
+  // this is always the radius without any thickness. We need the radius be like that so a skewed ring has expected radia
   radius: number
-  tube: number
-  lod: number
-  radialSegments: number
-  tubularSegments: number
-  facing: string
-  geogrouping: string
-  color: Color
-  arc: number
 
-  geometry: KreiseRingGeometry | RingGeometry
-  materials: Array<Material | MeshBasicMaterial | MeshPhongMaterial | MeshLambertMaterial | ShaderMaterial>
-  mesh: Mesh
+  // this is always the band width, tubular width in torus
+  thickness: number
+
+  // this is always the count of segments for the most basic mesh used for bounding box and display mesh
+  // the first segment is always at 12 o Clock, NOT at 3 o Clock
+  segments: number = 16
+
+  skew: number = 0 // flat ring, takes radians to rotate, so half pi makes a cylinder
+  lod: number = 1           // Level of detail for the bounding box, 1 means 1 face / 4 vertices per segment. 2 means 2 faces / 9 vertices, 3 means 16, etc. pp.
+  lodDisplay: number = 3    // Level of detail for the display mesh. 3 means 16 vertices per segment, so a normal ring has 16x16 = 128 vertices
+  // default x and y axis, facing normals z (towards camera)
+
+  geogrouping: string = 'vertical'
+  color: Color
+  // arc: number
 
   constructor (parameters: any) {
     super()
 
-    this.name = parameters.identity // hmm well
+    this.name = parameters.name
+
     this.radius = parameters.radius
-    this.tube = parameters.tube
-    this.lod = parameters.lod ?? 48
-    this.tubularSegments = parameters.tubularSegments ?? Math.floor(this.radius * this.lod)
-    this.radialSegments = parameters.radialSegments ?? Math.floor(this.tube * this.lod * 2)
-    this.facing = parameters.facing ?? 'normal'
-    this.geogrouping = parameters.geogrouping ?? 'vertical'
-    this.arc = parameters.arc ?? Math.PI * 2
-    this.mesh = parameters.mesh ?? new Mesh()
+    this.thickness = parameters.thickness
+    this.segments = parameters.segments ?? 16
+    this.skew = parameters.skew ?? 0
+    this.lod = parameters.lod ?? 1
+    this.lodDisplay = parameters.lodDisplay ?? 3
 
-    // this.radialSegments = 12
-    // this.tubularSegments= 100
-    // this.geometry = new BufferGeometry()
-    if (this.geogrouping === 'vertical') {
-      this.geometry = new KreiseTorusGeometry(this.radius, this.tube, this.radialSegments, this.tubularSegments, this.facing, this.arc)
-      this.materials = []
-
-      let i: number
-      for (i = 0; i < this.tubularSegments; i++) {
-        // in an indexed geometry, use index for triangles. each radial segment is 2 triangles, so 6 vertices.
-        this.geometry.addGroup(i * 6 * this.radialSegments, 6 * this.radialSegments, 0)
-      }
-    }
-
-    /*
-    if (this.geogrouping === 'horizontal') {
-      this.geometry = new TorusGeometry(this.radius, this.tube, this.radialSegments, this.tubularSegments, this.facing, this.arc)
-      this.materials = []
-
-      let i: number
-      for (i = 0; i < this.radialSegments; i++) {
-        // in an indexed geometry, use index for triangles. each radial segment is 2 triangles, so 6 vertices.
-        this.geometry.addGroup(i * 6 * this.radialSegments, 6 * this.radialSegments, 0)
-      }
-    }
-    */
-
-    
 
     this.color = parameters.color ?? new Color(0xffffff)
-    this.materials.push(new Material())
-    this.materials[0] = new MeshPhongMaterial({ color: this.color, shininess: 200 })
-
-    this.material = this.materials
-  }
-
-  updateMesh (): void {
-    // Mesh.call(this, this.geometry, this.materials)
-  }
-
-  getMesh (): Mesh {
-    return this
-  }
-
-  updatePositions (positions: Float32BufferAttribute): void {
-    positions.needsUpdate = true
-    this.geometry.setAttribute('positions', positions)
-  }
-
-  pulseTubularLine (tubularLine: number, height: number): void {
-    const positionAttribute: BufferAttribute | InterleavedBufferAttribute = this.geometry.getAttribute('position')
-    const normalAttribute: BufferAttribute | InterleavedBufferAttribute = this.geometry.getAttribute('normal')
-
-    // console.log(positionAttribute)
-
-    const offset: number = tubularLine * (this.radialSegments + 1)
-
-    let radialSegment: number = 0
-    for (radialSegment = 0; radialSegment <= this.radialSegments; radialSegment++) {
-      const normal: Vector3 = new Vector3().fromBufferAttribute(normalAttribute, offset + radialSegment)
-      const point: Vector3 = new Vector3().fromBufferAttribute(positionAttribute, offset + radialSegment)
-
-      const newPoint: Vector3 = point.add(normal.multiplyScalar(height))
-
-      positionAttribute.setXYZ(offset + radialSegment, newPoint.x, newPoint.y, newPoint.z)
-    }
-    positionAttribute.needsUpdate = true
-  }
-
-  addBloomLayer(segments: number = 1) {
-
-    
-
+  
   }
 
 }
 
-class KlavierTorus extends KreiseTorus {
-  constructor (parameters: any = {}) {
-    super({
-      identity: 'KlavierTorus',
-      radius: 14,
-      tube: 0.7,
-      tubularSegments: 88,
-      radialSegments: 32,
-      color: new Color(0xffffff),
-      ...parameters
-    })
-
-    this.materials.push(new MeshPhongMaterial({ color: 0x000000, shininess: 200 }))
-
-    const blackWhite: any = [0, 1, 0,
-      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
-      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
-      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
-      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, // <- startet mit C1
-      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
-      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
-      0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0,
-      0]
-
-    // console.log(blackWhite.length)
-
-    let i: number = 0
-    for (i = 0; i < this.geometry.groups.length; i++) {
-      this.geometry.groups[i].materialIndex = blackWhite[i]
-    }
-
-    // old and disabled: raise every octave
-    for (i = 0; i <= this.tubularSegments; i++) {
-      // if ((i - 3) % 12 === 0) this.pulseTubularLine(i, 0.1)
-    }
-
-    this.updateMesh()
-  }
-}
-
-class KreiseShaderedTorus extends KreiseTorus {
-  constructor (parameters: any = []) {
-    super({
-      ...parameters
-    })
-
-    this.materials[0] = new ShaderMaterial({
-
-      uniforms: {
-        center: { value: this.mesh.position },
-        radius: { value: this.radius },
-        tube: { value: this.tube },
-        tubularSegments: { value: this.tubularSegments },
-        radialSegments: { value: this.radialSegments }
-      },
-
-      /*
-
-      Uniforms are variables that have the same value for all vertices - lighting, fog, and shadow maps
-      are examples of data that would be stored in uniforms. Uniforms can be accessed by both the vertex
-      shader and the fragment shader.
-
-      // = object.matrixWorld
-      uniform mat4 modelMatrix;
-
-      // = camera.matrixWorldInverse * object.matrixWorld
-      uniform mat4 modelViewMatrix;
-
-      // = camera.projectionMatrix
-      uniform mat4 projectionMatrix;
-
-      // = camera.matrixWorldInverse
-      uniform mat4 viewMatrix;
-
-      // = inverse transpose of modelViewMatrix
-      uniform mat3 normalMatrix;
-
-      // = camera position in world space
-      uniform vec3 cameraPosition;
-
-      Attributes are variables associated with each vertex---for instance, the vertex position,
-      face normal, and vertex color are all examples of data that would be stored in attributes.
-      Attributes can only be accessed within the vertex shader.
-
-      // default vertex attributes provided by BufferGeometry
-      attribute vec3 position;
-      attribute vec3 normal;
-      attribute vec2 uv;
-
-      */
-      vertexShader: `
-
-        attribute float vertexIndex;
-
-        // float tubularSegment = 
-
-        varying vec3 v_Normal;
-
-        void main() {
-          vec3 scale = vec3(4.0, 1.0, 1.0);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          v_Normal = normal;
-        }
-      `,
-
-      /*
-
-      uniform mat4 viewMatrix;
-      uniform vec3 cameraPosition;
-
-      */
-
-      fragmentShader: /* glsl */
-      `
-
-        varying vec3 v_Normal;
-
-        void main() {
-          gl_FragColor = vec4(v_Normal, v_Normal.x);
-        }
-      
-      `
-
-    })
-  }
-}
-
-class KreiseTorusGeometry extends BufferGeometry {
+class KreiseRingGeometry extends BufferGeometry {
   type: string
   parameters: any
   tubularSegmentIndices: any
@@ -263,39 +71,55 @@ class KreiseTorusGeometry extends BufferGeometry {
   uvs: any
   verticesIndex: any
 
-  constructor (radius = 1, tube = 0.4, radialSegments = 12, tubularSegments = 48, facing = 'normal', arc = Math.PI * 2) {
+  constructor (radius: number = 6, thickness: number = 1, segments: number = 12, skew: number = 0, lod: number = 1, facing: string = 'normal', arc: number = Math.PI * 2) {
     super()
 
-    this.type = 'KreiseTorusGeometry'
+    this.type = 'KreiseRingGeometry'
 
-    // buffers
-    this.tubularSegmentIndices = []
-
-    this.indices = []
     this.vertices = []
     this.normals = []
     this.uvs = []
+
+    this.indices = []
     this.verticesIndex = []
 
     this.parameters = {
       radius,
-      tube,
-      radialSegments,
-      tubularSegments,
-      arc,
-      facing
+      thickness,
+      segments,
+      skew,
+      lod,
+      facing,
+      arc
     }
 
-    radialSegments = Math.floor(radialSegments)
-    tubularSegments = Math.floor(tubularSegments)
+    segments = Math.floor(segments)
+    // thickness can be float
 
     // helper variables
 
     const centerForRadial = new Vector3()
     const vertex = new Vector3()
-    const normal = new Vector3()
+    const normal = new Vector3() // always the vertex rotated by skew
 
     // generate vertices, normals and uvs
+
+    // band segments are always integer and plus 1 to LOD, so at least 2. LOD 3 means 4 faces / band segments (and 4 radial segments per segment)
+    const bandSegments = Math.ceil(this.parameters.lod) + 1
+
+    let radia: number[] = []
+    for (let i: number = 1; i <= bandSegments; i++) {
+      let offset = (this.parameters.radius - this.parameters.thickness / 2) + (this.parameters.thickness / i)
+      radia.push(this.parameters.radius + offset)
+    }
+
+    // start from the innermost radius
+    radia.forEach((radius) => {
+
+      // segments * lod
+      vertex.x 
+
+    })
 
     let tubularSegment: number
     let radialSegment: number

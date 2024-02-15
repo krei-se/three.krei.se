@@ -11,7 +11,9 @@ import {
   Raycaster,
   Ray,
   Vector2,
-  MeshStandardMaterial
+  MeshStandardMaterial,
+  InstancedMesh,
+  DynamicDrawUsage
 } from 'three'
 
 import {
@@ -38,6 +40,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
   flyCurveDirection: Vector3
   flyCurveNormal: Vector3
   colorScheme: string
+  autoInstances: any
 
   keydown (event: KeyboardEvent): void { console.log(event) } // stub to shutup linter about event
   keyup (event: KeyboardEvent): void { console.log(event) }
@@ -197,62 +200,6 @@ export default class AutobahnEpisode extends KreiseEpisode {
       facing: 'normal'
     })
 
-    this.objects.Autos1 = new KreiseTorus({
-      identity: 'Autos1',
-      radius: 20,
-      tube: 0.8,
-      lod: 24,
-      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
-      facing: 'normal'
-    })
-
-    this.objects.Autos2 = new KreiseTorus({
-      identity: 'Autos2',
-      radius: 20,
-      tube: 0.8,
-      lod: 24,
-      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
-      facing: 'normal'
-    })
-
-    this.objects.Autos3 = new KreiseTorus({
-      identity: 'Autos3',
-      radius: 20,
-      tube: 0.8,
-      lod: 24,
-      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
-      facing: 'normal'
-    })
-
-    this.objects.Autos4 = new KreiseTorus({
-      identity: 'Autos4',
-      radius: 20,
-      tube: 0.8,
-      lod: 24,
-      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
-      facing: 'normal'
-    })
-
-    this.objects.Autos5 = new KreiseTorus({
-      identity: 'Autos5',
-      radius: 20,
-      tube: 0.8,
-      lod: 24,
-      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
-      facing: 'normal'
-    })
-
-    this.objects.Autos6 = new KreiseTorus({
-      identity: 'Autos6',
-      radius: 20,
-      tube: 0.8,
-      lod: 24,
-      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
-      facing: 'normal'
-    })
-
-    const nullMaterial = new MeshStandardMaterial({ transparent: true, opacity: 0, color: 0x000000 })
-
     // Standstreifen
     const standstreifen: KreiseTorus[] = [this.objects.Bahn1, this.objects.Bahn4, this.objects.Bahn5, this.objects.Bahn8]
 
@@ -264,7 +211,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     leitlinien.forEach((Bahn, index) => {
       // Bahn.materials[0] = new MeshPhongMaterial({ color: 0x333333, shininess: 100 })
-      Bahn.materials[0] = nullMaterial // new MeshDepthMaterial({})
+      Bahn.materials[0] = new MeshDepthMaterial({})
       Bahn.materials[1] = new MeshPhongMaterial({ color: 0xdddddd, shininess: 150 })
 
       // console.log(Bahn.geometry.groups)
@@ -287,10 +234,9 @@ export default class AutobahnEpisode extends KreiseEpisode {
       this.scene.add(this.objects[BahnName])
     }
 
-    // Jetzt die Autos!
     let intensity: number = 0
     if (this.kreise.brightness === 0) {
-      intensity = 3
+      intensity = 1
     }
     const rotesRuecklicht = { toneMapped: false, color: 0xcc4cee, shininess: 400, emissive: 0xcc4cee, emissiveIntensity: intensity }
     const rotesRuecklicht2 = { toneMapped: false, color: 0xff2200, shininess: 350, emissive: 0xff2200, emissiveIntensity: intensity }
@@ -298,136 +244,56 @@ export default class AutobahnEpisode extends KreiseEpisode {
     const xenonFrontlicht = { toneMapped: false, color: 0x5555ff, shininess: 400, emissive: 0x5555ff, emissiveIntensity: intensity }
     const normalFrontlicht = { toneMapped: false, color: 0xffba24, shininess: 350, emissive: 0xffba24, emissiveIntensity: intensity }
 
-    
-    let autos: KreiseTorus[] = [this.objects.Autos1, this.objects.Autos6]
-    autos.forEach((Auto, index) => {
-      Auto.materials[0] = new MeshPhongMaterial(rotesRuecklicht)
-      Auto.materials[1] = new MeshPhongMaterial(xenonFrontlicht)
-      Auto.materials[2] = nullMaterial
-      Auto.materials[3] = nullMaterial
-      Auto.materials[4] = nullMaterial
-      Auto.materials[5] = nullMaterial
+    this.autoInstances = [
+        { identity: 'AutoBaseLKW', count: 50, material1: rotesRuecklicht, material2: xenonFrontlicht, offsetX: 9, offsetProgress: 0, speed: 0.00005 },
+        { identity: 'AutoBaseLKW2', count: 50, material1: rotesRuecklicht2, material2: normalFrontlicht, offsetX: 9, offsetProgress: 1/100, speed: 0.00005 },
+        
+        { identity: 'AutoBaseMS', count: 25, material1: rotesRuecklicht, material2: xenonFrontlicht, offsetX: 6, offsetProgress: 0, speed: 0.00008 },
+        { identity: 'AutoBaseMS2', count: 25, material1: rotesRuecklicht2, material2: normalFrontlicht, offsetX: 6, offsetProgress: 1/50,  speed: 0.00008 },
+        
+        { identity: 'AutoBaseUS', count: 10, material1: rotesRuecklicht, material2: xenonFrontlicht, offsetX: 3, offsetProgress: 0, speed: 0.00015},
+        { identity: 'AutoBaseUS2', count: 10, material1: rotesRuecklicht2, material2: normalFrontlicht, offsetX: 3, offsetProgress: 1/20, speed: 0.00015 }
+    ]
 
-      Auto.materials[6] = new MeshPhongMaterial(rotesRuecklicht2)
-      Auto.materials[7] = new MeshPhongMaterial(normalFrontlicht)
-      Auto.materials[8] = nullMaterial
-      Auto.materials[9] = nullMaterial
-      Auto.materials[10] = nullMaterial
-      Auto.materials[11] = nullMaterial
+    this.autoInstances.forEach((autoInstance) => {
 
-      for (let j: number = 1; j < Auto.tubularSegments; j += 6) {
-        Auto.pulseTubularLine(j, 0.2)
+      this.objects[autoInstance.identity] = new KreiseTorus({
+        identity: autoInstance.identity,
+        radius: 1,
+        tube: 0.25,
+        lod: 1,
+        tubularSegments: 32,
+        radialSegments: 8,
+        facing: 'normal',
+        geogrouping: 'horizontal'
+      })
+
+      this.objects[autoInstance.identity].materials[1] = new MeshPhongMaterial(autoInstance.material1)
+      this.objects[autoInstance.identity].materials[0] = new MeshPhongMaterial(autoInstance.material2)
+      
+
+      for (let k: number = 0; k < this.objects[autoInstance.identity].geometry.groups.length; k++) {
+        this.objects[autoInstance.identity].geometry.groups[k].materialIndex = Math.floor(k / 4) % 2
       }
+      
+      let instancedMeshName: string = autoInstance.identity + 'InstancedMesh'
+      let instancedMeshNameCCW: string = autoInstance.identity + 'InstancedMeshCCW'
 
-      for (let k: number = 0; k < Auto.geometry.groups.length; k++) {
-        Auto.geometry.groups[k].materialIndex = k % 12
-      }
+      this.objects[instancedMeshName] = new InstancedMesh(this.objects[autoInstance.identity].geometry, this.objects[autoInstance.identity].materials, autoInstance.count)
+      this.objects[instancedMeshName].instanceMatrix.setUsage(DynamicDrawUsage)
 
-      //Auto.rotateY(Math.PI / 2)
-      this.scene.add(Auto)
-    })
 
-    autos = [this.objects.Autos2, this.objects.Autos5]
-    autos.forEach((Auto, index) => {
-      Auto.materials[0] = new MeshPhongMaterial(rotesRuecklicht)
-      Auto.materials[1] = new MeshPhongMaterial(xenonFrontlicht)
-      Auto.materials[2] = nullMaterial
-      Auto.materials[3] = nullMaterial
-      Auto.materials[4] = nullMaterial
-      Auto.materials[5] = nullMaterial
-      Auto.materials[6] = nullMaterial
-      Auto.materials[7] = nullMaterial
-      Auto.materials[8] = nullMaterial
-      Auto.materials[9] = nullMaterial
+      this.objects[instancedMeshNameCCW] = new InstancedMesh(this.objects[autoInstance.identity].geometry, this.objects[autoInstance.identity].materials, autoInstance.count)
+      this.objects[instancedMeshNameCCW].instanceMatrix.setUsage(DynamicDrawUsage)
 
-      Auto.materials[10] = new MeshPhongMaterial(rotesRuecklicht2)
-      Auto.materials[11] = new MeshPhongMaterial(normalFrontlicht)
-      Auto.materials[12] = nullMaterial
-      Auto.materials[13] = nullMaterial
-      Auto.materials[14] = nullMaterial
-      Auto.materials[15] = nullMaterial
-      Auto.materials[16] = nullMaterial
-      Auto.materials[17] = nullMaterial
-      Auto.materials[18] = nullMaterial
-      Auto.materials[19] = nullMaterial
+      this.scene.add(this.objects[instancedMeshName])
+      this.scene.add(this.objects[instancedMeshNameCCW])
 
-      for (let j: number = 1; j < Auto.tubularSegments; j += 10) {
-        Auto.pulseTubularLine(j, 0.2)
-      }
+      
 
-      for (let k: number = 0; k < Auto.geometry.groups.length; k++) {
-        Auto.geometry.groups[k].materialIndex = k % 20
-      }
-
-      //Auto.rotateY(Math.PI / 2)
-      this.scene.add(Auto)
-    })
-
-    autos = [this.objects.Autos3, this.objects.Autos4]
-    autos.forEach((Auto, index) => {
-      Auto.materials[0] = new MeshPhongMaterial(rotesRuecklicht)
-      Auto.materials[1] = new MeshPhongMaterial(xenonFrontlicht)
-      Auto.materials[2] = nullMaterial
-      Auto.materials[3] = nullMaterial
-      Auto.materials[4] = nullMaterial
-      Auto.materials[5] = nullMaterial
-      Auto.materials[6] = nullMaterial
-      Auto.materials[7] = nullMaterial
-      Auto.materials[8] = nullMaterial
-      Auto.materials[9] = nullMaterial
-      Auto.materials[10] = nullMaterial
-      Auto.materials[11] = nullMaterial
-      Auto.materials[12] = nullMaterial
-      Auto.materials[13] = nullMaterial
-      Auto.materials[14] = nullMaterial
-
-      Auto.materials[15] = new MeshPhongMaterial(rotesRuecklicht2)
-      Auto.materials[16] = new MeshPhongMaterial(normalFrontlicht)
-      Auto.materials[17] = nullMaterial
-      Auto.materials[18] = nullMaterial
-      Auto.materials[19] = nullMaterial
-      Auto.materials[20] = nullMaterial
-      Auto.materials[21] = nullMaterial
-      Auto.materials[22] = nullMaterial
-      Auto.materials[23] = nullMaterial
-      Auto.materials[24] = nullMaterial
-      Auto.materials[25] = nullMaterial
-      Auto.materials[26] = nullMaterial
-      Auto.materials[27] = nullMaterial
-      Auto.materials[28] = nullMaterial
-      Auto.materials[29] = nullMaterial
-
-      for (let j: number = 1; j < Auto.tubularSegments; j += 15) {
-        Auto.pulseTubularLine(j, 0.2)
-      }
-
-      for (let k: number = 0; k < Auto.geometry.groups.length; k++) {
-        Auto.geometry.groups[k].materialIndex = k % 30
-      }
-
-      //Auto.rotateY(Math.PI / 2)
-      this.scene.add(Auto)
     })
 
 
-    /*
-    for (let i: number = 1; i <= 4; i++) {
-      const AutosName = 'Autos' + i
-      const Autos: KreiseTorus = this.objects[AutosName] as KreiseTorus
-    } */
-
-    this.objects.Autos1.position.x = -9
-    this.objects.Autos1.rotateY(-Math.PI / 2)
-    this.objects.Autos2.position.x = -6
-    this.objects.Autos2.rotateY(-Math.PI / 2)
-    this.objects.Autos3.position.x = -3
-    this.objects.Autos3.rotateY(-Math.PI / 2)
-    this.objects.Autos4.position.x = 3
-    this.objects.Autos4.rotateY(Math.PI / 2)
-    this.objects.Autos5.position.x = 6
-    this.objects.Autos5.rotateY(Math.PI / 2)
-    this.objects.Autos6.position.x = 9
-    this.objects.Autos6.rotateY(Math.PI / 2)
 
     this.camera.position.set(0, -16.5, 0)
     this.camera.lookAt(0, -16.5, 0)
@@ -445,15 +311,66 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
       this.objects.Bahn6.rotation.z = ticks * -0.00005
       this.objects.Bahn7.rotation.z = ticks * -0.00005
-
-      this.objects.Autos1.rotation.z = ticks * +0.00004
-      this.objects.Autos2.rotation.z = ticks * +0.00008
-      this.objects.Autos3.rotation.z = ticks * +0.00012
-
-      this.objects.Autos4.rotation.z = ticks * +0.00012
-      this.objects.Autos5.rotation.z = ticks * +0.00008
-      this.objects.Autos6.rotation.z = ticks * +0.00004
     }
+
+    const matrixDummy = new Object3D();
+
+    this.autoInstances.forEach((autoInstance) => {
+
+      let instancedMeshName: string = autoInstance.identity + 'InstancedMesh'
+
+      for (let i: number = 0 ; i < this.objects[instancedMeshName].count; i++ ) {
+        //for (let i: number = 1 ; i <= 10; i++ ) {
+    
+          let radius: number = 20
+          let progress: number = (i / this.objects[instancedMeshName].count) + autoInstance.offsetProgress
+          matrixDummy.position.set (autoInstance.offsetX, Math.cos(progress * (Math.PI * 2)) * radius, Math.sin(progress * (Math.PI * 2)) * radius)
+          matrixDummy.rotation.x = 0
+          matrixDummy.rotateX((Math.PI * 2) * progress)
+          matrixDummy.updateMatrix();
+    
+          this.objects[instancedMeshName].setMatrixAt(i, matrixDummy.matrix)
+    
+        }
+    
+        this.objects[instancedMeshName].rotation.x = ticks * autoInstance.speed
+    
+    
+        this.objects[instancedMeshName].needsUpdate = true;
+
+    })
+
+    // CCW
+
+    this.autoInstances.forEach((autoInstance) => {
+
+      let instancedMeshNameCCW: string = autoInstance.identity + 'InstancedMeshCCW'
+
+      for (let i: number = 0 ; i < this.objects[instancedMeshNameCCW].count; i++ ) {
+        //for (let i: number = 1 ; i <= 10; i++ ) {
+    
+          let radius: number = 20
+          let progress: number = (i / this.objects[instancedMeshNameCCW].count) + autoInstance.offsetProgress
+          matrixDummy.position.set (-autoInstance.offsetX, Math.cos(progress * (Math.PI * 2)) * radius, Math.sin(progress * (Math.PI * 2)) * radius)
+          matrixDummy.rotation.x = 0
+          matrixDummy.rotation.y = 0
+          matrixDummy.rotation.z = 0
+          
+          matrixDummy.rotateX((Math.PI * 2) * progress)
+          matrixDummy.rotateY(Math.PI)
+          matrixDummy.updateMatrix();
+    
+          this.objects[instancedMeshNameCCW].setMatrixAt(i, matrixDummy.matrix)
+    
+        }
+    
+        this.objects[instancedMeshNameCCW].rotation.x = ticks * -autoInstance.speed
+    
+    
+        this.objects[instancedMeshNameCCW].needsUpdate = true;
+
+    })
+
 
     if (this.kreise.autoplay.camera) {
       this.camera.rotation.x = ticks * 0.00004

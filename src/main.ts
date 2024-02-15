@@ -221,7 +221,7 @@ cameraControls.update(clock.getDelta())
 let ticks: number = 0
 
 let episodes: any[] = ['Intro', 'Autobahn', 'Chemnitz']
-//episodes = ['Autobahn']
+// episodes = ['Autobahn']
 const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Math.random is inclusively 0 but never 1
 
 console.log(EpisodeRand)

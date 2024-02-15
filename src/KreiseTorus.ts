@@ -30,6 +30,8 @@ class KreiseTorus extends Mesh {
   color: Color
   arc: number
 
+  parameters: any
+
   geometry: KreiseTorusGeometry | TorusGeometry
   materials: Array<Material | MeshBasicMaterial | MeshPhongMaterial | MeshLambertMaterial | ShaderMaterial>
   mesh: Mesh
@@ -37,6 +39,7 @@ class KreiseTorus extends Mesh {
   constructor (parameters: any) {
     super()
 
+    this.parameters = parameters
     this.name = parameters.identity // hmm well
     this.radius = parameters.radius
     this.tube = parameters.tube
@@ -51,9 +54,12 @@ class KreiseTorus extends Mesh {
     // this.radialSegments = 12
     // this.tubularSegments= 100
     // this.geometry = new BufferGeometry()
+
+    this.materials = []
+
     if (this.geogrouping === 'vertical') {
       this.geometry = new KreiseTorusGeometry(this.radius, this.tube, this.radialSegments, this.tubularSegments, this.facing, this.arc)
-      this.materials = []
+      
 
       let i: number
       for (i = 0; i < this.tubularSegments; i++) {
@@ -62,21 +68,17 @@ class KreiseTorus extends Mesh {
       }
     }
 
-    /*
+    
     if (this.geogrouping === 'horizontal') {
-      this.geometry = new TorusGeometry(this.radius, this.tube, this.radialSegments, this.tubularSegments, this.facing, this.arc)
-      this.materials = []
-
+      this.geometry = new TorusGeometry(this.radius, this.tube, this.radialSegments, this.tubularSegments, this.arc)
+      
       let i: number
       for (i = 0; i < this.radialSegments; i++) {
         // in an indexed geometry, use index for triangles. each radial segment is 2 triangles, so 6 vertices.
-        this.geometry.addGroup(i * 6 * this.radialSegments, 6 * this.radialSegments, 0)
+        this.geometry.addGroup(i * 6 * this.tubularSegments, 6 * this.tubularSegments, 0)
       }
     }
-    */
-
     
-
     this.color = parameters.color ?? new Color(0xffffff)
     this.materials.push(new Material())
     this.materials[0] = new MeshPhongMaterial({ color: this.color, shininess: 200 })
