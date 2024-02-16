@@ -1,4 +1,4 @@
-import KreiseEpisode, { ObjectInterface } from './KreiseEpisode'
+import KreiseEpisode from './KreiseEpisode'
 
 import {
   Scene,
@@ -32,8 +32,7 @@ import turboTextureImage from '../textures/turbo.png'
 
 import { ColorSchemes, flyCurveVectors } from '../KreiseConsts'
 import type Kreise from '../Kreise.ts'
-import { materialOpacity } from 'three/examples/jsm/nodes/Nodes.js'
-import { isUndef } from 'tone'
+import { domElementType } from '../Kreise.ts'
 
 export default class AutobahnEpisode extends KreiseEpisode {
   flyCurveTicks: number
@@ -50,7 +49,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
   pointer: Vector2 = new Vector2()
 
   // remember the kreise scene is the main scene and this one is local to the episode :)
-  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: HTMLElement) {
+  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: domElementType) {
     super(kreise, scene, camera, domElement)
 
     this.colorScheme = kreise.ColorScheme // set this up in main.ts
@@ -93,6 +92,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
               })
             }
           })
+          break
       }
     }
 
@@ -211,7 +211,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     leitlinien.forEach((Bahn, index) => {
       // Bahn.materials[0] = new MeshPhongMaterial({ color: 0x333333, shininess: 100 })
-      Bahn.materials[0] = new MeshDepthMaterial({})
+      Bahn.materials[0] = new MeshPhongMaterial({ color: 0x000000, transparent: true, opacity: 0 })
       Bahn.materials[1] = new MeshPhongMaterial({ color: 0xdddddd, shininess: 150 })
 
       // console.log(Bahn.geometry.groups)
@@ -234,7 +234,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       this.scene.add(this.objects[BahnName])
     }
 
-    let intensity: number = 0
+    let intensity: number = 1
     if (this.kreise.brightness === 0) {
       intensity = 1
     }
@@ -245,14 +245,14 @@ export default class AutobahnEpisode extends KreiseEpisode {
     const normalFrontlicht = { toneMapped: false, color: 0xffba24, shininess: 350, emissive: 0xffba24, emissiveIntensity: intensity }
 
     this.autoInstances = [
-        { identity: 'AutoBaseLKW', count: 50, material1: rotesRuecklicht, material2: xenonFrontlicht, offsetX: 9, offsetProgress: 0, speed: 0.00005 },
-        { identity: 'AutoBaseLKW2', count: 50, material1: rotesRuecklicht2, material2: normalFrontlicht, offsetX: 9, offsetProgress: 1/100, speed: 0.00005 },
+        { identity: 'AutoBaseLKW', count: 40, material1: rotesRuecklicht, material2: xenonFrontlicht, offsetX: 9, offsetProgress: 0, speed: 0.00005 },
+        { identity: 'AutoBaseLKW2', count: 40, material1: rotesRuecklicht2, material2: normalFrontlicht, offsetX: 9, offsetProgress: 1/80, speed: 0.00005 },
         
-        { identity: 'AutoBaseMS', count: 25, material1: rotesRuecklicht, material2: xenonFrontlicht, offsetX: 6, offsetProgress: 0, speed: 0.00008 },
-        { identity: 'AutoBaseMS2', count: 25, material1: rotesRuecklicht2, material2: normalFrontlicht, offsetX: 6, offsetProgress: 1/50,  speed: 0.00008 },
+        { identity: 'AutoBaseMS', count: 20, material1: rotesRuecklicht, material2: xenonFrontlicht, offsetX: 6, offsetProgress: 0, speed: 0.00009 },
+        { identity: 'AutoBaseMS2', count: 20, material1: rotesRuecklicht2, material2: normalFrontlicht, offsetX: 6, offsetProgress: 1/40,  speed: 0.00009 },
         
-        { identity: 'AutoBaseUS', count: 10, material1: rotesRuecklicht, material2: xenonFrontlicht, offsetX: 3, offsetProgress: 0, speed: 0.00015},
-        { identity: 'AutoBaseUS2', count: 10, material1: rotesRuecklicht2, material2: normalFrontlicht, offsetX: 3, offsetProgress: 1/20, speed: 0.00015 }
+        { identity: 'AutoBaseUS', count: 8, material1: rotesRuecklicht, material2: xenonFrontlicht, offsetX: 3, offsetProgress: 0, speed: 0.0003},
+        { identity: 'AutoBaseUS2', count: 8, material1: rotesRuecklicht2, material2: normalFrontlicht, offsetX: 3, offsetProgress: 1/16, speed: 0.0003 }
     ]
 
     this.autoInstances.forEach((autoInstance) => {
@@ -300,9 +300,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
     //this.camera.rotateZ(-Math.PI / 10)
   }
 
-  addControls (): void {
-    console.log('stub')
-  }
+
 
   update (ticks: number): void {
     if (this.kreise.autoplay.animation) {

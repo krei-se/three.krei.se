@@ -23,6 +23,7 @@ import turboTextureImage from '../textures/turbo.png'
 
 import { ColorSchemes, flyCurveVectors } from '../KreiseConsts'
 import type Kreise from '../Kreise.ts'
+import { domElementType } from '../Kreise.ts'
 
 export default class IntroEpisode extends KreiseEpisode {
   flyCurveTicks: number
@@ -34,7 +35,7 @@ export default class IntroEpisode extends KreiseEpisode {
   keyup (event: KeyboardEvent): void { console.log(event) }
 
   // remember the kreise scene is the main scene and this one is local to the episode :)
-  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: HTMLElement) {
+  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: domElementType) {
     super(kreise, scene, camera, domElement)
 
     this.colorScheme = kreise.ColorScheme // set this up in main.ts
@@ -94,6 +95,8 @@ export default class IntroEpisode extends KreiseEpisode {
     this.domElement.removeEventListener( 'pointercancel', _pointercancel );
     */
 
+    const _keydown = this.keydown.bind(this)
+    const _keyup = this.keyup.bind(this)
     window.removeEventListener('keydown', _keydown)
     window.removeEventListener('keyup', _keyup)
   }
@@ -224,10 +227,6 @@ export default class IntroEpisode extends KreiseEpisode {
 
     // console.log(flyCurveSegments)
     // console.log(flyCurveTicks)
-  }
-
-  addControls (): void {
-    console.log('stub')
   }
 
   update (ticks: number): void {

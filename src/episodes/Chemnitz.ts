@@ -9,7 +9,8 @@ import {
   MeshDepthMaterial,
   MeshPhongMaterial,
   PointLight,
-  PointLightHelper
+  PointLightHelper,
+  MeshStandardMaterial
 } from 'three'
 
 import {
@@ -28,7 +29,7 @@ import turboTextureImage from '../textures/turbo.png'
 
 import { ColorSchemes, flyCurveVectors } from '../KreiseConsts'
 import type Kreise from '../Kreise.ts'
-import { materialOpacity } from 'three/examples/jsm/nodes/Nodes.js'
+import { domElementType } from '../Kreise.ts'
 
 export default class ChemnitzEpisode extends KreiseEpisode {
 
@@ -36,7 +37,7 @@ export default class ChemnitzEpisode extends KreiseEpisode {
   keyup (event: KeyboardEvent): void { console.log(event) }
 
   // remember the kreise scene is the main scene and this one is local to the episode :)
-  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: HTMLElement) {
+  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: domElementType) {
     super(kreise, scene, camera, domElement)
 
     // Controls
@@ -130,21 +131,22 @@ export default class ChemnitzEpisode extends KreiseEpisode {
       opacity = 1
     }
 
-    Lulatsch.materials[0] = null
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: aquamarin, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
-    Lulatsch.materials.push(null)
+    const nullMaterial = new MeshStandardMaterial({ color: 0x000000, transparent: true, opacity: 0})
+
+    Lulatsch.materials[0] = new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: aquamarin, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 })
+    Lulatsch.materials.push(nullMaterial)
     Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: erdbeerrot, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
-    Lulatsch.materials.push(null)
+    Lulatsch.materials.push(nullMaterial)
     Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: gelbgruen, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
-    Lulatsch.materials.push(null)
+    Lulatsch.materials.push(nullMaterial)
     Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: himmelblau, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
-    Lulatsch.materials.push(null)
+    Lulatsch.materials.push(nullMaterial)
     Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: melonengelb, shininess: 300, emissive: melonengelb, emissiveIntensity: .05 }))
-    Lulatsch.materials.push(null)
+    Lulatsch.materials.push(nullMaterial)
     Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: signalviolett, shininess: 300, emissive: signalviolett, emissiveIntensity: .05 }))
-    Lulatsch.materials.push(null)
+    Lulatsch.materials.push(nullMaterial)
     Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: verkehrsgelb, shininess: 300, emissive: verkehrsgelb, emissiveIntensity: .05 }))
-    Lulatsch.materials.push(null)
+    Lulatsch.materials.push(nullMaterial)
     Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: topgold, shininess: 300, emissive: topgold, emissiveIntensity: .1 }))
 
     for (let k: number = 0; k < Lulatsch.geometry.groups.length; k++) {
@@ -173,10 +175,6 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     this.camera.position.set(0, 0, -20)
     this.camera.lookAt(0, 0, 0)
     //this.camera.rotateZ(-Math.PI / 2)
-  }
-
-  addControls (): void {
-    console.log('stub')
   }
 
   update (ticks: number): void {

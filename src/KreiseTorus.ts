@@ -14,7 +14,8 @@ import {
   DynamicDrawUsage,
   ShaderMaterial,
   Int32BufferAttribute,
-  TorusGeometry
+  TorusGeometry,
+  MeshStandardMaterial
 } from 'three'
 
 // import turboTextureImage from './textures/turbo.png'
@@ -33,7 +34,7 @@ class KreiseTorus extends Mesh {
   parameters: any
 
   geometry: KreiseTorusGeometry | TorusGeometry
-  materials: Array<Material | MeshBasicMaterial | MeshPhongMaterial | MeshLambertMaterial | ShaderMaterial>
+  materials: Array<Material | MeshStandardMaterial | MeshBasicMaterial | MeshPhongMaterial | MeshLambertMaterial | ShaderMaterial>
   mesh: Mesh
 
   constructor (parameters: any) {
@@ -56,6 +57,7 @@ class KreiseTorus extends Mesh {
     // this.geometry = new BufferGeometry()
 
     this.materials = []
+    this.geometry = new KreiseTorusGeometry() // will be overwritten
 
     if (this.geogrouping === 'vertical') {
       this.geometry = new KreiseTorusGeometry(this.radius, this.tube, this.radialSegments, this.tubularSegments, this.facing, this.arc)

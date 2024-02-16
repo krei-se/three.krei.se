@@ -1,26 +1,9 @@
 import './style.css'
 
 import {
-  AmbientLight,
   Clock,
-  GridHelper,
-  Mesh,
-  MeshBasicMaterial,
-  MeshLambertMaterial,
-  PCFSoftShadowMap,
-  PerspectiveCamera,
-  PlaneGeometry,
-  PointLight,
   Scene,
-  WebGLRenderer,
-  SphereGeometry,
-  Color,
-  PointLightHelper,
-  AxesHelper,
-  WebGLRenderTarget,
   Vector2,
-  SRGBColorSpace,
-  ACESFilmicToneMapping
 } from 'three'
 
 // GLOBALS
@@ -47,80 +30,29 @@ import KreiseZeit from './kreiseZeit.ts'
 
 // Episodes
 
+import KreiseEpisode from './episodes/KreiseEpisode.ts'
 import IntroEpisode from './episodes/Intro.ts'
 import AutobahnEpisode from './episodes/Autobahn.ts'
 import { EffectComposer, OutputPass, ParallaxBarrierEffect, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 import ChemnitzEpisode from './episodes/Chemnitz.ts'
-import KreiseEpisode from './episodes/KreiseEpisode.ts'
 
 //
 // End of imports
 //
 
-// GLOBALS
-const kreise = new Kreise()
-
 // @TODO this is not needed
 document.title = 'Krei·se'
+
+
+const kreise = new Kreise() // sets up main scene, camera, globals like brightness and client device
 
 const removeMeDiv: HTMLDivElement = document.querySelector('#removeMe') ?? document.createElement('div')
 document.body.removeChild(removeMeDiv)
 document.body.append(getPageOverlayDiv())
 
-const canvas: HTMLCanvasElement = document.createElement('canvas')
-canvas.setAttribute('id', 'scene')
-
-document.body.append(canvas)
-
 setTimeout(fadeoutDatenschutzAndInfoParagraphs, 20000)
 
-// ===== ☀️ ===== Sunrise and Sunset ===== 🌒 =====
-
-if (kreise.sunPosition.altitude < -0.1) {
-  kreise.brightness = 0
-}
-
-if (kreise.sunPosition.altitude > 0.1) {
-  kreise.brightness = 255
-}
-
-const altitude: number = kreise.sunPosition.altitude // in radians, so µ/2 at highest point
-
-// BACKGROUND COLOR
-
-// @TODO check this in anmation every minute
-if (altitude < 0.1 && altitude > -0.1) {
-  kreise.brightness = Math.floor(255 * ((altitude + 0.1) * 5))
-}
-
-// kreise.brightness = 0
-
-document.body.style.setProperty('--page-background', 'rgba(' + kreise.brightness + ',' + kreise.brightness + ',' + kreise.brightness + ',0)')
-
-if (kreise.brightness <= 128) {
-  const introDiv: HTMLDivElement = document.querySelector('#introDiv') ?? document.createElement('div')
-  introDiv.style.cssText = 'filter: invert(1);'
-}
-
-kreise.scene.background = new Color('rgb(' + kreise.brightness + ', ' + kreise.brightness + ', ' + kreise.brightness + ')')
-
-//
-// End of HTML
-//
-
-// ===== 🖼️ CANVAS, RENDERER, & SCENE =====
-
-kreise.renderer = new WebGLRenderer({
-  canvas,
-  antialias: true,
-  alpha: true,
-  logarithmicDepthBuffer: true
-})
-
-kreise.renderer.setPixelRatio(window.devicePixelRatio)
-
-kreise.renderer.shadowMap.enabled = true
-kreise.renderer.shadowMap.type = PCFSoftShadowMap
+// end of HTML Base
 
 // == RHYTHM AND TIME ==
 
@@ -140,10 +72,6 @@ if (kreise.client.developerMode) {
   document.body.appendChild(stats.dom)
 }
 
-// ===== 📦 OBJECTS =====
-
-// Plane
-
 kreise.ColorScheme = 'FourColours'
 const randomScheme: number = Math.random()
 // if (randomScheme >= 0.20) ColorScheme = 'Autumn'
@@ -162,71 +90,26 @@ if (document.referrer.includes('google')) {
   kreise.ColorScheme = 'FourColours'
 }
 
-// ===== 💡 LIGHTS =====
-
-kreise.objects.ambientLight = new AmbientLight('white', 3)
-kreise.objects.pointLight = new PointLight('white', 150, 150, 1.5)
-kreise.objects.pointLight.position.set(0, 0, 0)
-/*
-kreise.objects.pointLight.castShadow = true
-kreise.objects.pointLight.shadow.radius = 20
-kreise.objects.pointLight.shadow.camera.near = 0.5
-kreise.objects.pointLight.shadow.camera.far = 30
-kreise.objects.pointLight.shadow.mapSize.width = 2048
-kreise.objects.pointLight.shadow.mapSize.height = 2048
-*/
-kreise.scene.add(kreise.objects.ambientLight)
-kreise.scene.add(kreise.objects.pointLight)
-
-// ambientLight.intensity = ((255 - kreise.brightness) / 50) + 0.2
-kreise.objects.ambientLight.intensity = 0.5
-// pointLight.intensity = (255 - kreise.brightness) + 50
-
-// ===== 🎥 CAMERA =====
-
-kreise.camera = new PerspectiveCamera(
-  90,
-  canvas.clientWidth / canvas.clientHeight,
-  0.1,
-  100
-)
-kreise.camera.fov = 120
-kreise.camera.position.set(0, 0, 0)
-kreise.camera.lookAt(0, 0, 0)
-kreise.camera.near = 0.05
-kreise.camera.far = 50
-
 // ===== 🕹️ CONTROLS =====
 
-const cameraControls: FlyControls = new FlyControls(kreise.camera, canvas)
+const cameraControls: FlyControls = new FlyControls(kreise.camera, kreise.canvas)
 cameraControls.dragToLook = true
 cameraControls.movementSpeed = 5
 cameraControls.autoForward = false
 cameraControls.rollSpeed = Math.PI / 6
 cameraControls.update(clock.getDelta())
 
-// cameraControls = new OrbitControls(camera, canvas);
-
-// console.log(camera)
-// console.log(cameraControls)
-
-// ===== 🪄 HELPERS AND DEBUG =====
-
-// most are in Kreise Class for the main scene
-// const pointLightHelper: PointLightHelper = new PointLightHelper(pointLight, undefined, 'orange')
-
-
-// ===== Mouse Events =====
+// Main Loop and Episode Chooser
 
 let ticks: number = 0
 
 let episodes: any[] = ['Intro', 'Autobahn', 'Chemnitz']
-// episodes = ['Autobahn']
+// episodes = ['Intro']
 const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Math.random is inclusively 0 but never 1
 
 console.log(EpisodeRand)
 
-let episode: KreiseEpisode = null
+let episode: KreiseEpisode = new KreiseEpisode(kreise, new Scene(), kreise.camera, window)
 
 if (EpisodeRand === 'Intro') {
   episode = new IntroEpisode(kreise, new Scene(), kreise.camera, window)
@@ -238,42 +121,46 @@ if (EpisodeRand === 'Chemnitz') {
   episode = new ChemnitzEpisode(kreise, new Scene(), kreise.camera, window)
 }
 
-
-
 episode.makeScene()
-episode.addControls()
+// episode.addControls()
 
 kreise.scene.add(episode.scene)
 
-// kreise.renderer.outputColorSpace = SRGBColorSpace
-// kreise.renderer.toneMapping = ACESFilmicToneMapping
-
-kreise.renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
-kreise.renderTarget.samples = 2
-kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
-kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
-if (kreise.brightness === 0) {
-  kreise.composer.addPass(new UnrealBloomPass(new Vector2(canvas.clientWidth / 2, canvas.clientHeight / 2), 0.3, 0.05, 0))
-}
-
-const outputPass = new OutputPass()
-kreise.composer.addPass(outputPass)
-
-// const effect = new ParallaxBarrierEffect(kreise.renderer)
-// effect.setSize(canvas.clientWidth, canvas.clientHeight)
-
-// kreise.composer.renderTarget2 = false
+console.log(kreise.scene)
 
 kreise.zeit.interval[900].direction = 'ccw'
 kreise.zeit.interval[300].direction = 'ccw'
 kreise.zeit.interval[60].direction = 'ccw'
+
+
+kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
+kreise.composer.setSize(kreise.canvas.clientWidth, kreise.canvas.clientHeight)
+kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
+kreise.composer.addPass(new UnrealBloomPass(new Vector2(kreise.canvas.clientWidth / 2, kreise.canvas.clientHeight / 2), 0.3, 0.05, 0))
+
+kreise.composer.passes[1].enabled = false
+
+const outputPass = new OutputPass()
+kreise.composer.addPass(outputPass)
+
+kreise.updateBrightness()
+
 
 kreise.renderer.setAnimationLoop(function () {
   const timeDelta = clock.getDelta()
 
   ticks += (timeDelta * 1000)
 
-  kreise.zeit.update()
+  // Crons
+
+  if (Math.floor(ticks / 1000) % 60 === 0) {  // every 60 seconds, update brightness
+  
+    // kreise.updateBrightness()
+    // console.log(ticks)
+  
+  } // every 60 seconds
+
+  // kreise.zeit.update()
 
   // INTRO
   if (episode instanceof IntroEpisode) {
@@ -297,9 +184,8 @@ kreise.renderer.setAnimationLoop(function () {
     kreise.objects.cameraEyeHelper.visible = true
   }
 
-  //kreise.renderer.render(kreise.scene, kreise.camera)
   kreise.composer.render()
-  //effect.render(kreise.scene, kreise.camera)
+  //kreise.renderer.render(kreise.scene, kreise.camera)
 
   if (import.meta.env.DEV) {
     stats.update()
@@ -307,53 +193,16 @@ kreise.renderer.setAnimationLoop(function () {
   }
 
   if (resizeRendererToDisplaySize(kreise.renderer)) {
-    // console.log('Resized')
-    const canvas = kreise.renderer.domElement
-    kreise.camera.aspect = canvas.clientWidth / canvas.clientHeight
+
+    kreise.camera.aspect = kreise.canvas.clientWidth / kreise.canvas.clientHeight
     kreise.camera.updateProjectionMatrix()
-    /*
-      kreise.renderer.dispose()
 
-      kreise.renderer = new WebGLRenderer({
-        canvas,
-        antialias: true,
-        alpha: true,
-        logarithmicDepthBuffer: true
-      })
-
-      kreise.renderer.setPixelRatio(window.devicePixelRatio)
-
-      kreise.renderer.shadowMap.enabled = true
-      kreise.renderer.shadowMap.type = PCFSoftShadowMap
-
-      kreise.renderTarget.dispose()
-
-      kreise.renderTarget = new WebGLRenderTarget(canvas.clientWidth, canvas.clientHeight)
-      kreise.renderTarget.samples = 0
-    */
-
-    /*
-    kreise.composer.dispose()
-        kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
-        kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
-    */
-
-    kreise.composer.setSize(canvas.clientWidth, canvas.clientHeight)
+    kreise.composer.setSize(kreise.canvas.clientWidth, kreise.canvas.clientHeight)
 
     if (kreise.brightness === 0) {
-      kreise.composer.passes[1] = new UnrealBloomPass(new Vector2(canvas.clientWidth / 2, canvas.clientHeight / 2), 0.3, 0.05, 0)
+      //kreise.composer.passes[1] = new UnrealBloomPass(new Vector2(kreise.canvas.clientWidth / 2, kreise.canvas.clientHeight / 2), 0.3, 0.05, 0)
     }
-    // all below are replaced with kreise.composer.setSize
-    // kreise.renderer.width = canvas.clientWidth
-    // kreise.renderer.height = canvas.clientHeight
-    // effect.setSize(canvas.clientWidth, canvas.clientHeight)
-
-    /*
-    const outputPass = new OutputPass()
-    kreise.composer.addPass(outputPass)
-
-*/
-
-    // console.log(kreise.composer)
   }
+  
+
 })
