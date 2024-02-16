@@ -17,23 +17,14 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 import { resizeRendererToDisplaySize } from './helpers/responsiveness'
 
 import { getPageOverlayDiv, fadeoutDatenschutzAndInfoParagraphs } from './htmlincludes.ts'
-import * as Tone from 'tone'
-
-// Constants (mostly used in Episodes)
-
-// import { ColorSchemes } from './KreiseConsts.ts'
-// import { flyCurveVectors } from './KreiseConsts.ts'
-
-// Time
-
-import KreiseZeit from './kreiseZeit.ts'
+// import * as Tone from 'tone'
 
 // Episodes
 
 import KreiseEpisode from './episodes/KreiseEpisode.ts'
 import IntroEpisode from './episodes/Intro.ts'
 import AutobahnEpisode from './episodes/Autobahn.ts'
-import { EffectComposer, OutputPass, ParallaxBarrierEffect, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
+import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 import ChemnitzEpisode from './episodes/Chemnitz.ts'
 
 //
@@ -72,23 +63,6 @@ if (kreise.client.developerMode) {
   document.body.appendChild(stats.dom)
 }
 
-kreise.ColorScheme = 'FourColours'
-const randomScheme: number = Math.random()
-// if (randomScheme >= 0.20) ColorScheme = 'Autumn'
-if (randomScheme >= 0.25) kreise.ColorScheme = 'Cyber'
-if (randomScheme >= 0.50) kreise.ColorScheme = 'Phoenix'
-if (randomScheme >= 0.75) kreise.ColorScheme = 'PurplePath'
-// if (randomScheme >= 0.75) ColorScheme = 'Toxic'
-// if (randomScheme >= 0.90) ColorScheme = 'BaseColors'
-
-// console.log(ColorSchemes)
-// console.log(ColorScheme)
-
-// Google referrer
-// console.log(document.referrer)
-if (document.referrer.includes('google')) {
-  kreise.ColorScheme = 'FourColours'
-}
 
 // ===== 🕹️ CONTROLS =====
 
@@ -126,12 +100,9 @@ episode.makeScene()
 
 kreise.scene.add(episode.scene)
 
-console.log(kreise.scene)
-
 kreise.zeit.interval[900].direction = 'ccw'
 kreise.zeit.interval[300].direction = 'ccw'
 kreise.zeit.interval[60].direction = 'ccw'
-
 
 kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
 kreise.composer.setSize(kreise.canvas.clientWidth, kreise.canvas.clientHeight)
@@ -194,8 +165,7 @@ kreise.renderer.setAnimationLoop(function () {
 
   if (resizeRendererToDisplaySize(kreise.renderer)) {
 
-    kreise.camera.aspect = kreise.canvas.clientWidth / kreise.canvas.clientHeight
-    kreise.camera.updateProjectionMatrix()
+    kreise.updateCamera()
 
     kreise.composer.setSize(kreise.canvas.clientWidth, kreise.canvas.clientHeight)
 

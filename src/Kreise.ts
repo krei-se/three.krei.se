@@ -15,6 +15,7 @@ export type ObjectRecordType = Record<string, AmbientLight | PointLight | Mesh |
 
 export type domElementType = HTMLElement | HTMLDivElement | Window
 
+export type CameraType = PerspectiveCamera // | StereoCamera | Camera
 
 export default class Kreise extends EventDispatcher {
   zeit: KreiseZeit
@@ -29,7 +30,7 @@ export default class Kreise extends EventDispatcher {
 
   objects: ObjectRecordType
   scene: Scene
-  camera: Camera | PerspectiveCamera | StereoCamera
+  camera: CameraType
 
   autoplay: AutoplayOptionsInterface
   debug: DebugOptionsInterface
@@ -92,13 +93,28 @@ export default class Kreise extends EventDispatcher {
     this.debug = { helperObjects: false, helperInterface: false }
 
     this.rhythms = [] // will be overwritten in main.ts
+    
     this.ColorScheme = '' // will be overwritten in main.ts
+    this.ColorScheme = 'FourColours'
+    const randomScheme: number = Math.random()
+    // if (randomScheme >= 0.20) ColorScheme = 'Autumn'
+    if (randomScheme >= 0.25) this.ColorScheme = 'Cyber'
+    if (randomScheme >= 0.50) this.ColorScheme = 'Phoenix'
+    if (randomScheme >= 0.75) this.ColorScheme = 'PurplePath'
+    // if (randomScheme >= 0.75) ColorScheme = 'Toxic'
+    // if (randomScheme >= 0.90) ColorScheme = 'BaseColors'
+
+    // Google referrer
+    if (document.referrer.includes('google')) {
+      this.ColorScheme = 'FourColours'
+    }
+
+    // Client (Desktop / Mobile, Input Devices)
 
     this.client = new KreiseClient()
     this.client.detectAndSetClientDeviceType()
 
     
-
 
     // Main Controls
     this.keydown = function (event) {
@@ -116,6 +132,13 @@ export default class Kreise extends EventDispatcher {
     const _keyup = this.keyup.bind(this)
     window.addEventListener('keydown', _keydown)
     window.addEventListener('keyup', _keyup)
+
+  }
+
+  updateCamera(): void {
+
+    this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight
+    this.camera.updateProjectionMatrix()
 
   }
 
