@@ -114,9 +114,10 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     const gelbgruen = 0x55AA33
     const himmelblau = 0x3077BB
     const melonengelb = 0xFFAA00
-    const signalviolett = 0xF2F900
+    const signalviolett = 0xCC00FF
     const verkehrsgelb = 0xF0C900
     const topgold = 0xEEE8AA
+    const black = 0x000000
 
     const Lulatsch = this.objects.Lulatsch as KreiseTorus
 
@@ -133,21 +134,24 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
     const nullMaterial = new MeshStandardMaterial({ color: 0x000000, transparent: true, opacity: 0})
 
-    Lulatsch.materials[0] = new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: aquamarin, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 })
+    const intensity: number = 1.5
+
+    Lulatsch.materials[0] = new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: aquamarin, emissiveIntensity: intensity })
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: erdbeerrot, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: erdbeerrot, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: gelbgruen, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: gelbgruen, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: himmelblau, shininess: 300, emissive: aquamarin, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: himmelblau, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: melonengelb, shininess: 300, emissive: melonengelb, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: melonengelb, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: signalviolett, shininess: 300, emissive: signalviolett, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: signalviolett, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: verkehrsgelb, shininess: 300, emissive: verkehrsgelb, emissiveIntensity: .05 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: verkehrsgelb, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: topgold, shininess: 300, emissive: topgold, emissiveIntensity: .1 }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: topgold, emissiveIntensity: intensity }))
+    Lulatsch.materials.push(nullMaterial)
 
     for (let k: number = 0; k < Lulatsch.geometry.groups.length; k++) {
       Lulatsch.geometry.groups[k].materialIndex = k % Lulatsch.materials.length

@@ -61,7 +61,7 @@ export default class Kreise extends EventDispatcher {
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       antialias: true,
-      alpha: true,
+      alpha: false, // we don't need this true, its just for the background
       logarithmicDepthBuffer: true
     })
     this.renderer.setPixelRatio(window.devicePixelRatio)

@@ -78,13 +78,15 @@ cameraControls.update(clock.getDelta())
 let ticks: number = 0
 
 let episodes: any[] = ['Intro', 'Autobahn', 'Chemnitz']
-// episodes = ['Intro']
+
+// episodes = ['Chemnitz']
+
 const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Math.random is inclusively 0 but never 1
 
 console.log(EpisodeRand)
 
 let episode: KreiseEpisode = new KreiseEpisode(kreise, new Scene(), kreise.camera, window)
-
+kreise.brightness = 0
 if (EpisodeRand === 'Intro') {
   episode = new IntroEpisode(kreise, new Scene(), kreise.camera, window)
 }
@@ -107,7 +109,7 @@ kreise.zeit.interval[60].direction = 'ccw'
 kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
 kreise.composer.setSize(kreise.canvas.clientWidth, kreise.canvas.clientHeight)
 kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
-kreise.composer.addPass(new UnrealBloomPass(new Vector2(kreise.canvas.clientWidth / 2, kreise.canvas.clientHeight / 2), 0.3, 0.05, 0))
+kreise.composer.addPass(new UnrealBloomPass(new Vector2(kreise.canvas.clientWidth / 2, kreise.canvas.clientHeight / 2), .5, .2, .2))
 
 kreise.composer.passes[1].enabled = false
 

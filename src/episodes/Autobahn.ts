@@ -234,15 +234,17 @@ export default class AutobahnEpisode extends KreiseEpisode {
       this.scene.add(this.objects[BahnName])
     }
 
-    let intensity: number = 1
+    let intensity: number = 1.2
+    /*
     if (this.kreise.brightness === 0) {
       intensity = 1
     }
-    const rotesRuecklicht = { toneMapped: false, color: 0xcc4cee, shininess: 400, emissive: 0xcc4cee, emissiveIntensity: intensity }
-    const rotesRuecklicht2 = { toneMapped: false, color: 0xff2200, shininess: 350, emissive: 0xff2200, emissiveIntensity: intensity }
+    */
+    const rotesRuecklicht = { toneMapped: false, color: 0x000000, shininess: 200, emissive: 0xa50132, emissiveIntensity: intensity }
+    const rotesRuecklicht2 = { toneMapped: false, color: 0x000000, shininess: 150, emissive: 0xff2200, emissiveIntensity: intensity }
 
-    const xenonFrontlicht = { toneMapped: false, color: 0x5555ff, shininess: 400, emissive: 0x5555ff, emissiveIntensity: intensity }
-    const normalFrontlicht = { toneMapped: false, color: 0xffba24, shininess: 350, emissive: 0xffba24, emissiveIntensity: intensity }
+    const xenonFrontlicht = { toneMapped: false, color: 0x000000, shininess: 400, emissive: 0xbdecfc, emissiveIntensity: intensity }
+    const normalFrontlicht = { toneMapped: false, color: 0x000000, shininess: 350, emissive: 0xffba24, emissiveIntensity: intensity }
 
     this.autoInstances = [
         { identity: 'AutoBaseLKW', count: 40, material1: rotesRuecklicht, material2: xenonFrontlicht, offsetX: 9, offsetProgress: 0, speed: 0.00005 },
