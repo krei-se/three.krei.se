@@ -14,6 +14,7 @@ import {
   PerspectiveCamera, 
   PlaneGeometry, 
   PointLight, 
+  PointLightHelper, 
   Scene, 
   SphereGeometry, 
   Vector2, 
@@ -30,7 +31,8 @@ import { KlavierTorus, KreiseShaderedTorus } from './KreiseTorus'
 export interface AutoplayOptionsInterface { camera: boolean, animation: boolean }
 export interface DebugOptionsInterface { helperObjects: boolean, helperInterface: boolean }
 
-export type ObjectRecordType = Record<string, AmbientLight | PointLight | Mesh | AxesHelper | GridHelper | KreiseTorus | KreiseShaderedTorus | KlavierTorus>
+export type ObjectType = AmbientLight | PointLight | PointLightHelper | Mesh | AxesHelper | GridHelper | KreiseTorus | KreiseShaderedTorus | KlavierTorus
+export type ObjectRecordType = Record<string, ObjectType>
 
 export type domElementType = HTMLElement | HTMLDivElement | Window
 
@@ -149,6 +151,18 @@ export default class Kreise extends EventDispatcher {
     // Main Controls
     this.keydown = function (event) {
       switch (event.code) {
+          case 'KeyI':
+            if (this.client.developerMode) {
+              this.switchHelpers()
+            }
+            break
+            case 'KeyO': // usually for autoplay camera, defined in KreiseEpisode
+              break
+            case 'KeyP':
+              if (this.client.developerMode) {
+                this.autoplay.animation = !this.autoplay.animation
+              }
+              break    
           case 'KeyM':
             this.updateBrightness(this.brightness + 10)
             break

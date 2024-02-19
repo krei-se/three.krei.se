@@ -1,33 +1,16 @@
-import KreiseEpisode, { ObjectInterface } from './KreiseEpisode'
+import KreiseEpisode from './KreiseEpisode'
 
 import {
   Scene,
   Camera,
-  Group,
-  Object3D,
-  MeshPhongMaterial,
-  MeshDepthMaterial,
   MeshPhongMaterial,
   PointLight,
   PointLightHelper,
   MeshStandardMaterial
 } from 'three'
 
-import {
-  Vector3,
-  Mesh,
-  MeshLambertMaterial,
-  TextureLoader,
-  MirroredRepeatWrapping,
-  Color,
-  TubeGeometry
-} from 'three'
+import { KreiseTorus } from '../KreiseTorus'
 
-import { KlavierTorus, KreiseShaderedTorus, KreiseTorus } from '../KreiseTorus'
-
-import turboTextureImage from '../textures/turbo.png'
-
-import { ColorSchemes, flyCurveVectors } from '../KreiseConsts'
 import type Kreise from '../Kreise.ts'
 import { domElementType } from '../Kreise.ts'
 
@@ -43,13 +26,6 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     // Controls
     this.keydown = function (event) {
       switch (event.code) {
-        case 'KeyI':
-          if (this.kreise.client.developerMode) {
-            this.kreise.switchHelpers()
-            console.log('keydown')
-            //this.objects.flyCurveMesh.visible = true
-          }
-          break
         case 'KeyO':
           if (this.kreise.client.developerMode) {
             this.kreise.autoplay.camera = !this.kreise.autoplay.camera
@@ -59,22 +35,6 @@ export default class ChemnitzEpisode extends KreiseEpisode {
             }
           }
           break
-        case 'KeyP':
-          if (this.kreise.client.developerMode) {
-            this.kreise.autoplay.animation = !this.kreise.autoplay.animation
-          }
-          break
-        case 'KeyU':
-          Object.entries(this.objects).forEach(([object]) => {
-            console.log(object)
-            if (this.objects[object] instanceof KreiseTorus) {
-              this.objects[object].materials.forEach((material, index) => {
-                if (material !== null) {
-                  material.wireframe = !material.wireframe
-                }
-              })
-            }
-          })
       }
     }
 
@@ -93,6 +53,8 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     this.domElement.removeEventListener( 'pointercancel', _pointercancel );
     */
 
+    const _keydown = this.keydown.bind(this)
+    const _keyup = this.keyup.bind(this)
     window.removeEventListener('keydown', _keydown)
     window.removeEventListener('keyup', _keyup)
   }
@@ -162,8 +124,9 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
     this.scene.add(this.objects.Lulatsch)
 
-    this.kreise.objects.pointLight.position.set(0, 0, 30)
-    this.kreise.objects.pointLight.intensity = 600
+    let pointlightshorthand = this.kreise.objects.pointLight as PointLight
+    pointlightshorthand.position.set(0, 0, 30)
+    pointlightshorthand.intensity = 600
 
     this.objects.pointLight = new PointLight('red', 800, 50, 1.5)
     this.objects.pointLight.position.set(0, 0, 10)

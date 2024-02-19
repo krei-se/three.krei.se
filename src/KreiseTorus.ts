@@ -4,7 +4,6 @@ import {
   type InterleavedBufferAttribute,
   BufferGeometry,
   Color,
-  Material,
   type MeshBasicMaterial,
   type MeshLambertMaterial,
   MeshPhongMaterial,
@@ -34,7 +33,7 @@ class KreiseTorus extends Mesh {
   parameters: any
 
   geometry: KreiseTorusGeometry | TorusGeometry
-  materials: Array<Material | MeshStandardMaterial | MeshBasicMaterial | MeshPhongMaterial | MeshLambertMaterial | ShaderMaterial>
+  materials: Array<MeshStandardMaterial | MeshBasicMaterial | MeshPhongMaterial | MeshLambertMaterial | ShaderMaterial>
   mesh: Mesh
 
   constructor (parameters: any) {
@@ -82,7 +81,7 @@ class KreiseTorus extends Mesh {
     }
     
     this.color = parameters.color ?? new Color(0xffffff)
-    this.materials.push(new Material())
+    this.materials.push(new MeshStandardMaterial())
     this.materials[0] = new MeshPhongMaterial({ color: this.color, shininess: 200 })
 
     this.material = this.materials
@@ -121,11 +120,13 @@ class KreiseTorus extends Mesh {
     positionAttribute.needsUpdate = true
   }
 
+  /*
   addBloomLayer(segments: number = 1) {
 
     
 
   }
+  */
 
 }
 

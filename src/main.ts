@@ -32,7 +32,6 @@ import ChemnitzEpisode from './episodes/Chemnitz.ts'
 // @TODO this is not needed
 document.title = 'Krei·se'
 
-
 const kreise = new Kreise() // sets up main scene, camera, globals like brightness and client device
 
 const removeMeDiv: HTMLDivElement = document.querySelector('#removeMe') ?? document.createElement('div')
@@ -118,9 +117,7 @@ kreise.renderer.setAnimationLoop(function () {
 
   ticks += (timeDelta * 1000)
 
-  // Crons
-
-  
+  // Crons  
   
   if (ticks > (lastcron + (cronInterval * 1000))) {  // every 60 seconds, update brightness
 

@@ -3,8 +3,7 @@ import KreiseEpisode from './KreiseEpisode'
 import {
   Scene,
   Camera,
-  Group,
-  Object3D
+  MeshPhongMaterial,
 } from 'three'
 
 import {
@@ -73,8 +72,7 @@ export default class IntroEpisode extends KreiseEpisode {
           break
         case 'KeyO':
           if (this.kreise.client.developerMode) {
-            this.kreise.autoplay.camera = true
-            this.kreise.autoplay.animation = true
+            // this.kreise.autoplay.camera = !this.kreise.autoplay.camera            
           }
           break
       }
@@ -171,9 +169,11 @@ export default class IntroEpisode extends KreiseEpisode {
 
     const TorusFive = this.scene.getObjectByName('TorusFive') as KreiseTorus
 
-    TorusFive.materials[0].transparent = true
-    TorusFive.materials[0].opacity = 0.85
-    TorusFive.materials[0].map = turboTexture
+    let materialshorthand = TorusFive.materials[0] as MeshPhongMaterial
+
+    materialshorthand.transparent = true
+    materialshorthand.opacity = 0.85
+    materialshorthand.map = turboTexture
     TorusFive.updateMesh()
 
     const TorusOne = this.scene.getObjectByName('TorusOne') as KreiseTorus
@@ -285,21 +285,22 @@ export default class IntroEpisode extends KreiseEpisode {
       this.camera.lookAt(flyCurvePositionLookAt)
       this.camera.up.copy(this.flyCurveNormal)
     } else {
-      if (import.meta.env.DEV) {
+
+      /*
+      if (this.kreise.client.developerMode) {
         const flyCurveProgress: number = (ticks % this.flyCurveTicks) / this.flyCurveTicks
 
-        const flyCurvePosition: Vector3 =
-          flyCurveVectors.getPointAt(flyCurveProgress)
+        const flyCurvePosition: Vector3 = flyCurveVectors.getPointAt(flyCurveProgress)
 
-        /* const flyCurveProgressAhead: number =
-          ((ticks + 50) % flyCurveTicks) / flyCurveTicks
+        const flyCurveProgressAhead: number =
+          ((ticks + 50) % this.flyCurveTicks) / this.flyCurveTicks
 
-        const flyCurvePositionLookAt: Vector3 = flyCurveVectors.getPointAt(
-          flyCurveProgressAhead
-        ) */
+        const flyCurvePositionLookAt: Vector3 = flyCurveVectors.getPointAt(flyCurveProgressAhead)
 
-//        cameraEyeHelper.position.copy(flyCurvePosition)
+        this.objects.cameraEyeHelper.position.copy(flyCurvePosition)
       }
+      */
+
     }
   }
 }
