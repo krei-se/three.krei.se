@@ -61,8 +61,9 @@ export default class Kreise extends EventDispatcher {
 
   client: KreiseClient
 
-  keydown (event: KeyboardEvent): void { console.log(event) } // stub to shutup linter about event
-  keyup (event: KeyboardEvent): void { console.log(event) }
+  keydown (event: KeyboardEvent): void { event; return }    // stub this to console.log(event)
+  keyup (event: KeyboardEvent): void { event; return }      // stub this to console.log(event)
+  onPointerMove (event: MouseEvent): void { event; return } // stub this to console.log(event)
 
   constructor () {
     super()
@@ -157,6 +158,9 @@ export default class Kreise extends EventDispatcher {
             }
             break
             case 'KeyO': // usually for autoplay camera, defined in KreiseEpisode
+              if (this.client.developerMode) {
+                this.autoplay.camera = !this.autoplay.camera  
+              }
               break
             case 'KeyP':
               if (this.client.developerMode) {
@@ -248,12 +252,12 @@ export default class Kreise extends EventDispatcher {
     this.objects.cameraEyeHelper.visible = !this.objects.cameraEyeHelper.visible
   }
 
-  updateBrightness (brightness: number = -1): void {
+  updateBrightness (brightness: number = NaN): void {
 
     this.suncalc = SunCalc.getTimes(new Date(), 50.84852106503032, 12.923759828615541)
     this.sunPosition = SunCalc.getPosition(new Date(), 50.84852106503032, 12.923759828615541)
     
-    if (brightness === -1) {
+    if (isNaN(brightness)) {
       this.brightness = 255
 
       if (this.sunPosition.altitude < -0.1) {

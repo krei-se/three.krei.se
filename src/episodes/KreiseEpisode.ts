@@ -17,9 +17,9 @@ export default class KreiseEpisode extends EventDispatcher {
   makeScene(): void {}
   addControls(): void {}
 
-  keydown (event: KeyboardEvent): void { console.log(event) } // stub to shutup linter about event
-  keyup (event: KeyboardEvent): void { console.log(event) }
-  onPointerMove (event: MouseEvent): void { console.log(event) } // stub
+  keydown (event: KeyboardEvent): void { event; return }    // stub this to console.log(event)
+  keyup (event: KeyboardEvent): void { event; return }      // stub this to console.log(event)
+  onPointerMove (event: MouseEvent): void { event; return } // stub this to console.log(event)
 
   constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: domElementType) {
     super()

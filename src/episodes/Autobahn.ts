@@ -30,9 +30,9 @@ export default class AutobahnEpisode extends KreiseEpisode {
   colorScheme: string
   autoInstances: Array<autoInstancesInterface>
 
-  keydown (event: KeyboardEvent): void { console.log(event) } // stub to shutup linter about event
-  keyup (event: KeyboardEvent): void { console.log(event) }
-  onPointerMove (event: MouseEvent): void { console.log(event) } // stub
+  keydown (event: KeyboardEvent): void { event; return }    // stub this to console.log(event)
+  keyup (event: KeyboardEvent): void { event; return }      // stub this to console.log(event)
+  onPointerMove (event: MouseEvent): void { event; return } // stub this to console.log(event)
 
   raycaster: Raycaster = new Raycaster()
   pointer: Vector2 = new Vector2()

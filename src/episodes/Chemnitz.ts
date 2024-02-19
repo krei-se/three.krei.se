@@ -16,9 +16,6 @@ import { domElementType } from '../Kreise.ts'
 
 export default class ChemnitzEpisode extends KreiseEpisode {
 
-  keydown (event: KeyboardEvent): void { console.log(event) } // stub to shutup linter about event
-  keyup (event: KeyboardEvent): void { console.log(event) }
-
   // remember the kreise scene is the main scene and this one is local to the episode :)
   constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: domElementType) {
     super(kreise, scene, camera, domElement)
@@ -38,10 +35,6 @@ export default class ChemnitzEpisode extends KreiseEpisode {
       }
     }
 
-    const _keydown = this.keydown.bind(this)
-    const _keyup = this.keyup.bind(this)
-    window.addEventListener('keydown', _keydown)
-    window.addEventListener('keyup', _keyup)
   }
 
   dispose (): void {
@@ -152,12 +145,6 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
       this.objects.pointLight.position.x = 10 * Math.sin((ticks / 1000))
       this.objects.pointLightTwo.position.x = -10 * Math.sin((ticks / 1000))
-      //this.objects.pointLight.position.z = -10 * Math.cos((ticks / 1000))
-    }
-
-    if (this.kreise.autoplay.camera) {
-
-      //this.kreise.camera.rotation.z = .3 * Math.sin(ticks / 1000)
 
     }
 

@@ -53,12 +53,6 @@ export default class IntroEpisode extends KreiseEpisode {
             this.objects.flyCurveMesh.visible = true
           }
           break
-        case 'KeyO':
-          if (this.kreise.client.developerMode) {
-            this.kreise.autoplay.camera = false
-            this.kreise.autoplay.animation = false
-          }
-          break
       }
     }
 
