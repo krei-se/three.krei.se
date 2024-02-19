@@ -1,7 +1,26 @@
 import SunCalc from 'suncalc'
 import type { GetSunPositionResult, GetTimesResult } from 'suncalc'
 
-import { ACESFilmicToneMapping, AmbientLight, AxesHelper, Camera, Color, EventDispatcher, GridHelper, Mesh, MeshBasicMaterial, MeshLambertMaterial, PCFSoftShadowMap, PerspectiveCamera, PlaneGeometry, PlaneHelper, PointLight, RenderTarget, SRGBColorSpace, Scene, SphereGeometry, StereoCamera, Vector2, WebGLRenderTarget, WebGLRenderer } from 'three'
+import { 
+  AmbientLight, 
+  AxesHelper, 
+  Color, 
+  EventDispatcher, 
+  GridHelper, 
+  Mesh, 
+  MeshBasicMaterial, 
+  MeshLambertMaterial, 
+  PCFSoftShadowMap, 
+  PerspectiveCamera, 
+  PlaneGeometry, 
+  PointLight, 
+  Scene, 
+  SphereGeometry, 
+  Vector2, 
+  WebGLRenderTarget, 
+  WebGLRenderer
+} from 'three'
+
 import { toggleFullScreen } from './helpers/fullscreen'
 import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 import KreiseZeit from './KreiseZeit'
@@ -52,6 +71,26 @@ export default class Kreise extends EventDispatcher {
 
     this.objects = {}
 
+    this.autoplay = { camera: true, animation: true }
+    this.debug = { helperObjects: false, helperInterface: false }
+
+    this.rhythms = [] // will be overwritten in main.ts
+    
+    this.ColorScheme = '' // will be overwritten in main.ts
+    this.ColorScheme = 'FourColours'
+    const randomScheme: number = Math.random()
+    // if (randomScheme >= 0.20) ColorScheme = 'Autumn'
+    if (randomScheme >= 0.25) this.ColorScheme = 'Cyber'
+    if (randomScheme >= 0.50) this.ColorScheme = 'Phoenix'
+    if (randomScheme >= 0.75) this.ColorScheme = 'PurplePath'
+    // if (randomScheme >= 0.75) ColorScheme = 'Toxic'
+    // if (randomScheme >= 0.90) ColorScheme = 'BaseColors'
+
+    // Google referrer
+    if (document.referrer.includes('google')) {
+      this.ColorScheme = 'FourColours'
+    }
+
     this.scene = new Scene()
     this.canvas = document.querySelector('#scene') ?? document.createElement('canvas')
     this.canvas.setAttribute('id', 'scene')
@@ -72,7 +111,9 @@ export default class Kreise extends EventDispatcher {
     this.renderTarget.samples = 2
     //this.renderer.outputColorSpace = SRGBColorSpace
     //this.renderer.toneMapping = ACESFilmicToneMapping
-    
+
+    // this needs to be set up before the composer
+
     this.camera = new PerspectiveCamera(
         120,                                                        // FOV
         this.canvas.clientWidth / this.canvas.clientHeight,         // Aspect, updated on resize
@@ -87,27 +128,16 @@ export default class Kreise extends EventDispatcher {
     // add helper objects for dev debug
     this.addHelpers()
 
+    this.composer = new EffectComposer(this.renderer, this.renderTarget)
+    this.composer.setSize(this.canvas.clientWidth, this.canvas.clientHeight)
+    this.composer.addPass(new RenderPass(this.scene, this.camera))
+    this.composer.addPass(new UnrealBloomPass(new Vector2(this.canvas.clientWidth / 2, this.canvas.clientHeight / 2), .5, .2, .2))
 
+    this.composer.passes[1].enabled = false
 
-    this.autoplay = { camera: true, animation: true }
-    this.debug = { helperObjects: false, helperInterface: false }
+    this.composer.addPass(new OutputPass())
 
-    this.rhythms = [] // will be overwritten in main.ts
     
-    this.ColorScheme = '' // will be overwritten in main.ts
-    this.ColorScheme = 'FourColours'
-    const randomScheme: number = Math.random()
-    // if (randomScheme >= 0.20) ColorScheme = 'Autumn'
-    if (randomScheme >= 0.25) this.ColorScheme = 'Cyber'
-    if (randomScheme >= 0.50) this.ColorScheme = 'Phoenix'
-    if (randomScheme >= 0.75) this.ColorScheme = 'PurplePath'
-    // if (randomScheme >= 0.75) ColorScheme = 'Toxic'
-    // if (randomScheme >= 0.90) ColorScheme = 'BaseColors'
-
-    // Google referrer
-    if (document.referrer.includes('google')) {
-      this.ColorScheme = 'FourColours'
-    }
 
     // Client (Desktop / Mobile, Input Devices)
 

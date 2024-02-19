@@ -2,8 +2,7 @@ import './style.css'
 
 import {
   Clock,
-  Scene,
-  Vector2,
+  Scene
 } from 'three'
 
 // GLOBALS
@@ -24,7 +23,6 @@ import { getPageOverlayDiv, fadeoutDatenschutzAndInfoParagraphs } from './htmlin
 import KreiseEpisode from './episodes/KreiseEpisode.ts'
 import IntroEpisode from './episodes/Intro.ts'
 import AutobahnEpisode from './episodes/Autobahn.ts'
-import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 import ChemnitzEpisode from './episodes/Chemnitz.ts'
 
 //
@@ -102,22 +100,18 @@ episode.makeScene()
 
 kreise.scene.add(episode.scene)
 
+// Global Time dependent Scene setup
+
 kreise.zeit.interval[900].direction = 'ccw'
 kreise.zeit.interval[300].direction = 'ccw'
 kreise.zeit.interval[60].direction = 'ccw'
 
-kreise.composer = new EffectComposer(kreise.renderer, kreise.renderTarget)
-kreise.composer.setSize(kreise.canvas.clientWidth, kreise.canvas.clientHeight)
-kreise.composer.addPass(new RenderPass(kreise.scene, kreise.camera))
-kreise.composer.addPass(new UnrealBloomPass(new Vector2(kreise.canvas.clientWidth / 2, kreise.canvas.clientHeight / 2), .5, .2, .2))
-
-kreise.composer.passes[1].enabled = false
-
-const outputPass = new OutputPass()
-kreise.composer.addPass(outputPass)
-
 kreise.updateBrightness()
 
+let lastcron: number = 0
+let cronInterval: number = 60
+
+// Delta Time dependent animation loop
 
 kreise.renderer.setAnimationLoop(function () {
   const timeDelta = clock.getDelta()
@@ -126,12 +120,18 @@ kreise.renderer.setAnimationLoop(function () {
 
   // Crons
 
-  if (Math.floor(ticks / 1000) % 60 === 0) {  // every 60 seconds, update brightness
   
-    // kreise.updateBrightness()
-    // console.log(ticks)
   
-  } // every 60 seconds
+  if (ticks > (lastcron + (cronInterval * 1000))) {  // every 60 seconds, update brightness
+
+    kreise.updateBrightness()
+    console.log(ticks)
+    console.log(lastcron)
+    
+    console.log(kreise.brightness)
+    lastcron = ticks
+  
+  }
 
   // kreise.zeit.update()
 
