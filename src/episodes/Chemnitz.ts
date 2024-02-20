@@ -99,23 +99,23 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
     const nullMaterial = new MeshStandardMaterial({ color: 0x000000, transparent: true, opacity: 0})
 
-    const intensity: number = 1.5
+    const intensity: number = 1
 
-    Lulatsch.materials[0] = new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: aquamarin, emissiveIntensity: intensity })
+    Lulatsch.materials[0] = new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: aquamarin, shininess: 300, emissive: aquamarin, emissiveIntensity: intensity })
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: erdbeerrot, emissiveIntensity: intensity }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: erdbeerrot, shininess: 300, emissive: erdbeerrot, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: gelbgruen, emissiveIntensity: intensity }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: gelbgruen, shininess: 300, emissive: gelbgruen, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: himmelblau, emissiveIntensity: intensity }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: himmelblau, shininess: 300, emissive: himmelblau, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: melonengelb, emissiveIntensity: intensity }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: melonengelb, shininess: 300, emissive: melonengelb, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: signalviolett, emissiveIntensity: intensity }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: signalviolett, shininess: 300, emissive: signalviolett, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: verkehrsgelb, emissiveIntensity: intensity }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: verkehrsgelb, shininess: 300, emissive: verkehrsgelb, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
-    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: black, shininess: 300, emissive: topgold, emissiveIntensity: intensity }))
+    Lulatsch.materials.push(new MeshPhongMaterial({ transparent: transparency, opacity: opacity, color: topgold, shininess: 300, emissive: topgold, emissiveIntensity: intensity }))
     Lulatsch.materials.push(nullMaterial)
 
     for (let k: number = 0; k < Lulatsch.geometry.groups.length; k++) {
@@ -127,20 +127,19 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
     this.scene.add(this.objects.Lulatsch)
 
-    let pointlightshorthand = this.kreise.objects.pointLight as PointLight
-    pointlightshorthand.position.set(0, 0, 30)
-    pointlightshorthand.intensity = 600
-
-    this.objects.pointLight = new PointLight('red', 800, 50, 1.5)
+    this.objects.pointLight = new PointLight('red', 800, 100, 1)
     this.objects.pointLight.position.set(0, 0, 10)
     this.scene.add(this.objects.pointLight)
 
-    this.objects.pointLightTwo = new PointLight('red', 800, 50, 1.5)
+    this.objects.pointLightTwo = new PointLight('red', 800, 100, 1)
     this.objects.pointLightTwo.position.set(0, 0, 10)
     this.scene.add(this.objects.pointLightTwo)
 
     this.objects.pointLightHelper = new PointLightHelper(this.objects.pointLight, undefined, 'orange')
-    //this.scene.add(this.objects.pointLightHelper)
+    this.objects.pointLightHelperTwo = new PointLightHelper(this.objects.pointLightTwo, undefined, 'red')
+    
+    // this.scene.add(this.objects.pointLightHelper)
+    // this.scene.add(this.objects.pointLightHelperTwo)
 
     this.camera.position.set(0, 0, -20)
     this.camera.lookAt(0, 0, 0)
