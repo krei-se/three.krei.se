@@ -78,81 +78,54 @@ export default class IntroEpisode extends KreiseEpisode {
   makeScene (): void { // its stored in this.scene, get it from there
   // Tori
 
-    this.scene.add(new KreiseTorus({
-      identity: 'TorusZero',
-      radius: 6,
-      tube: 1.5,
-      color: new Color(parseInt('0xffffff')),
-      facing: 'inverse'
-    }))
+    
 
-    this.scene.add(new KreiseTorus({
-      identity: 'TorusOne',
-      radius: 6,
-      tube: 0.8,
-      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][0])),
-      facing: 'inverse'
-    }))
+    this.objects.TorusZero = new KreiseTorus({ identity: 'TorusZero', radius: 6, tube: 1.5, lod: 32,
+      color: new Color(parseInt('0xffffff')), facing: 'inverse'
+    })
+    
+    this.objects.TorusOne = new KreiseTorus({ identity: 'TorusOne', radius: 6, tube: 0.8, lod: 24,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][0])), facing: 'inverse'
+    })
+    
+    this.objects.TorusTwo = new KreiseTorus({ identity: 'TorusTwo', radius: 6, tube: 0.6, lod: 16,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][1])), facing: 'normal'
+    })
 
-    this.scene.add(new KreiseTorus({
-      identity: 'TorusTwo',
-      radius: 6,
-      tube: 0.6,
-      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][1])),
-      facing: 'normal'
-    }))
+    this.objects.TorusThree = new KreiseTorus({ identity: 'TorusThree', radius: 8, tube: 0.5, lod: 16,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][2])), facing: 'inverse'
+    })
 
-    this.scene.add(new KreiseTorus({
-      identity: 'TorusThree',
-      radius: 8,
-      tube: 0.5,
-      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][2])),
-      facing: 'inverse'
-    }))
+    this.objects.TorusFour = new KreiseTorus({ identity: 'TorusFour', radius: 9, tube: 0.5, lod: 16,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][3])), facing: 'inverse'
+    })
 
-    this.scene.add(new KreiseTorus({
-      identity: 'TorusFour',
-      radius: 9,
-      tube: 0.5,
-      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][3])),
-      facing: 'inverse'
-    }))
+    this.objects.TorusFive = new KreiseTorus({ identity: 'TorusFive', radius: 11, tube: 0.8, lod: 24,
+      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])), facing: 'inverse'
+    })
 
-    this.scene.add(new KreiseTorus({
-      identity: 'TorusFive',
-      radius: 11,
-      tube: 0.8,
-      color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])),
-      facing: 'inverse'
-    }))
+    this.objects.KlavierTorus = new KlavierTorus() // identity is always KlavierTorus
 
-    this.scene.add(new KlavierTorus()) // identity is always KlavierTorus
-
-    this.scene.add(new KreiseShaderedTorus({
-      identity: 'TorusSeven',
-      radius: 6,
-      tube: 1,
-      tubularSegments: 256,
-      radialSegments: 32
-    }))
-
-    // TorusZero.materials[0].transparent = true
-    // TorusZero.materials[0].opacity = 0.2
+    this.objects.ShaderedTorus = new KreiseShaderedTorus({ identity: 'TorusSeven', radius: 6, tube: 1,
+      tubularSegments: 256, radialSegments: 32
+    })
 
     const turboTexture = new TextureLoader().load(turboTextureImage)
     turboTexture.wrapS = MirroredRepeatWrapping
     turboTexture.repeat.set(4, 1)
 
-    const TorusFive = this.scene.getObjectByName('TorusFive') as KreiseTorus
+    // shorthand
+    const TorusFive = this.objects.TorusFive as KreiseTorus
 
-    let materialshorthand = TorusFive.materials[0] as MeshPhongMaterial
+    // shorthand
+    const materialshorthand = TorusFive.materials[0] as MeshPhongMaterial
 
     materialshorthand.transparent = true
     materialshorthand.opacity = 0.85
     materialshorthand.map = turboTexture
     TorusFive.updateMesh()
 
-    const TorusOne = this.scene.getObjectByName('TorusOne') as KreiseTorus
+    const TorusOne = this.objects.TorusOne as KreiseTorus
 
     let i: number = 0
     let rate: number = 0
@@ -166,7 +139,7 @@ export default class IntroEpisode extends KreiseEpisode {
     TorusOne.materials[0].transparent = true
     TorusOne.materials[0].opacity = 0.3
 
-    const TorusTwo = this.scene.getObjectByName('TorusTwo') as KreiseTorus
+    const TorusTwo = this.objects.TorusTwo as KreiseTorus
 
     for (i = 0; i <= TorusTwo.tubularSegments; i++) {
       // from 0 to 1
@@ -178,19 +151,22 @@ export default class IntroEpisode extends KreiseEpisode {
     TorusTwo.materials[0].transparent = true
     TorusTwo.materials[0].opacity = 0.8
 
+    this.scene.add(this.objects.TorusZero, this.objects.TorusOne, this.objects.TorusTwo, this.objects.TorusThree, this.objects.TorusFour, this.objects.TorusFive)
+    this.scene.add(this.objects.KlavierTorus, this.objects.ShaderedTorus )
+
+    // FlyCurve-Stuff
+
     const flyCurveMaterial: MeshLambertMaterial = new MeshLambertMaterial({
       emissive: 0x888800, map: turboTexture, transparent: true, opacity: 0.3
     })
 
     const flyCurveGeometry: TubeGeometry = new TubeGeometry(flyCurveVectors, 500, 0.2, 16)
 
-    const flyCurveMesh = new Mesh(flyCurveGeometry, flyCurveMaterial)
-    flyCurveMesh.name = 'flyCurveMesh'
+    this.objects.flyCurveMesh = new Mesh(flyCurveGeometry, flyCurveMaterial)
+    this.objects.flyCurveMesh.name = 'flyCurveMesh'
+    this.objects.flyCurveMesh.visible = false
 
-    this.objects.flyCurveMesh = flyCurveMesh
-
-    this.scene.add(flyCurveMesh)
-    flyCurveMesh.visible = false
+    this.scene.add(this.objects.flyCurveMesh)
 
     // const flyCurveSegments: number = flyCurvePoints.length
     this.flyCurveTicks = Math.floor(Math.random() * 60000) + 900000 // how many ticks for one flythrough
@@ -198,46 +174,34 @@ export default class IntroEpisode extends KreiseEpisode {
     this.flyCurveDirection = new Vector3()
     // const flyCurveBinormal = new Vector3()
     this.flyCurveNormal = new Vector3()
-    // const flyCurvePosition = new Vector3()
-    // const flyCurveLookAt = new Vector3()
 
-    // console.log(flyCurveSegments)
-    // console.log(flyCurveTicks)
   }
 
   update (ticks: number): void {
-    const TorusZero = this.scene.getObjectByName('TorusZero') as KreiseTorus
-    const TorusOne = this.scene.getObjectByName('TorusOne') as KreiseTorus
-    const TorusTwo = this.scene.getObjectByName('TorusTwo') as KreiseTorus
-    const TorusThree = this.scene.getObjectByName('TorusThree') as KreiseTorus
-    const TorusFour = this.scene.getObjectByName('TorusFour') as KreiseTorus
-    const TorusFive = this.scene.getObjectByName('TorusFive') as KreiseTorus
-    const TorusSix = this.scene.getObjectByName('KlavierTorus') as KlavierTorus
-    const TorusSeven = this.scene.getObjectByName('TorusSeven') as KreiseShaderedTorus
 
-    TorusSeven.rotation.x = ticks * 0.00001
-    TorusSeven.rotation.z = ticks * 0.00001
+    this.objects.ShaderedTorus.rotation.x = ticks * 0.00001
+    this.objects.ShaderedTorus.rotation.z = ticks * 0.00001
 
-    TorusZero.rotation.x = ticks * 0.00001
+    this.objects.TorusZero.rotation.x = ticks * 0.00001
 
-    TorusOne.rotation.x = ticks * 0.00001
-    TorusOne.rotation.z = ticks * 0.0001
+    this.objects.TorusOne.rotation.x = ticks * 0.00001
+    this.objects.TorusOne.rotation.z = ticks * 0.0001
 
-    TorusTwo.rotation.x = ticks * 0.00001
-    TorusTwo.rotation.z = ticks * -0.0001
+    this.objects.TorusTwo.rotation.x = ticks * 0.00001
+    this.objects.TorusTwo.rotation.z = ticks * -0.0001
 
-    TorusThree.rotation.x = ticks * 0.00002
-    TorusThree.rotation.y = ticks * -0.00002
-    TorusThree.rotation.z = ticks * 0.0001
+    this.objects.TorusThree.rotation.x = ticks * 0.00002
+    this.objects.TorusThree.rotation.y = ticks * -0.00002
+    this.objects.TorusThree.rotation.z = ticks * 0.0001
 
-    TorusFour.rotation.x = ticks * -0.00002
-    TorusFour.rotation.y = ticks * 0.00002
+    this.objects.TorusFour.rotation.x = ticks * -0.00002
+    this.objects.TorusFour.rotation.y = ticks * 0.00002
 
-    TorusFive.rotation.y = ticks * -0.00003
-    TorusFive.rotation.z = ticks * -0.00015
+    this.objects.TorusFive.rotation.y = ticks * -0.00003
+    this.objects.TorusFive.rotation.z = ticks * -0.00015
 
-    TorusSix.rotation.y = ticks * 0.00003
-    TorusSix.rotation.z = ticks * 0.00015
+    this.objects.KlavierTorus.rotation.y = ticks * 0.00003
+    this.objects.KlavierTorus.rotation.z = ticks * 0.00015
 
     const flyCurveProgress: number = (ticks % this.flyCurveTicks) / this.flyCurveTicks
     const flyCurveProgressAhead: number = ((ticks + 500) % this.flyCurveTicks) / this.flyCurveTicks
