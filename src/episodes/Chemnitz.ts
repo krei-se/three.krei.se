@@ -158,8 +158,8 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
       this.objects.Lulatsch.rotation.z = 2 * Math.sin(ticks / 10000)
 
-      this.objects.pointLight.position.x = 10 * Math.sin((ticks / 1000))
-      this.objects.pointLightTwo.position.x = -10 * Math.sin((ticks / 1000))
+      this.objects.pointLight.position.x = 10 * Math.sin((ticks / 2000))
+      this.objects.pointLightTwo.position.x = -10 * Math.sin((ticks / 3000))
 
     }
 
