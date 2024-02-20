@@ -25,15 +25,25 @@ export default class ChemnitzEpisode extends KreiseEpisode {
       switch (event.code) {
         case 'KeyO':
           if (this.kreise.client.developerMode) {
-            this.kreise.autoplay.camera = !this.kreise.autoplay.camera
             if (this.kreise.autoplay.camera) {
               this.camera.position.set(0, 0, -20)
               this.camera.lookAt(0, 0, 0)
             }
+            else {
+              this.kreise.objects.cameraEyeHelper.position.set(0, 0, -20)
+            }
           }
+          console.log(this.camera.position)
           break
       }
     }
+
+    const _keydown = this.keydown.bind(this)
+    const _keyup = this.keyup.bind(this)
+    const _onPointerMove = this.onPointerMove.bind(this)
+    window.addEventListener('keydown', _keydown)
+    window.addEventListener('keyup', _keyup)
+    window.addEventListener('pointermove', _onPointerMove)
 
   }
 
@@ -135,6 +145,9 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     this.camera.position.set(0, 0, -20)
     this.camera.lookAt(0, 0, 0)
     //this.camera.rotateZ(-Math.PI / 2)
+
+    this.kreise.objects.cameraEyeHelper.position.set(0, 0, -20)
+
   }
 
   update (ticks: number): void {
@@ -147,6 +160,8 @@ export default class ChemnitzEpisode extends KreiseEpisode {
       this.objects.pointLightTwo.position.x = -10 * Math.sin((ticks / 1000))
 
     }
+
+
 
   }
 }

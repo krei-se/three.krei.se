@@ -48,25 +48,7 @@ export default class IntroEpisode extends KreiseEpisode {
       switch (event.code) {
         case 'KeyI':
           if (this.kreise.client.developerMode) {
-            this.kreise.debug.helperObjects = true
-            console.log('keydown')
-            this.objects.flyCurveMesh.visible = true
-          }
-          break
-      }
-    }
-
-    this.keyup = function (event) {
-      switch (event.code) {
-        case 'KeyI':
-          if (this.kreise.client.developerMode) {
-            this.kreise.debug.helperObjects = false
-            this.objects.flyCurveMesh.visible = false
-          }
-          break
-        case 'KeyO':
-          if (this.kreise.client.developerMode) {
-            // this.kreise.autoplay.camera = !this.kreise.autoplay.camera            
+            this.objects.flyCurveMesh.visible = !this.objects.flyCurveMesh.visible
           }
           break
       }
@@ -197,7 +179,7 @@ export default class IntroEpisode extends KreiseEpisode {
     TorusTwo.materials[0].opacity = 0.8
 
     const flyCurveMaterial: MeshLambertMaterial = new MeshLambertMaterial({
-      emissive: 0x888800, map: turboTexture
+      emissive: 0x888800, map: turboTexture, transparent: true, opacity: 0.3
     })
 
     const flyCurveGeometry: TubeGeometry = new TubeGeometry(flyCurveVectors, 500, 0.2, 16)
@@ -257,43 +239,35 @@ export default class IntroEpisode extends KreiseEpisode {
     TorusSix.rotation.y = ticks * 0.00003
     TorusSix.rotation.z = ticks * 0.00015
 
+    const flyCurveProgress: number = (ticks % this.flyCurveTicks) / this.flyCurveTicks
+    const flyCurveProgressAhead: number = ((ticks + 500) % this.flyCurveTicks) / this.flyCurveTicks
+
+    const flyCurvePosition: Vector3 =
+      flyCurveVectors.getPointAt(flyCurveProgress)
+
+    const flyCurvePositionLookAt: Vector3 = flyCurveVectors.getPointAt(
+      flyCurveProgressAhead
+    )
+
+    this.flyCurveDirection
+      .subVectors(flyCurvePositionLookAt, flyCurvePosition)
+      .normalize()
+    this.flyCurveNormal
+      .subVectors(new Vector3(0, 0, 100), flyCurvePosition)
+      .normalize()
+
     if (this.kreise.autoplay.camera) {
-      const flyCurveProgress: number = (ticks % this.flyCurveTicks) / this.flyCurveTicks
-      const flyCurveProgressAhead: number = ((ticks + 500) % this.flyCurveTicks) / this.flyCurveTicks
-
-      const flyCurvePosition: Vector3 =
-        flyCurveVectors.getPointAt(flyCurveProgress)
-
-      const flyCurvePositionLookAt: Vector3 = flyCurveVectors.getPointAt(
-        flyCurveProgressAhead
-      )
-
-      this.flyCurveDirection
-        .subVectors(flyCurvePositionLookAt, flyCurvePosition)
-        .normalize()
-      this.flyCurveNormal
-        .subVectors(new Vector3(0, 0, 100), flyCurvePosition)
-        .normalize()
 
       this.camera.position.copy(flyCurvePosition)
       this.camera.lookAt(flyCurvePositionLookAt)
       this.camera.up.copy(this.flyCurveNormal)
+
     } else {
 
-      /*
       if (this.kreise.client.developerMode) {
-        const flyCurveProgress: number = (ticks % this.flyCurveTicks) / this.flyCurveTicks
-
-        const flyCurvePosition: Vector3 = flyCurveVectors.getPointAt(flyCurveProgress)
-
-        const flyCurveProgressAhead: number =
-          ((ticks + 50) % this.flyCurveTicks) / this.flyCurveTicks
-
-        const flyCurvePositionLookAt: Vector3 = flyCurveVectors.getPointAt(flyCurveProgressAhead)
-
-        this.objects.cameraEyeHelper.position.copy(flyCurvePosition)
+       
+        this.kreise.objects.cameraEyeHelper.position.copy(flyCurvePosition)
       }
-      */
 
     }
   }

@@ -33,15 +33,6 @@ export default class KreiseEpisode extends EventDispatcher {
     // Controls
     this.keydown = function (event) {
       switch (event.code) {
-        case 'KeyO':
-          if (this.kreise.client.developerMode) {
-            this.kreise.autoplay.camera = !this.kreise.autoplay.camera
-            if (this.kreise.autoplay.camera) {
-              this.camera.position.set(0, -16.5, 0)
-              this.camera.lookAt(0, -16.5, 0)
-            }
-          }
-          break
         case 'KeyU':
           Object.entries(this.objects).forEach(([object]) => {
             console.log(object)

@@ -157,16 +157,17 @@ export default class Kreise extends EventDispatcher {
               this.switchHelpers()
             }
             break
-            case 'KeyO': // usually for autoplay camera, defined in KreiseEpisode
-              if (this.client.developerMode) {
-                this.autoplay.camera = !this.autoplay.camera  
-              }
-              break
-            case 'KeyP':
-              if (this.client.developerMode) {
-                this.autoplay.animation = !this.autoplay.animation
-              }
-              break    
+          case 'KeyO': // usually for autoplay camera, defined in KreiseEpisode
+            if (this.client.developerMode) {
+              this.autoplay.camera = !this.autoplay.camera
+              this.objects.cameraEyeHelper.visible = !this.objects.cameraEyeHelper.visible
+            }
+            break
+          case 'KeyP':
+            if (this.client.developerMode) {
+              this.autoplay.animation = !this.autoplay.animation
+            }
+            break    
           case 'KeyM':
             this.updateBrightness(this.brightness + 10)
             break
@@ -249,7 +250,7 @@ export default class Kreise extends EventDispatcher {
     this.objects.gridHelperInstance.visible = !this.objects.gridHelperInstance.visible
     this.objects.axesHelper.visible = !this.objects.axesHelper.visible
     this.objects.planeHelper.visible = !this.objects.planeHelper.visible
-    this.objects.cameraEyeHelper.visible = !this.objects.cameraEyeHelper.visible
+    //this.objects.cameraEyeHelper.visible = !this.objects.cameraEyeHelper.visible
   }
 
   updateBrightness (brightness: number = NaN): void {

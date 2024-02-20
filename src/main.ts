@@ -147,17 +147,14 @@ kreise.renderer.setAnimationLoop(function () {
     episode.update(ticks)
   }
 
-  if (kreise.autoplay.camera) {
-    kreise.objects.cameraEyeHelper.visible = false
-  } else {
+  if (!kreise.autoplay.camera) {
     cameraControls.update(timeDelta)
-    kreise.objects.cameraEyeHelper.visible = true
   }
 
   kreise.composer.render()
   //kreise.renderer.render(kreise.scene, kreise.camera)
 
-  if (import.meta.env.DEV) {
+  if (kreise.client.developerMode) {
     stats.update()
     // add debug interfaces
   }

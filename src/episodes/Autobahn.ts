@@ -53,12 +53,12 @@ export default class AutobahnEpisode extends KreiseEpisode {
       switch (event.code) {
         case 'KeyO':
           if (this.kreise.client.developerMode) {
-            this.kreise.autoplay.camera = !this.kreise.autoplay.camera
             if (this.kreise.autoplay.camera) {
               this.camera.position.set(0, -16.5, 0)
               this.camera.lookAt(0, -16.5, 0)
             }
           }
+          console.log(this.camera.position)
           break
       }
     }
@@ -278,6 +278,11 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     this.camera.position.set(0, -16.5, 0)
     this.camera.lookAt(0, -16.5, 0)
+
+    this.kreise.objects.cameraEyeHelper.position.set(0, -16.5, 0)
+    this.kreise.objects.cameraEyeHelper.lookAt(0, -16.5, 0)
+
+    
     //this.camera.rotateZ(-Math.PI / 10)
   }
 
