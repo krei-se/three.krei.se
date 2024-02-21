@@ -54,8 +54,9 @@ class KreiseRing extends Group {
     this.lod = parameters.lod ?? 1
     this.lodDisplay = parameters.lodDisplay ?? 3
 
-
     this.color = parameters.color ?? new Color(0xffffff)
+
+    this.geometry = 
   
   }
 

@@ -82,7 +82,7 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     const signalviolett = 0xCC00FF
     const verkehrsgelb = 0xF0C900
     const topgold = 0xEEE8AA
-    const black = 0x000000
+    // const black = 0x000000
 
     const Lulatsch = this.objects.Lulatsch as KreiseTorus
 
@@ -157,13 +157,13 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     if (this.kreise.autoplay.animation) {
 
       this.objects.Lulatsch.rotation.z = 2 * Math.sin(ticks / 10000)
+      this.objects.Lulatsch.rotation.y = 3 * Math.sin(ticks / 8000)
+            
 
       this.objects.pointLight.position.x = 10 * Math.sin((ticks / 2000))
       this.objects.pointLightTwo.position.x = -10 * Math.sin((ticks / 3000))
 
     }
-
-
 
   }
 }
