@@ -144,6 +144,8 @@ kreise.renderer.setAnimationLoop(function () {
 
   // EPISODE 2: CHEMNITZ
   if (episode instanceof ChemnitzEpisode) {
+    if (ticks > 60000 * 4) // 4 minutes = 360 Episoden / Songs
+      ticks = ticks - (60000 * 4)
     episode.update(ticks)
   }
 

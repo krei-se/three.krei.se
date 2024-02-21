@@ -154,16 +154,43 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
   update (ticks: number): void {
 
+    // 240 000 ticks (4 Minutes)
     if (this.kreise.autoplay.animation) {
 
-      this.objects.Lulatsch.rotation.z = 2 * Math.sin(ticks / 10000)
-      this.objects.Lulatsch.rotation.y = 3 * Math.sin(ticks / 8000)
+      this.objects.Lulatsch.rotation.z = Math.sin(Math.PI*2 * (ticks / 20000)) * 2 
+      //this.objects.Lulatsch.rotation.y = 3 * Math.sin(ticks / 40000)
             
+      if (ticks > 0 && ticks < 20000) {
+          // 0 to 1               PI is half a rotation, so quarter rotation is PI/2, subtract PI/2 from initial rotation
+      this.objects.Lulatsch.rotation.y = (((ticks - 0) / 20000) * (Math.PI/2)) - (Math.PI/2)
+      }
+
+      if (ticks > 60000 && ticks < 80000) {
+              // 0 to 1                PI is half rotation in rad, so quarter rotation is PI/2, current rotation is 0 rad
+      this.objects.Lulatsch.rotation.y = (((ticks - 60000) / 20000) * (Math.PI/2))
+      }
+
+      if (ticks > 120000 && ticks < 140000) {
+                // 0 to 1               PI is half a rotation, so quarter rotation is PI/2, add PI/2 from previous rotation
+      this.objects.Lulatsch.rotation.y = (((ticks - 120000) / 20000) * (Math.PI/2)) + (Math.PI/2)
+      }
+
+      if (ticks > 180000 && ticks < 200000) {
+        // 0 to 1                PI is half rotation in rad, so quarter rotation is PI/2, , ends in + half PI ?
+      this.objects.Lulatsch.rotation.y = (((ticks - 180000) / 20000) * (Math.PI/2)) + (Math.PI)
+      }
 
       this.objects.pointLight.position.x = 10 * Math.sin((ticks / 2000))
       this.objects.pointLightTwo.position.x = -10 * Math.sin((ticks / 3000))
 
     }
 
+    else {
+
+      console.log(this.objects.Lulatsch.rotation)
+
+    }
+
   }
+
 }
