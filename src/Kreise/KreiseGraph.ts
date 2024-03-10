@@ -57,11 +57,14 @@ export default class KreiseGraph {
   
   constructor() {
 
-    this.repeat++
-    if (this.repeat < this.visited) {
       return new Proxy(this, {
         get(target, property, receiver) {
           if (property in target) {
+            // catch tired nodes
+            if (property === 'graphs') {
+              target.visited++
+              if (target.visited > target.repeat) return
+            }
             return target[property]
           }
           else if (property in target.objects) {
@@ -87,7 +90,5 @@ export default class KreiseGraph {
         }
       })
     }
-
-  }
 
 }
