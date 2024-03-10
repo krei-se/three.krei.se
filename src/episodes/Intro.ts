@@ -16,13 +16,13 @@ import {
   TubeGeometry
 } from 'three'
 
-import { KlavierTorus, KreiseShaderedTorus, KreiseTorus } from '../KreiseTorus'
+import { KlavierTorus, KreiseShaderedTorus, KreiseTorus } from '../Kreise/KreiseTorus'
 
 import turboTextureImage from '../textures/turbo.png'
 
-import { ColorSchemes, flyCurveVectors } from '../KreiseConsts'
-import type Kreise from '../Kreise.ts'
-import { domElementType } from '../Kreise.ts'
+import { ColorSchemes, flyCurveVectors } from '../Kreise/KreiseConsts'
+import type Kreise from '../Kreise/Kreise.ts'
+import { domElementType } from '../Kreise/Kreise.ts'
 
 export default class IntroEpisode extends KreiseEpisode {
   flyCurveTicks: number
@@ -230,7 +230,7 @@ export default class IntroEpisode extends KreiseEpisode {
 
       if (this.kreise.client.developerMode) {
        
-        this.kreise.objects.cameraEyeHelper.position.copy(flyCurvePosition)
+        this.kreise.graph.helpers.cameraEyeHelper.position.copy(flyCurvePosition)
       }
 
     }

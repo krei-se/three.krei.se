@@ -4,12 +4,19 @@ import type { GetSunPositionResult, GetTimesResult } from 'suncalc'
 import { 
   AmbientLight, 
   AxesHelper, 
+  Box3, 
+  Box3Helper, 
+  CameraHelper, 
   Color, 
+  DirectionalLight, 
+  DirectionalLightHelper, 
   EventDispatcher, 
   GridHelper, 
+  Group, 
   Mesh, 
   MeshBasicMaterial, 
   MeshLambertMaterial, 
+  Object3D, 
   PCFSoftShadowMap, 
   PerspectiveCamera, 
   PlaneGeometry, 
@@ -22,24 +29,45 @@ import {
   WebGLRenderer
 } from 'three'
 
-import { toggleFullScreen } from './helpers/fullscreen'
+import { toggleFullScreen } from '../helpers/fullscreen'
 import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 import KreiseZeit from './KreiseZeit'
 import { KreiseTorus } from './KreiseTorus'
 import { KlavierTorus, KreiseShaderedTorus } from './KreiseTorus'
+import KreiseGraph from './KreiseGraph'
 
 export interface AutoplayOptionsInterface { camera: boolean, animation: boolean }
 export interface DebugOptionsInterface { helperObjects: boolean, helperInterface: boolean }
 
-export type ObjectType = AmbientLight | PointLight | PointLightHelper | Mesh | AxesHelper | GridHelper | KreiseTorus | KreiseShaderedTorus | KlavierTorus
+export type LightsType = AmbientLight | PointLight | DirectionalLight
+export type LightsRecordType = Record<string, LightsType>
+
+export type MeshesType = Mesh | Group
+export type MeshesRecordType = Record<string, MeshesType>
+
+export type HelpersType = AxesHelper | GridHelper | CameraHelper 
+export type HelpersRecordType = Record<string, MeshesType>
+
+
+
+//  Basic three type                                                                LIGHTS                                                      HELPERS                   Kreise    Mesh              Mesh              Mesh
+export type ObjectType = Object3D | Group | Mesh | Box3 | Box3Helper   |   AmbientLight | PointLight | PointLightHelper | DirectionalLight | DirectionalLightHelper  |   AxesHelper | GridHelper  |   KreiseTorus | KreiseShaderedTorus | KlavierTorus
 export type ObjectRecordType = Record<string, ObjectType>
+
+export interface ObjectTree {
+  lights?: LightsRecordType;
+  meshes?: MeshesRecordType;
+  helpers?: HelpersRecordType;
+}
 
 export type domElementType = HTMLElement | HTMLDivElement | Window
 
 export type CameraType = PerspectiveCamera // | StereoCamera | Camera
 
+
 export default class Kreise extends EventDispatcher {
   zeit: KreiseZeit
+  location: number[] = [50.84852106503032, 12.923759828615541]
   suncalc: GetTimesResult
   sunPosition: GetSunPositionResult
   brightness: number
@@ -49,7 +77,7 @@ export default class Kreise extends EventDispatcher {
   renderTarget: WebGLRenderTarget
   composer: EffectComposer
 
-  objects: ObjectRecordType
+  graph: KreiseGraph = new KreiseGraph()
   scene: Scene
   camera: CameraType
 
@@ -68,11 +96,9 @@ export default class Kreise extends EventDispatcher {
   constructor () {
     super()
     this.zeit = new KreiseZeit()
-    this.suncalc = SunCalc.getTimes(new Date(), 50.84852106503032, 12.923759828615541)
-    this.sunPosition = SunCalc.getPosition(new Date(), 50.84852106503032, 12.923759828615541)
+    this.suncalc = SunCalc.getTimes(new Date(), this.location[0], this.location[1])
+    this.sunPosition = SunCalc.getPosition(new Date(), this.location[0], this.location[1])
     this.brightness = 255
-
-    this.objects = {}
 
     this.autoplay = { camera: true, animation: true }
     this.debug = { helperObjects: false, helperInterface: false }
@@ -121,20 +147,21 @@ export default class Kreise extends EventDispatcher {
         120,                                                        // FOV
         this.canvas.clientWidth / this.canvas.clientHeight,         // Aspect, updated on resize
         0.1,                                                        // Near
-        120                                                         // Far) // will be overwritten in main
+        5000                                                         // Far) // will be overwritten in main
     )
     this.camera.position.set(0, 0, 0)
     this.camera.lookAt(0, 0, 0)
 
     // create the main Scene and Menu
-    this.makeMainScene()
+    // this.makeMainScene()
     // add helper objects for dev debug
     this.addHelpers()
+    this.switchHelpers()
 
     this.composer = new EffectComposer(this.renderer, this.renderTarget)
     this.composer.setSize(this.canvas.clientWidth, this.canvas.clientHeight)
     this.composer.addPass(new RenderPass(this.scene, this.camera))
-    this.composer.addPass(new UnrealBloomPass(new Vector2(this.canvas.clientWidth / 2, this.canvas.clientHeight / 2), .5, .2, .2))
+    this.composer.addPass(new UnrealBloomPass(new Vector2(this.canvas.clientWidth / 2, this.canvas.clientHeight / 2), .3, .2, .2))
 
     this.composer.passes[1].enabled = false
 
@@ -147,7 +174,7 @@ export default class Kreise extends EventDispatcher {
     this.client = new KreiseClient()
     this.client.detectAndSetClientDeviceType()
 
-    
+    this.updateBrightness()
 
     // Main Controls
     this.keydown = function (event) {
@@ -160,7 +187,7 @@ export default class Kreise extends EventDispatcher {
           case 'KeyO': // usually for autoplay camera, defined in KreiseEpisode
             if (this.client.developerMode) {
               this.autoplay.camera = !this.autoplay.camera
-              this.objects.cameraEyeHelper.visible = !this.objects.cameraEyeHelper.visible
+              this.graph.helpers.cameraEyeHelper.visible = !this.graph.helpers.cameraEyeHelper.visible;
             }
             break
           case 'KeyP':
@@ -193,9 +220,9 @@ export default class Kreise extends EventDispatcher {
 
   makeMainScene(): void {
 
-    this.objects.ambientLight = new AmbientLight('white', 3)
-    this.objects.pointLight = new PointLight('white', 150, 150, 1.5)
-    this.objects.pointLight.position.set(0, 0, 0)
+    this.graph.lights.ambientLight = new AmbientLight('white', 1)
+    this.graph.lights.pointLight = new PointLight('white', 150, 150, 1.5)
+    this.graph.lights.pointLight.position.set(0, 0, 0)
     /*
     kreise.objects.pointLight.castShadow = true
     kreise.objects.pointLight.shadow.radius = 20
@@ -204,17 +231,18 @@ export default class Kreise extends EventDispatcher {
     kreise.objects.pointLight.shadow.mapSize.width = 2048
     kreise.objects.pointLight.shadow.mapSize.height = 2048
     */
-    this.scene.add(this.objects.ambientLight)
-    this.scene.add(this.objects.pointLight)
+    this.scene.add(this.graph.lights.ambientLight)
+    this.scene.add(this.graph.lights.pointLight)
     
     // ambientLight.intensity = ((255 - kreise.brightness) / 50) + 0.2
-    this.objects.ambientLight.intensity = 0.5
+    this.graph.lights.ambientLight.intensity = 0.5
+
     // pointLight.intensity = (255 - kreise.brightness) + 50
+
   }
 
-  addHelpers (): void {
-    this.objects.axesHelper = new AxesHelper(4)
-    this.objects.axesHelper.visible = false
+  addHelpers (): void { // all helpers are visible by default and get switched by calling switchHelpers() in the constructor
+    this.graph.helpers.axesHelper = new AxesHelper(4)
 
     const planeHelperGeometry = new PlaneGeometry(100, 100)
     const planeHelperMaterial = new MeshLambertMaterial({
@@ -225,38 +253,43 @@ export default class Kreise extends EventDispatcher {
       transparent: true,
       opacity: 0.4
     })
-    this.objects.planeHelper = new Mesh(planeHelperGeometry, planeHelperMaterial)
-    this.objects.planeHelper.rotateX(Math.PI / 2)
-    this.objects.planeHelper.receiveShadow = true
-    this.objects.planeHelper.visible = false
+    this.graph.helpers.planeHelper = new Mesh(planeHelperGeometry, planeHelperMaterial)
+    this.graph.helpers.planeHelper.rotateX(Math.PI / 2)
+    this.graph.helpers.planeHelper.receiveShadow = true
+    
+    this.graph.helpers.planeHelper.userData.isDebugHelper = true
 
-    this.objects.gridHelperInstance = new GridHelper(100, 100, 'skyblue', 'bisque')
-    this.objects.gridHelperInstance.position.y = -0.01
-    this.objects.gridHelperInstance.visible = false
+    this.graph.helpers.gridHelperInstance = new GridHelper(100, 100, 'skyblue', 'bisque')
+    this.graph.helpers.gridHelperInstance.position.y = -0.01
 
-    this.objects.cameraEyeHelper = new Mesh(
+    this.graph.helpers.gridHelperInstance.userData.isDebugHelper = true
+
+    this.graph.helpers.cameraEyeHelper = new Mesh(
       new SphereGeometry(1),
       new MeshBasicMaterial({ color: 0xdddddd })
     )
-    this.objects.cameraEyeHelper.visible = false
 
-    this.scene.add(this.objects.cameraEyeHelper)
-    this.scene.add(this.objects.planeHelper)
-    this.scene.add(this.objects.gridHelperInstance)
-    this.scene.add(this.objects.axesHelper)
+    this.scene.add(this.graph.helpers.cameraEyeHelper)
+    this.scene.add(this.graph.helpers.planeHelper)
+    this.scene.add(this.graph.helpers.gridHelperInstance)
+    this.scene.add(this.graph.helpers.axesHelper)
   }
 
   switchHelpers (): void {
-    this.objects.gridHelperInstance.visible = !this.objects.gridHelperInstance.visible
-    this.objects.axesHelper.visible = !this.objects.axesHelper.visible
-    this.objects.planeHelper.visible = !this.objects.planeHelper.visible
-    //this.objects.cameraEyeHelper.visible = !this.objects.cameraEyeHelper.visible
+
+    Object.values(this.graph.helpers).forEach((helperObject) => {
+      helperObject.visible = !helperObject.visible
+    })
+
+    console.log("Camera Position: ", this.camera.position)
+    console.log("Camera Rotation: ", this.camera.rotation)
+
   }
 
   updateBrightness (brightness: number = NaN): void {
 
-    this.suncalc = SunCalc.getTimes(new Date(), 50.84852106503032, 12.923759828615541)
-    this.sunPosition = SunCalc.getPosition(new Date(), 50.84852106503032, 12.923759828615541)
+    this.suncalc = SunCalc.getTimes(new Date(), this.location[0], this.location[1])
+    this.sunPosition = SunCalc.getPosition(new Date(), this.location[0], this.location[1])
     
     if (isNaN(brightness)) {
       this.brightness = 255
@@ -290,13 +323,16 @@ export default class Kreise extends EventDispatcher {
 
     document.body.style.setProperty('--page-background', 'rgba(' + this.brightness + ',' + this.brightness + ',' + this.brightness + ',0)')
     
-    const introDiv: HTMLDivElement = document.querySelector('#introDiv') ?? document.createElement('div')
-    if (this.brightness <= 128) {
-      introDiv.style.cssText = 'filter: invert(1);'
-    }
-    else {
-      introDiv.style.cssText = 'filter: invert(0);'
-    }
+    let applyInvertFilterElements = document.querySelectorAll('.applyInvertFilter') ?? []
+
+    applyInvertFilterElements.forEach(element => {
+      if (this.brightness <= 128) {
+        element.style.filter = 'invert(1)'
+      }
+      else {
+        element.style.filter = ''
+      }  
+    });
 
     if (this.brightness <= 20) {
 

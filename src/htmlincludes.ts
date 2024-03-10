@@ -1,4 +1,5 @@
 import kreiseLogo from './kreise.svg'
+import derchemnitzLogo from '.derchemnitz.svg'
 
 export function getPageOverlayDiv (): HTMLDivElement {
 
@@ -18,17 +19,27 @@ export function getPageOverlayDiv (): HTMLDivElement {
   logoImg.setAttribute('src', kreiseLogo)
   logoImg.setAttribute('alt', 'Krei.se Logo')
 
-  logoImg.classList.add('logo')
+  logoImg.classList.add('kreiseLogo')
   logoImg.classList.add('vanilla')
+  introDiv.classList.add('applyInvertFilter')
+  
 
   introDiv.append(logoImg)
 
   const infoParagraph: HTMLParagraphElement = document.createElement('p')
   infoParagraph.setAttribute('id', 'info')
+  infoParagraph.classList.add('applyFadeOut')
+
+  // const cycleGraphLink: HTMLAnchorElement = document.createElement('a')
+  // cycleGraphLink.setAttribute('href', 'cycleGraph.html')
+  // cycleGraphLink.innerHTML = 'L&ouml;sung zyklische Graphen'
+  // infoParagraph.append(cycleGraphLink)
 
   const datenschutzParagraph: HTMLParagraphElement = document.createElement('p')
   datenschutzParagraph.setAttribute('id', 'datenschutz')
   datenschutzParagraph.style.fontWeight = '400'
+  datenschutzParagraph.classList.add('applyFadeOut')
+
   const datenschutzLink: HTMLAnchorElement = document.createElement('a')
   datenschutzLink.setAttribute('href', 'datenschutz.html')
   datenschutzLink.innerHTML = 'Impressum · Datenschutz'
@@ -42,17 +53,18 @@ export function getPageOverlayDiv (): HTMLDivElement {
 }
 
 export function fadeoutDatenschutzAndInfoParagraphs (): void {
-  const datenschutzParagraph: HTMLParagraphElement = document.querySelector('#datenschutz') ?? document.createElement('p')
-  datenschutzParagraph.style.cssText = datenschutzParagraph.style.cssText + 'opacity : 0.0; transition:opacity 60s;'
-  const infoParagraph: HTMLParagraphElement = document.querySelector('#info') ?? document.createElement('p')
-  infoParagraph.style.cssText = infoParagraph.style.cssText + 'opacity : 0.0; transition:opacity 60s;'
-  window.setTimeout(() => {
-    const introDiv: HTMLDivElement = document.querySelector('#introDiv') ?? document.createElement('div')
-    const datenschutzParagraph: HTMLParagraphElement = document.querySelector('#datenschutz') ?? document.createElement('p')
-    datenschutzParagraph.style.cssText = datenschutzParagraph.style.cssText + 'opacity : 0.0; transition:opacity 60s;'
-    const infoParagraph: HTMLParagraphElement = document.querySelector('#info') ?? document.createElement('p')
-    infoParagraph.style.cssText = infoParagraph.style.cssText + 'opacity : 0.0; transition:opacity 60s;'
-    introDiv.removeChild(datenschutzParagraph)
-    introDiv.removeChild(infoParagraph)
-  }, 60000)
+
+  const applyFadeOutElements = document.querySelectorAll('.applyFadeOut') ?? []
+
+  applyFadeOutElements.forEach((element: Element) => {
+    
+    element.style.transition = 'opacity 60s'
+    element.style.opacity = '0'
+    
+    window.setTimeout((element: HTMLElement) => {
+      element.parentNode!.removeChild (element)
+    }, 10000)
+
+  })
+
 }

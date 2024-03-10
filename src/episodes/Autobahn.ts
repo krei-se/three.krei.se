@@ -1,4 +1,4 @@
-import KreiseEpisode from './KreiseEpisode'
+import KreiseEpisode from '../Kreise/KreiseEpisode'
 
 import {
   Scene,
@@ -16,10 +16,10 @@ import {
   Color,
 } from 'three'
 
-import { KreiseTorus } from '../KreiseTorus'
+import { KreiseTorus } from '../Kreise/KreiseTorus'
 
-import type Kreise from '../Kreise.ts'
-import { ObjectType, domElementType } from '../Kreise.ts'
+import type Kreise from '../Kreise/Kreise.ts'
+import { ObjectType, domElementType } from '../Kreise/Kreise.ts'
 
 interface autoInstancesInterface { identity: string, count: number, material1: any, material2: any, offsetX: number, offsetProgress: number, speed: number }
 
@@ -279,8 +279,8 @@ export default class AutobahnEpisode extends KreiseEpisode {
     this.camera.position.set(0, -16.5, 0)
     this.camera.lookAt(0, -16.5, 0)
 
-    this.kreise.objects.cameraEyeHelper.position.set(0, -16.5, 0)
-    this.kreise.objects.cameraEyeHelper.lookAt(0, -16.5, 0)
+    this.kreise.graph.helpers.cameraEyeHelper.position.set(0, -16.5, 0)
+    this.kreise.graph.helpers.cameraEyeHelper.lookAt(0, -16.5, 0)
 
     
     //this.camera.rotateZ(-Math.PI / 10)

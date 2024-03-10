@@ -1,0 +1,21 @@
+/* Montserrat Light */
+@font-face {
+    font-family: 'Montserrat Light';
+    font-style: normal;
+    font-weight: 300;
+    src: local(''),
+         url('/fonts/Montserrat-Light.ttf') format('truetype');
+  }
+  
+  /* Dark mode */
+  
+  body {
+    font-family: 'Montserrat Light';
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  code {
+    display: block;
+    white-space: pre-wrap   
+  }

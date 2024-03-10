@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["./src/*"],
+      "Kreise/*": ["/src/Kreise/*"],
+      "textures/*": ["/src/textures/*"],
+      "helpers/*": ["/src/helpers/*"],
+      "models/*": ["/public/models/*"]
+    }
+  }
+}

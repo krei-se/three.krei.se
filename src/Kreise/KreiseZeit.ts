@@ -20,7 +20,6 @@ export default class KreiseZeit {
     this.addInterval(300, 900)      // 5 minutes, relates to 15 minutes cycle
     this.addInterval(60, 300)       // 1 minute, relates to 5 minute cycle
 
-    console.log(this)
   }
 
   addInterval (interval: number, parent = 0, direction = 'cw'): void {

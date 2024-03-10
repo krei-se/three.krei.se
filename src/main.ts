@@ -6,7 +6,7 @@ import {
 } from 'three'
 
 // GLOBALS
-import Kreise from './Kreise.ts'
+import Kreise from './Kreise/Kreise.ts'
 
 import { FlyControls } from 'three/addons/controls/FlyControls.js'
 
@@ -24,6 +24,7 @@ import KreiseEpisode from './episodes/KreiseEpisode.ts'
 import IntroEpisode from './episodes/Intro.ts'
 import AutobahnEpisode from './episodes/Autobahn.ts'
 import ChemnitzEpisode from './episodes/Chemnitz.ts'
+import KreiseGraph from './Kreise/KreiseGraph.ts'
 
 //
 // End of imports
@@ -38,7 +39,16 @@ const removeMeDiv: HTMLDivElement = document.querySelector('#removeMe') ?? docum
 document.body.removeChild(removeMeDiv)
 document.body.append(getPageOverlayDiv())
 
-setTimeout(fadeoutDatenschutzAndInfoParagraphs, 20000)
+setTimeout(fadeoutDatenschutzAndInfoParagraphs, 5000)
+
+let testGraph = new KreiseGraph()
+
+
+testGraph.graphs.subGraph = new KreiseGraph()
+
+testGraph.graphs.subGraph.graphs.cycleGraph = testGraph
+
+console.log(testGraph)
 
 // end of HTML Base
 
@@ -59,6 +69,10 @@ const stats: Stats = new Stats()
 if (kreise.client.developerMode) {
   document.body.appendChild(stats.dom)
 }
+
+// Main Scene
+
+kreise.makeMainScene()
 
 
 // ===== 🕹️ CONTROLS =====

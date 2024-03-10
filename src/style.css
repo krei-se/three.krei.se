@@ -116,6 +116,13 @@ h1 {
   filter: drop-shadow(0 0 2em #00000073);
 }
 
+.kreiseLogo {
+  height: 3em;
+  padding: 0em;
+  will-change: filter;
+  transition: filter 200ms;
+}
+
 
 #pageOverlay {
   z-index: 100;

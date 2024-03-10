@@ -9,10 +9,10 @@ import {
   MeshStandardMaterial
 } from 'three'
 
-import { KreiseTorus } from '../KreiseTorus'
+import { KreiseTorus } from '../Kreise/KreiseTorus'
 
-import type Kreise from '../Kreise.ts'
-import { domElementType } from '../Kreise.ts'
+import type Kreise from '../Kreise/Kreise.ts'
+import { domElementType } from '../Kreise/Kreise.ts'
 
 export default class ChemnitzEpisode extends KreiseEpisode {
 
@@ -30,7 +30,7 @@ export default class ChemnitzEpisode extends KreiseEpisode {
               this.camera.lookAt(0, 0, 0)
             }
             else {
-              this.kreise.objects.cameraEyeHelper.position.set(0, 0, -20)
+              this.kreise.graph.helpers.cameraEyeHelper.position.set(0, 0, -20)
             }
           }
           console.log(this.camera.position)
@@ -148,7 +148,7 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     this.camera.lookAt(0, 0, 0)
     //this.camera.rotateZ(-Math.PI / 2)
 
-    this.kreise.objects.cameraEyeHelper.position.set(0, 0, -20)
+    this.kreise.graph.helpers.cameraEyeHelper.position.set(0, 0, -20)
 
   }
 
@@ -157,27 +157,27 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     // 240 000 ticks (4 Minutes)
     if (this.kreise.autoplay.animation) {
 
-      this.objects.Lulatsch.rotation.z = Math.sin(Math.PI*2 * (ticks / 20000)) * 2 
+      this.objects.Lulatsch.rotation.z = Math.sin(Math.PI*2 * (ticks / 60000)) * 4
       //this.objects.Lulatsch.rotation.y = 3 * Math.sin(ticks / 40000)
             
-      if (ticks > 0 && ticks < 20000) {
+      if (ticks > 0 && ticks < 30000) {
           // 0 to 1               PI is half a rotation, so quarter rotation is PI/2, subtract PI/2 from initial rotation
-      this.objects.Lulatsch.rotation.y = (((ticks - 0) / 20000) * (Math.PI/2)) - (Math.PI/2)
+      this.objects.Lulatsch.rotation.y = (((ticks - 0) / 30000) * (Math.PI/2)) - (Math.PI/2)
       }
 
-      if (ticks > 60000 && ticks < 80000) {
+      if (ticks > 60000 && ticks < 90000) {
               // 0 to 1                PI is half rotation in rad, so quarter rotation is PI/2, current rotation is 0 rad
-      this.objects.Lulatsch.rotation.y = (((ticks - 60000) / 20000) * (Math.PI/2))
+      this.objects.Lulatsch.rotation.y = (((ticks - 60000) / 30000) * (Math.PI/2))
       }
 
-      if (ticks > 120000 && ticks < 140000) {
+      if (ticks > 120000 && ticks < 150000) {
                 // 0 to 1               PI is half a rotation, so quarter rotation is PI/2, add PI/2 from previous rotation
-      this.objects.Lulatsch.rotation.y = (((ticks - 120000) / 20000) * (Math.PI/2)) + (Math.PI/2)
+      this.objects.Lulatsch.rotation.y = (((ticks - 120000) / 30000) * (Math.PI/2)) + (Math.PI/2)
       }
 
-      if (ticks > 180000 && ticks < 200000) {
+      if (ticks > 180000 && ticks < 210000) {
         // 0 to 1                PI is half rotation in rad, so quarter rotation is PI/2, , ends in + half PI ?
-      this.objects.Lulatsch.rotation.y = (((ticks - 180000) / 20000) * (Math.PI/2)) + (Math.PI)
+      this.objects.Lulatsch.rotation.y = (((ticks - 180000) / 30000) * (Math.PI/2)) + (Math.PI)
       }
 
       this.objects.pointLight.position.x = 10 * Math.sin((ticks / 2000))
