@@ -50,41 +50,43 @@ export default class KreiseGraph {
   public helpers: HelpersRecordType = {}
   public objects: ObjectsInterface = {}
   public graphs: GraphsRecordType = {}
-  // public repeat: number = 1                       // how often do  we visit this node in a cyclical reference?
-  // public visited: number = 0                      // how often did we visit this node in a cyclical reference?
+  public repeat: number = 1000                    // how often do  we visit this node in a cyclical reference?
+  public visited: number = 0                      // how often did we visit this node in a cyclical reference?
   
   // public edges: edgeRecordType = {}        // parent Node or void for Graph without neighbors (gotta start somewhere!)
   
   constructor() {
 
-    return new Proxy(this, {
-      get(target, property, receiver) {
-        if (property in target) {
-          return target[property]
+    this.repeat++
+    if (this.repeat < this.visited) {
+      return new Proxy(this, {
+        get(target, property, receiver) {
+          if (property in target) {
+            return target[property]
+          }
+          else if (property in target.objects) {
+            return target.objects[property]
+          }
+          return undefined
+        },
+        set(target, property, value, receiver) {
+          if (property in target) {
+            target[property] = value
+          }
+          else {
+            // add everything else into _objects
+            target.objects[property] = value
+          }
+          return true
+        },
+        getPrototypeOf(target) {
+          return Object.getPrototypeOf(target)
+        },
+        has(target, property) {
+          return property in target || property in target.objects
         }
-        else if (property in target.objects) {
-          return target.objects[property]
-        }
-        return undefined
-      },
-      set(target, property, value, receiver) {
-        if (property in target) {
-          target[property] = value
-        }
-        else {
-          // add everything else into _objects
-          target.objects[property] = value
-        }
-        return true
-      },
-      getPrototypeOf(target) {
-        return Object.getPrototypeOf(target)
-      },
-      has(target, property) {
-        return property in target || property in target.objects
-      }
-
-    })
+      })
+    }
 
   }
 
