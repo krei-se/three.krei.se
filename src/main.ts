@@ -15,7 +15,7 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 
 import { resizeRendererToDisplaySize } from './helpers/responsiveness'
 
-import { getPageOverlayDiv, fadeoutDatenschutzAndInfoParagraphs } from './htmlincludes.ts'
+import { getPageOverlayDiv, fadeoutDatenschutzAndInfoParagraphs, getVersionDiv, getSocialDiv } from './htmlincludes.ts'
 // import * as Tone from 'tone'
 
 // Episodes
@@ -38,6 +38,8 @@ const kreise = new Kreise() // sets up main scene, camera, globals like brightne
 const removeMeDiv: HTMLDivElement = document.querySelector('#removeMe') ?? document.createElement('div')
 document.body.removeChild(removeMeDiv)
 document.body.append(getPageOverlayDiv())
+document.body.append(getVersionDiv())
+document.body.append(getSocialDiv())
 
 setTimeout(fadeoutDatenschutzAndInfoParagraphs, 5000)
 

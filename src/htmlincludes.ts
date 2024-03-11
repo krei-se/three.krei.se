@@ -52,6 +52,48 @@ export function getPageOverlayDiv (): HTMLDivElement {
   return pageOverlayDiv
 }
 
+export function getVersionDiv (): HTMLDivElement {
+
+  let vDiv = document.createElement('div')
+  vDiv.id = 'vDiv'
+
+  vDiv.classList.add('applyInvertFilter')
+  vDiv.classList.add('applyFaceOut')
+  
+
+  const vParagraph = document.createElement('p');
+  vParagraph.style.cssText = 'vertical-align: middle;'
+  vParagraph.innerHTML = '<a href="https://github.com/krei-se/three.krei.se"><img src="/github-mark.svg" width=30 height="auto"/> Krei.se 0.1.1 ·RayCaster·</a>'
+  
+  vDiv.append(vParagraph)
+  vDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; left: 1em;'
+
+  return vDiv
+
+}
+
+export function getSocialDiv (): HTMLDivElement {
+
+  let sDiv = document.createElement('div')
+  sDiv.id = 'sDiv'
+
+  sDiv.classList.add('applyInvertFilter')
+  sDiv.classList.add('applyFaceOut')
+  
+
+  const sParagraph = document.createElement('p');
+  sParagraph.style.cssText = 'vertical-align: middle;'
+  sParagraph.innerHTML = '<a href="https://mastodon.social/@kreise"><img src="/mastodon.svg" width=30 height="auto"/></a>'
+  
+  sDiv.append(sParagraph)
+  sDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 1em;'
+
+  return sDiv
+
+}
+
+
+
 export function fadeoutDatenschutzAndInfoParagraphs (): void {
 
   const applyFadeOutElements = document.querySelectorAll('.applyFadeOut') ?? []
