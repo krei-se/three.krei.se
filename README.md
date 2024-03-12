@@ -9,6 +9,8 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
 ```
 
 - main class KreiseGraph
+    // add any typed objects you would like to use, i use threejs objects to give each graph a "body"
+    + threejsObjects = {}
     + definetelyTypedObjects = {}
     + graphs = {}
 
@@ -36,6 +38,9 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
       // consider removing neuron connections
       // consider getting this.fitness() to alter methods
       // etc. pp. just all the stuff you can do in category theory
+
+      // use threejs objects to move the body (no circular references usually) or get position in the map, etc. pp.
+      // everything a virtual creature can do is valid
 
     }
 
