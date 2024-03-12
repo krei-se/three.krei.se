@@ -63,6 +63,7 @@ export default class KreiseGraph {
 
     eva(input: any): any {
 
+      // example method to sum graph outputs
       let output: any = input
       Object.entries(this.graphs).forEach(([graphName, graph]) => {
         
@@ -70,6 +71,14 @@ export default class KreiseGraph {
 
       })
       return output
+
+      // example to add up to 100 new neurons
+      for (i = this.graphs.count(); i <= Math.random() * 100 + this.graphs.count(); i++) {
+
+        this.graphs[i] = new KreiseGraph
+        this.graphs[i].eva = this.eva() // copy eva method
+
+      }
 
     }
 
