@@ -45,6 +45,9 @@ export type edgeRecordType = Record<string, edgeType | WeightedEdge>
 */
 
 export default class KreiseGraph {
+  // add any typed objects you would like to use,
+  // i use threejs objects to sculpture a "body" from a graph
+  // and allow for sensoric inputs (just add a map as an object anywhere in the graph)
   public lights: LightsRecordType = {}
   public meshes: MeshesRecordType = {}
   public helpers: HelpersRecordType = {}
