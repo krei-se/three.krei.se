@@ -52,6 +52,9 @@ export default class KreiseGraph {
   public graphs: GraphsRecordType = {}
   public repeat: number = 1000                    // how often do  we visit this node in a cyclical reference?
   public visited: number = 0                      // how often did we visit this node in a cyclical reference?
+
+  public input: any
+  public targetOutput: any
   
   // public edges: edgeRecordType = {}        // parent Node or void for Graph without neighbors (gotta start somewhere!)
   
@@ -89,6 +92,20 @@ export default class KreiseGraph {
           return property in target || property in target.objects
         }
       })
+
     }
+
+    eva(input: any): any {
+
+      let output: any = input
+      Object.entries(this.graphs).forEach(([graphName, graph]) => {
+        
+        output += graph.eva(null)
+
+      })
+      return output
+
+    }
+
 
 }

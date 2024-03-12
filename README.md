@@ -9,9 +9,12 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
 ```
 
 - main class KreiseGraph
-    // add any typed objects you would like to use, i use threejs objects to give each graph a "body"
-    + threejsObjects = {}
-    + definetelyTypedObjects = {}
+    // add any typed objects you would like to use,
+    // i use threejs objects to sculpture a "body" from a graph
+    // and allow for sensoric inputs
+    + threejsObjects: ObjectRecordType
+    + surroundingMap: MapType
+    + definetelyTypedObjects: any[]
     + graphs = {}
 
     + repeat = 1000
@@ -29,7 +32,7 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
       }
 
     // hmmm.. apples ...    
-    + eva() {
+    + eva(input: any): any {
       
       // computational method here, use this.input at starting neuron
 
@@ -42,26 +45,17 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
       // use threejs objects to move the body (no circular references usually) or get position in the map, etc. pp.
       // everything a virtual creature can do is valid
 
-    }
+      // example to sum all connected graphs:
+       let output: any = input
+      Object.entries(this.graphs).forEach(([graphName, graph]) => {
+        
+        output += graph.eva(null)
 
-    + output(
-
-      let output: any = null
-      // sum all compututationalMethods of graphs
-      graphs.foreach(graph => {
-        output += graph.eva()
       })
       return output
 
-    )
-
-    // in the starting / end neuron input and targetOutput are defined, thus only this fitness() matters
-    + fitness(
-
-      this.output() - this.targetoutput
-
-    )
-
+    }
+    
 ```
 
 That's it. This design allows a graph structure similiar to the human brain (circular reference) and motor neurons (no circular reference). For this reason there is no difference between "nodes" (or neurons) and graphs (or networks)
