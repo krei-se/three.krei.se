@@ -8,44 +8,63 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
 
 ```
 
-- main class KreiseGraph
-    // add any typed objects you would like to use,
-    // i use threejs objects to sculpture a "body" from a graph
-    // and allow for sensoric inputs (just add a map as an object anywhere in the graph    + threejsObjects: ObjectRecordType
-    + surroundingMap: MapType
-    + definetelyTypedObjects: any[]
-    + graphs = {}
+export default class KreiseGraph {
+  // add any typed objects you would like to use,
+  // i use threejs objects to sculpture a "body" from a graph
+  // and allow for sensoric inputs (just add a map as an object anywhere in the graph)
+  public lights: LightsRecordType = {}
+  public meshes: MeshesRecordType = {}
+  public helpers: HelpersRecordType = {}
+  public objects: ObjectsInterface = {}
+  public graphs: GraphsRecordType = {}
+  public repeat: number = 1000                    // how often do  we visit this node in a cyclical reference?
+  public visited: number = 0                      // how often did we visit this node in a cyclical reference?
 
-    + repeat = 1000
-    + visited = 0
+  public input: any
+  public targetOutput: any
+  
+  // public edges: edgeRecordType = {}        // parent Node or void for Graph without neighbors (gotta start somewhere!)
+  
+  constructor() {
 
-    + public targetOutput // used for training
-    + public input // only used in the starting neuron
-
-    constructor() --> Proxy { 
-        if (target === graphs) {
-          target.visited++; 
-          if target.visited > target.repeat return; // neuron tired after n repeat cycles
+      return new Proxy(this, {
+        get(target, property, receiver) {
+          if (property in target) {
+            // catch tired nodes
+            if (property === 'graphs') {
+              target.visited++
+              if (target.visited > target.repeat) return
+            }
+            return target[property]
+          }
+          else if (property in target.objects) {
+            return target.objects[property]
+          }
+          return undefined
+        },
+        set(target, property, value, receiver) {
+          if (property in target) {
+            target[property] = value
+          }
+          else {
+            // add everything else into _objects
+            target.objects[property] = value
+          }
+          return true
+        },
+        getPrototypeOf(target) {
+          return Object.getPrototypeOf(target)
+        },
+        has(target, property) {
+          return property in target || property in target.objects
         }
-        return target.property  // else return target property / graph
-      }
+      })
 
-    // hmmm.. apples ...    
-    + eva(input: any): any {
-      
-      // computational method here, use this.input at starting neuron
+    }
 
-      // consider stuff like AND / OR, image formatters, trigonometric functions
-      // consider creating new neurons and adding them to this.graphs
-      // consider removing neuron connections
-      // consider getting this.fitness() to alter methods
-      // etc. pp. just all the stuff you can do in category theory
+    eva(input: any): any {
 
-      // use threejs objects to move the body (no circular references usually) or get position in the map, etc. pp.
-      // everything a virtual creature can do is valid
-
-      // example to sum all connected graphs:
-       let output: any = input
+      let output: any = input
       Object.entries(this.graphs).forEach(([graphName, graph]) => {
         
         output += graph.eva(null)
@@ -54,6 +73,9 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
       return output
 
     }
+
+
+}
     
 ```
 
