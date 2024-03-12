@@ -31,6 +31,12 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
       
       // computational method here, use this.input at starting neuron
 
+      // consider stuff like AND / OR, image formatters, trigonometric functions
+      // consider creating new neurons and adding them to this.graphs
+      // consider removing neuron connections
+      // consider getting this.fitness() to alter methods
+      // etc. pp. just all the stuff you can do in category theory
+
     }
 
     + output(
