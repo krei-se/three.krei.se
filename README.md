@@ -10,7 +10,7 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
 
 - main class KreiseGraph
     + definetelyTypedObjects = {}
-    + graphs = {}
+    + graphs = {} // when adding to graphs remember to add child to parent
     + parents = {}
 
     + repeat = 1000
@@ -45,6 +45,7 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
 
     )
 
+    // in the starting / end neuron input and targetOutput are defined, thus only this fitness() matters
     + fitness(
 
       this.output() - this.targetoutput
@@ -57,7 +58,7 @@ That's it. This design allows a graph structure similiar to the human brain (cir
 
 Any neural network without limitations has no reason to save on energy and has no way to alter its connections between neurons other than weighing them differently which i though is really odd - your brain alters its connections all the time and neurons die of or get created all throughout your life. 
 
-Instead here any graph in Krei.se can connect to any other graph without crashing the system and hold an arbitrary amount of defined TS classes which allow for computation like in any category theory category. This seems inefficient at first glance, but remember any function can be a lot more complex than something like 20 relu-functions chained.
+Instead here any graph in Krei.se can connect to any other graph without crashing the system and hold an arbitrary amount of defined TS classes which allow for computation like in any category theory category. This seems inefficient at first glance, but remember any function can be a lot more complex than something like 20 relu-functions chained. To add sugar to this - the starting neuron with the input defined and the neuron holding the targetOutput are the same neuron!
 
 You can use this design to randomly add genetically evolved solutions to match the desired return value of the whole graph by applying different eva() methods in each neuron.
 
