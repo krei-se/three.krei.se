@@ -56,10 +56,9 @@ export default class KreiseGraph {
   public repeat: number = 1000                    // how often do  we visit this node in a cyclical reference?
   public visited: number = 0                      // how often did we visit this node in a cyclical reference?
 
+  // mostly unused, useful for eva(input) and moving the goalpost in the base (start and ending) graph
   public input: any
   public targetOutput: any
-  
-  // public edges: edgeRecordType = {}        // parent Node or void for Graph without neighbors (gotta start somewhere!)
   
   constructor() {
 

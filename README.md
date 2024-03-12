@@ -20,10 +20,9 @@ export default class KreiseGraph {
   public repeat: number = 1000                    // how often do  we visit this node in a cyclical reference?
   public visited: number = 0                      // how often did we visit this node in a cyclical reference?
 
+  // mostly unused, useful for eva(input) and moving the goalpost in the base (start and ending) graph
   public input: any
   public targetOutput: any
-  
-  // public edges: edgeRecordType = {}        // parent Node or void for Graph without neighbors (gotta start somewhere!)
   
   constructor() {
 
@@ -64,7 +63,6 @@ export default class KreiseGraph {
 
     eva(input: any): any {
 
-      // example method to sum graph outputs
       let output: any = input
       Object.entries(this.graphs).forEach(([graphName, graph]) => {
         
@@ -72,14 +70,6 @@ export default class KreiseGraph {
 
       })
       return output
-
-      // example to add up to 100 new neurons
-      for (i = this.graphs.count(); i <= Math.random() * 100 + this.graphs.count(); i++) {
-
-        this.graphs[i] = new KreiseGraph
-        this.graphs[i].eva = this.eva() // copy eva method
-
-      }
 
     }
 
