@@ -6,7 +6,7 @@ This is the base krei.se n' Gin written in TS with (mainly) use of threejs
 
 The base idea is the structure of a directed cyclic graph that runs with a repeat-counter to allow infinite or finite loops through subgraphs that point back to higher levels of the graph.
 
-'''
+```
 
 - main class KreiseGraph
     + definetelyTypedObjects = {}
@@ -51,7 +51,7 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
 
     )
 
-'''
+```
 
 That's it. This design allows a graph structure similiar to the human brain (circular refernece) and motor neurons (no circular reference). For this reason there is no difference between "nodes" (or neurons) and graphs (or networks)
 
