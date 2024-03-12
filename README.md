@@ -53,7 +53,7 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
 
 ```
 
-That's it. This design allows a graph structure similiar to the human brain (circular refernece) and motor neurons (no circular reference). For this reason there is no difference between "nodes" (or neurons) and graphs (or networks)
+That's it. This design allows a graph structure similiar to the human brain (circular reference) and motor neurons (no circular reference). For this reason there is no difference between "nodes" (or neurons) and graphs (or networks)
 
 Any neural network without limitations has no reason to save on energy and has no way to alter its connections between neurons other than weighing them differently which i though is really odd - your brain alters its connections all the time and neurons die of or get created all throughout your life. 
 
