@@ -10,8 +10,7 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
 
 - main class KreiseGraph
     + definetelyTypedObjects = {}
-    + graphs = {} // when adding to graphs remember to add child to parent
-    + parents = {}
+    + graphs = {}
 
     + repeat = 1000
     + visited = 0
@@ -22,7 +21,7 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
     constructor() --> Proxy { 
         if target === graphs) {
           target.visited++; 
-          if target.visited > target.repeat return; // close loop after n repeat cycles
+          if target.visited > target.repeat return; // neuron tired after n repeat cycles
         }
         return target.property  // else return target property / graph
       }
@@ -38,8 +37,8 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
 
       let output: any = null
       // sum all compututationalMethods of parent graphs
-      parents.foreach(parent => {
-        output += parent.eva()
+      graphs.foreach(graph => {
+        output += graph.eva()
       })
       return output
 
