@@ -19,7 +19,7 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
     + public input // only used in the starting neuron
 
     constructor() --> Proxy { 
-        if target === graphs) {
+        if (target === graphs) {
           target.visited++; 
           if target.visited > target.repeat return; // neuron tired after n repeat cycles
         }
@@ -36,7 +36,7 @@ The base idea is the structure of a directed cyclic graph that runs with a repea
     + output(
 
       let output: any = null
-      // sum all compututationalMethods of parent graphs
+      // sum all compututationalMethods of graphs
       graphs.foreach(graph => {
         output += graph.eva()
       })
