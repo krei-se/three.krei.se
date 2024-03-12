@@ -11,6 +11,7 @@ import {
   DirectionalLight, 
   DirectionalLightHelper, 
   EventDispatcher, 
+  Fog, 
   GridHelper, 
   Group, 
   Mesh, 
@@ -22,6 +23,7 @@ import {
   PlaneGeometry, 
   PointLight, 
   PointLightHelper, 
+  Raycaster, 
   Scene, 
   SphereGeometry, 
   Vector2, 
@@ -50,8 +52,8 @@ export type HelpersRecordType = Record<string, MeshesType>
 
 
 
-//  Basic three type                                                                LIGHTS                                                      HELPERS                   Kreise    Mesh              Mesh              Mesh
-export type ObjectType = Object3D | Group | Mesh | Box3 | Box3Helper   |   AmbientLight | PointLight | PointLightHelper | DirectionalLight | DirectionalLightHelper  |   AxesHelper | GridHelper  |   KreiseTorus | KreiseShaderedTorus | KlavierTorus
+//  Basic three type                                                                LIGHTS                                                      HELPERS                                                       Kreise    Mesh              Mesh              Mesh
+export type ObjectType = Object3D | Group | Mesh | Box3 | Box3Helper   |   AmbientLight | PointLight | PointLightHelper | DirectionalLight | DirectionalLightHelper | Fog    |   AxesHelper | GridHelper  |   KreiseTorus | KreiseShaderedTorus | KlavierTorus
 export type ObjectRecordType = Record<string, ObjectType>
 
 export interface ObjectTree {
@@ -171,8 +173,7 @@ export default class Kreise extends EventDispatcher {
 
     // Client (Desktop / Mobile, Input Devices)
 
-    this.client = new KreiseClient()
-    this.client.detectAndSetClientDeviceType()
+    this.client = new KreiseClient(this)
 
     this.updateBrightness()
 
@@ -358,8 +359,16 @@ export class KreiseClient {
   hasGamepad: boolean
   orientation: string
   developerMode: boolean
+  kreise: Kreise
+  raycaster: Raycaster = new Raycaster()
+  pointer: Vector2 = new Vector2()      // normalized position from -1 to 1
+  pointerPx: Vector2 = new Vector2()    // absolute position in Pixels
+  pointerSource: string = 'documentMouseEvent' // todo add gamepad
 
-  constructor () {
+  constructor (kreise: Kreise) {
+
+    this.kreise = kreise
+
     this.clientDeviceType = 'desktop'
     this.orientation = 'landscape'
     this.hasGyro = false
@@ -373,9 +382,56 @@ export class KreiseClient {
         }
       })
     }
+
+    this.detectAndSetClientDeviceType()
+    this.setupPointer()
+    this.setupRaycaster()
+
   }
 
   detectAndSetClientDeviceType() {
+
+  }
+
+
+  onPointerMove = (e: MouseEvent) => { // needs to be arrow function for this. to work
+
+    this.pointer.x = ( e.offsetX / window.innerWidth ) * 2 - 1; // from -1 to 1
+    this.pointer.y = - ( e.offsetY / window.innerHeight ) * 2 + 1; // from -1 to 1
+  
+    this.pointerPx.x = e.offsetX
+    this.pointerPx.y = e.offsetY
+
+  }
+
+  updateRaycasterIntersects() {
+
+    this.kreise.graph.objects.selected = this.raycaster.intersectObjects(this.kreise.scene.children)
+    
+  }
+
+
+  setupPointer() {
+
+    if (this.clientDeviceType === 'desktop') {
+
+      this.pointerSource = 'documentMouseEvent'
+      document.addEventListener('pointermove', this.onPointerMove)
+
+    }
+
+    if (this.hasGamepad) {
+
+      
+
+    }
+
+  }
+
+  setupRaycaster() {
+
+    this.raycaster.layers.set(18) // R is 18
+    this.raycaster.setFromCamera(this.pointer, this.kreise.camera)
 
   }
 
