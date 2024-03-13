@@ -22,7 +22,7 @@ export type LightsRecordType = Record<string, LightsType>
 export type MeshesType = Mesh | Group
 export type MeshesRecordType = Record<string, MeshesType>
 
-export type HelpersType = AxesHelper | GridHelper | CameraHelper | MeshesType | DirectionalLightHelper | PointLightHelper
+export type HelpersType = AxesHelper | GridHelper | CameraHelper | MeshesType | DirectionalLightHelper | PointLightHelper | Box3Helper
 export type HelpersRecordType = Record<string, HelpersType>
 
 export type GraphsType = KreiseGraph
