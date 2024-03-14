@@ -6,6 +6,14 @@ This is the base krei.se n' Gin written in TS with (mainly) use of threejs
 
 The base idea is the structure of a directed cyclic graph that runs with a repeat-counter to allow infinite or finite loops through subgraphs that point back to higher levels of the graph.
 
+This solution took me 8 years to come up with. The neurons get tired after n repeat access to connected neurons. This way you can solve the recursive graph problem without relying on external supervision, thus not crashing the system with recursion while still holding all advantages of fractal design.
+
+Any tree-structured property can be queried infinite times without raising the counter - ONLY accessing connected graphs raise the counter.
+
+To stay human readable you should consider limiting the number of connected graphs to 7 +- 2 (Millersche Zahl) and train the network with this limitation. This way any decision the graph makes can be explained to a human.
+
+eva()-method is a placeholder, im still building virtual bodies with sensors to train the network on capsulated methods embedding category theory categories.
+
 ```
 
 export default class KreiseGraph {
@@ -72,6 +80,16 @@ export default class KreiseGraph {
       })
       return output
 
+      // example to output maximum usable muscle move energy
+      // this graph holds only muscle groups
+      Object.entries(this.graphs.muscles).forEach([muscleName, muscle]) {
+
+        output += muscle.force
+
+      }
+
+      return output
+
       // example to add up to 100 new neurons
       for (i = this.graphs.count(); i <= Math.random() * 100 + this.graphs.count(); i++) {
 
@@ -79,6 +97,8 @@ export default class KreiseGraph {
         this.graphs[i].eva = this.eva() // copy eva method
 
       }
+
+      return this.graphs // <-- this will create a cyclic graph
 
     }
 
