@@ -4,13 +4,19 @@ This is the base krei.se n' Gin written in TS with (mainly) use of threejs
 
 ## Graph structure
 
-The base idea is the structure of a directed cyclic graph that runs with a repeat-counter to allow infinite (brain and CNS neuron) or finite (motor and sensoric neurons) loops through subgraphs that point back to higher levels of the graph.
+The base idea is the structure of a directed cyclic graph that runs with a repeat-counter to "tire" a graph any time it accesses a connected graph.
+This solution allows infinite (brain and CNS neuron) or finite (motor and sensoric neurons) loops through subgraphs that point back to already visited graphs.
 
-This solution took me 8 years to come up with. The neurons get tired after n repeat access to connected neurons. This way you can solve the recursive graph problem without relying on external supervision, thus not crashing the system with recursion while still holding all advantages of fractal design.
+Why would i need that? Well if you have a neuron or function that outputs different on changed conditions (as your brain does) you may visit a neuron more often than once.
+Usually a loop-detection is in place to make sure you derive a tree from a cyclic graph without recursion - but we want a network like the brain that has different outputs each time
+it's accessed.
 
-Any tree-structured property can be queried infinite times without raising the counter - ONLY accessing connected graphs raise the counter.
+This solution took me 8 years to come up with and should include all improvements from fractal-design and pure functions from category theory.
 
-To stay human readable you should consider limiting the number of connected graphs to 7 +- 2 (Millersche Zahl) and train the network with this limitation. This way any decision the graph makes can be explained to a human.
+Any tree-structured property (body maps f.e. or whatever directory you add) can be queried infinite times without raising the counter, so you don't have to worry to tire a
+graph by accident just because you query a property multiple times. ONLY accessing connected graphs raise the counter.
+
+To stay human readable you should consider limiting the number of connected graphs to 7 +- 2 (Millersche Zahl) and train the network with this limitation. This way any decision the graph makes can be explained to a human in a ~7 word sentence.
 
 eva()-method is a placeholder, im still building virtual bodies with sensors to train the network on capsulated methods embedding category theory categories.
 
