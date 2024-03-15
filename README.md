@@ -11,7 +11,8 @@ Why would i need that? Well if you have a neuron or function that outputs differ
 Usually a loop-detection is in place to make sure you derive a tree from a cyclic graph without recursion - but we want a network like the brain that has different outputs each time
 it's accessed.
 
-This solution took me 8 years to come up with and should include all improvements from fractal-design and pure functions from category theory.
+Neural networks that get trained always act the same when accessed and have a fixed structure and weights. KreiseGraph allows for a dynamic addition of neurons anywhere (the Graph can
+program and change itself) and is forced to find new solutions without blindly increasing its size.
 
 Any tree-structured property (body maps f.e. or whatever directory you add) can be queried infinite times without raising the counter, so you don't have to worry to tire a
 graph by accident just because you query a property multiple times. ONLY accessing connected graphs raise the counter.
