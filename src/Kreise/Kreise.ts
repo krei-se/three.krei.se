@@ -324,7 +324,7 @@ export default class Kreise extends EventDispatcher {
 
     document.body.style.setProperty('--page-background', 'rgba(' + this.brightness + ',' + this.brightness + ',' + this.brightness + ',0)')
     
-    let applyInvertFilterElements = document.querySelectorAll('.applyInvertFilter') ?? []
+    let applyInvertFilterElements = document.querySelectorAll('.applyInvertFilter') as NodeListOf<HTMLElement>
 
     applyInvertFilterElements.forEach(element => {
       if (this.brightness <= 128) {

@@ -4,7 +4,7 @@ This is the base krei.se n' Gin written in TS with (mainly) use of threejs
 
 ## Graph structure
 
-The base idea is the structure of a directed cyclic graph that runs with a repeat-counter to allow infinite or finite loops through subgraphs that point back to higher levels of the graph.
+The base idea is the structure of a directed cyclic graph that runs with a repeat-counter to allow infinite (brain and CNS neuron) or finite (motor and sensoric neurons) loops through subgraphs that point back to higher levels of the graph.
 
 This solution took me 8 years to come up with. The neurons get tired after n repeat access to connected neurons. This way you can solve the recursive graph problem without relying on external supervision, thus not crashing the system with recursion while still holding all advantages of fractal design.
 
@@ -16,32 +16,39 @@ eva()-method is a placeholder, im still building virtual bodies with sensors to 
 
 ```
 
+
 export default class KreiseGraph {
+
   // add any typed objects you would like to use,
-  // i use threejs objects to sculpture a "body" from a graph
-  // and allow for sensoric inputs (just add a map as an object anywhere in the graph)
+  // i use threejs objects to sculpture a "body"-tree from a graph
+  // and allow for sensoric inputs (add a map as an object anywhere in the graph
+  // and sensors on any branch of the nerves)
   public lights: LightsRecordType = {}
   public meshes: MeshesRecordType = {}
   public helpers: HelpersRecordType = {}
   public objects: ObjectsInterface = {}
   public graphs: GraphsRecordType = {}
-  public repeat: number = 1000                    // how often do  we visit this node in a cyclical reference?
-  public visited: number = 0                      // how often did we visit this node in a cyclical reference?
+  public repeat: number = 1000                    // how often do  we visit this node in a circular reference?
+  public visited: number = 0                      // how often did we visit this node in a circular reference?
 
   // mostly unused, useful for eva(input) and moving the goalpost in the base (start and ending) graph
   public input: any
   public targetOutput: any
+
+  [key: string]: any
+  [key: symbol]: any
   
   constructor() {
 
       return new Proxy(this, {
-        get(target, property, receiver) {
+        get(target: KreiseGraph, property) { // (, receiver)
           if (property in target) {
             // catch tired nodes
             if (property === 'graphs') {
               target.visited++
               if (target.visited > target.repeat) return
             }
+            
             return target[property]
           }
           else if (property in target.objects) {
@@ -49,7 +56,7 @@ export default class KreiseGraph {
           }
           return undefined
         },
-        set(target, property, value, receiver) {
+        set(target: KreiseGraph, property, value) { // (, receiver)
           if (property in target) {
             target[property] = value
           }
@@ -59,10 +66,10 @@ export default class KreiseGraph {
           }
           return true
         },
-        getPrototypeOf(target) {
+        getPrototypeOf(target: KreiseGraph) {
           return Object.getPrototypeOf(target)
         },
-        has(target, property) {
+        has(target: KreiseGraph, property) {
           return property in target || property in target.objects
         }
       })
@@ -70,6 +77,8 @@ export default class KreiseGraph {
     }
 
     eva(input: any): any {
+
+      /*
 
       // example method to sum graph outputs
       let output: any = input
@@ -80,16 +89,6 @@ export default class KreiseGraph {
       })
       return output
 
-      // example to output maximum usable muscle move energy
-      // this graph holds only muscle groups
-      Object.entries(this.graphs.muscles).forEach([muscleName, muscle]) {
-
-        output += muscle.force
-
-      }
-
-      return output
-
       // example to add up to 100 new neurons
       for (i = this.graphs.count(); i <= Math.random() * 100 + this.graphs.count(); i++) {
 
@@ -98,7 +97,9 @@ export default class KreiseGraph {
 
       }
 
-      return this.graphs // <-- this will create a cyclic graph
+      */
+
+      return input
 
     }
 
