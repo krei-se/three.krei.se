@@ -4,25 +4,16 @@ import type { GetSunPositionResult, GetTimesResult } from 'suncalc'
 import { 
   AmbientLight, 
   AxesHelper, 
-  Box3, 
-  Box3Helper, 
-  CameraHelper, 
   Color, 
-  DirectionalLight, 
-  DirectionalLightHelper, 
   EventDispatcher, 
-  Fog, 
   GridHelper, 
-  Group, 
   Mesh, 
   MeshBasicMaterial, 
   MeshLambertMaterial, 
-  Object3D, 
   PCFSoftShadowMap, 
   PerspectiveCamera, 
   PlaneGeometry, 
   PointLight, 
-  PointLightHelper, 
   Raycaster, 
   Scene, 
   SphereGeometry, 
@@ -34,35 +25,10 @@ import {
 import { toggleFullScreen } from '../helpers/fullscreen'
 import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 import KreiseZeit from './KreiseZeit'
-import { KreiseTorus } from './KreiseTorus'
-import { KlavierTorus, KreiseShaderedTorus } from './KreiseTorus'
 import KreiseGraph from './KreiseGraph'
 
 export interface AutoplayOptionsInterface { camera: boolean, animation: boolean }
 export interface DebugOptionsInterface { helperObjects: boolean, helperInterface: boolean }
-
-export type LightsType = AmbientLight | PointLight | DirectionalLight
-export type LightsRecordType = Record<string, LightsType>
-
-export type MeshesType = Mesh | Group
-export type MeshesRecordType = Record<string, MeshesType>
-
-export type HelpersType = AxesHelper | GridHelper | CameraHelper 
-export type HelpersRecordType = Record<string, MeshesType>
-
-
-
-//  Basic three type                                                                LIGHTS                                                      HELPERS                                                       Kreise    Mesh              Mesh              Mesh
-export type ObjectType = Object3D | Group | Mesh | Box3 | Box3Helper   |   AmbientLight | PointLight | PointLightHelper | DirectionalLight | DirectionalLightHelper | Fog    |   AxesHelper | GridHelper  |   KreiseTorus | KreiseShaderedTorus | KlavierTorus
-export type ObjectRecordType = Record<string, ObjectType>
-
-export interface ObjectTree {
-  lights?: LightsRecordType;
-  meshes?: MeshesRecordType;
-  helpers?: HelpersRecordType;
-}
-
-export type domElementType = HTMLElement | HTMLDivElement | Window
 
 export type CameraType = PerspectiveCamera // | StereoCamera | Camera
 
@@ -91,9 +57,9 @@ export default class Kreise extends EventDispatcher {
 
   client: KreiseClient
 
-  keydown (event: KeyboardEvent): void { event; return }    // stub this to console.log(event)
-  keyup (event: KeyboardEvent): void { event; return }      // stub this to console.log(event)
-  onPointerMove (event: MouseEvent): void { event; return } // stub this to console.log(event)
+  keydown (e: KeyboardEvent): void { e; return }    // stub this to console.log(event)
+  keyup (e: KeyboardEvent): void { e; return }      // stub this to console.log(event)
+  onPointerMove (e: MouseEvent): void { e; return } // stub this to console.log(event)
 
   constructor () {
     super()
@@ -178,8 +144,8 @@ export default class Kreise extends EventDispatcher {
     this.updateBrightness()
 
     // Main Controls
-    this.keydown = function (event) {
-      switch (event.code) {
+    this.keydown = function (e: KeyboardEvent) {
+      switch (e.code) {
           case 'KeyI':
             if (this.client.developerMode) {
               this.switchHelpers()
@@ -376,8 +342,8 @@ export class KreiseClient {
     this.developerMode = import.meta.env.DEV
 
     if (this.clientDeviceType === 'desktop') {
-      window.addEventListener('dblclick', (event) => {
-        if (event.target === document.getElementById('scene')) {
+      window.addEventListener('dblclick', (e: MouseEvent) => {
+        if (e.target === document.getElementById('scene')) {
           toggleFullScreen(document.body)
         }
       })

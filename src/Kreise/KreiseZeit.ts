@@ -26,8 +26,8 @@ export default class KreiseZeit {
     this.interval[interval] = { parent, ms: this.interval[0].ms % (interval * 1000), interval, direction }
   }
 
-  flipInterval(id) {
-
+  flipInterval(intervalIndex: number) {
+    console.log(intervalIndex)
   }
 
   update (): void {
@@ -39,7 +39,7 @@ export default class KreiseZeit {
 
     const intervals = Object.entries(this.interval)
 
-    intervals.forEach(([intervalIndex, interval]) => {
+    intervals.forEach(([_, interval]) => {
       // console.log(intervalIndex, interval.ms)
       if (interval.interval !== 0) {              // before you go crazy, this is the same number as intervalIndex
         if (interval.direction === 'cw') {

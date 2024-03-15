@@ -1,4 +1,4 @@
-import KreiseEpisode from '../Kreise/KreiseEpisode'
+import KreiseEpisode from '../Kreise/KreiseEpisode.ts'
 
 import {
   Scene,
@@ -19,7 +19,6 @@ import {
 import { KreiseTorus } from '../Kreise/KreiseTorus'
 
 import type Kreise from '../Kreise/Kreise.ts'
-import { ObjectType, domElementType } from '../Kreise/Kreise.ts'
 
 interface autoInstancesInterface { identity: string, count: number, material1: any, material2: any, offsetX: number, offsetProgress: number, speed: number }
 
@@ -30,16 +29,16 @@ export default class AutobahnEpisode extends KreiseEpisode {
   colorScheme: string
   autoInstances: Array<autoInstancesInterface>
 
-  keydown (event: KeyboardEvent): void { event; return }    // stub this to console.log(event)
-  keyup (event: KeyboardEvent): void { event; return }      // stub this to console.log(event)
-  onPointerMove (event: MouseEvent): void { event; return } // stub this to console.log(event)
+  keydown (e: KeyboardEvent): void { e; return }    // stub this to console.log(event)
+  keyup (e: KeyboardEvent): void { e; return }      // stub this to console.log(event)
+  onPointerMove (e: MouseEvent): void { e; return } // stub this to console.log(event)
 
   raycaster: Raycaster = new Raycaster()
   pointer: Vector2 = new Vector2()
 
   // remember the kreise scene is the main scene and this one is local to the episode :)
-  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: domElementType) {
-    super(kreise, scene, camera, domElement)
+  constructor (kreise: Kreise, scene: Scene, camera: Camera) {
+    super(kreise, scene, camera)
 
     this.colorScheme = kreise.ColorScheme // set this up in main.ts
 
@@ -49,8 +48,8 @@ export default class AutobahnEpisode extends KreiseEpisode {
     this.autoInstances = []
 
     // Controls
-    this.keydown = function (event) {
-      switch (event.code) {
+    this.keydown = function (e: KeyboardEvent) {
+      switch (e.code) {
         case 'KeyO':
           if (this.kreise.client.developerMode) {
             if (this.kreise.autoplay.camera) {
@@ -79,13 +78,6 @@ export default class AutobahnEpisode extends KreiseEpisode {
   }
 
   dispose (): void {
-    /*
-    this.domElement.removeEventListener( 'contextmenu', _contextmenu );
-    this.domElement.removeEventListener( 'pointerdown', _pointerdown );
-    this.domElement.removeEventListener( 'pointermove', _pointermove );
-    this.domElement.removeEventListener( 'pointerup', _pointerup );
-    this.domElement.removeEventListener( 'pointercancel', _pointercancel );
-    */
 
     const _keydown = this.keydown.bind(this)
     const _keyup = this.keyup.bind(this)
@@ -94,12 +86,13 @@ export default class AutobahnEpisode extends KreiseEpisode {
     window.removeEventListener('keydown', _keydown)
     window.removeEventListener('keyup', _keyup)
     window.removeEventListener('pointermove', _onPointerMove)
+
   }
 
   makeScene (): void { // its stored in this.scene, get it from there
   // Tori
 
-    this.objects.Bahn1 = new KreiseTorus({
+    this.graph.kreiseMeshes.Bahn1 = new KreiseTorus({
       identity: 'Bahn1',
       radius: 20,
       tube: 0.3,
@@ -108,7 +101,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       facing: 'normal'
     })
 
-    this.objects.Bahn2 = new KreiseTorus({
+    this.graph.kreiseMeshes.Bahn2 = new KreiseTorus({
       identity: 'Bahn2',
       radius: 20,
       tube: .2,
@@ -117,7 +110,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       facing: 'normal'
     })
 
-    this.objects.Bahn3 = new KreiseTorus({
+    this.graph.kreiseMeshes.Bahn3 = new KreiseTorus({
       identity: 'Bahn3',
       radius: 20,
       tube: .2,
@@ -126,7 +119,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       facing: 'normal'
     })
 
-    this.objects.Bahn4 = new KreiseTorus({
+    this.graph.kreiseMeshes.Bahn4 = new KreiseTorus({
       identity: 'Bahn4',
       radius: 20,
       tube: .2,
@@ -135,7 +128,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       facing: 'normal'
     })
 
-    this.objects.Bahn5 = new KreiseTorus({
+    this.graph.kreiseMeshes.Bahn5 = new KreiseTorus({
       identity: 'Bahn5',
       radius: 20,
       tube: .2,
@@ -144,7 +137,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       facing: 'normal'
     })
 
-    this.objects.Bahn6 = new KreiseTorus({
+    this.graph.kreiseMeshes.Bahn6 = new KreiseTorus({
       identity: 'Bahn6',
       radius: 20,
       tube: .2,
@@ -153,7 +146,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       facing: 'normal'
     })
 
-    this.objects.Bahn7 = new KreiseTorus({
+    this.graph.kreiseMeshes.Bahn7 = new KreiseTorus({
       identity: 'Bahn7',
       radius: 20,
       tube: .2,
@@ -162,7 +155,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       facing: 'normal'
     })
 
-    this.objects.Bahn8 = new KreiseTorus({
+    this.graph.kreiseMeshes.Bahn8 = new KreiseTorus({
       identity: 'Bahn8',
       radius: 20,
       tube: .2,
@@ -172,17 +165,17 @@ export default class AutobahnEpisode extends KreiseEpisode {
     })
 
     // Standstreifen
-    const standstreifen: ObjectType[] = [this.objects.Bahn1, this.objects.Bahn4, this.objects.Bahn5, this.objects.Bahn8]
+    this.graph.objects.standstreifen = [this.graph.kreiseMeshes.Bahn1, this.graph.kreiseMeshes.Bahn4, this.graph.kreiseMeshes.Bahn5, this.graph.kreiseMeshes.Bahn8]
 
-    standstreifen.forEach((Bahn) => {
+    this.graph.objects.standstreifen.forEach((Bahn) => {
       if (Bahn instanceof KreiseTorus) {
         Bahn.materials[0] = new MeshPhongMaterial({ color: 0xeeeeee, shininess: 300 })
       }
     })
     // Leitlinien links
-    const leitlinien: Array<ObjectType> = [this.objects.Bahn2, this.objects.Bahn3, this.objects.Bahn6, this.objects.Bahn7]
+    this.graph.objects.leitlinien = [this.graph.kreiseMeshes.Bahn2, this.graph.kreiseMeshes.Bahn3, this.graph.kreiseMeshes.Bahn6, this.graph.kreiseMeshes.Bahn7]
 
-    leitlinien.forEach((Bahn) => {
+    this.graph.objects.leitlinien.forEach((Bahn) => {
       if (Bahn instanceof KreiseTorus) {
         Bahn.materials[0] = new MeshPhongMaterial({ color: 0x000000, transparent: true, opacity: 0 });
         Bahn.materials[1] = new MeshPhongMaterial({ color: 0xdddddd, shininess: 150 })
@@ -198,14 +191,14 @@ export default class AutobahnEpisode extends KreiseEpisode {
     // Und jetzt alle Linien!
     for (let i: number = 1; i <= 8; i++) {
       const BahnName = 'Bahn' + i
-      const Bahn: KreiseTorus = this.objects[BahnName] as KreiseTorus
+      const Bahn: KreiseTorus = this.graph.kreiseMeshes[BahnName] as KreiseTorus
       // rotate around Y so its in front and behind the camera
       Bahn.rotateY(Math.PI / 2)
 
       // Position
       Bahn.position.x = -13.5 + (3 * i)
 
-      this.scene.add(this.objects[BahnName])
+      this.scene.add(this.graph.kreiseMeshes[BahnName])
     }
 
     let intensity: number = 1.2
@@ -235,7 +228,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     this.autoInstances.forEach((autoInstance) => {
 
-      this.objects[autoInstance.identity] = new KreiseTorus({
+      this.graph.kreiseMeshes[autoInstance.identity] = new KreiseTorus({
         identity: autoInstance.identity,
         radius: 1,
         tube: 0.25,
@@ -247,7 +240,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       })
 
       // shorthand to shutup linter
-      let autoInstanceObject = this.objects[autoInstance.identity] as KreiseTorus
+      let autoInstanceObject = this.graph.kreiseMeshes[autoInstance.identity] as KreiseTorus
 
       autoInstanceObject.materials[1] = new MeshPhongMaterial(autoInstance.material1)
       autoInstanceObject.materials[0] = new MeshPhongMaterial(autoInstance.material2)
@@ -260,16 +253,16 @@ export default class AutobahnEpisode extends KreiseEpisode {
       // --- Instanced Meshes ---
 
       let instancedMeshName: string = autoInstance.identity + 'InstancedMesh'
-      this.objects[instancedMeshName] = new InstancedMesh(autoInstanceObject.geometry, autoInstanceObject.materials, autoInstance.count)
+      this.graph.meshes[instancedMeshName] = new InstancedMesh(autoInstanceObject.geometry, autoInstanceObject.materials, autoInstance.count)
       // shorthand to shutup linter
-      let instancedMeshObject = this.objects[instancedMeshName] as InstancedMesh
+      let instancedMeshObject = this.graph.meshes[instancedMeshName] as InstancedMesh
       instancedMeshObject.instanceMatrix.setUsage(DynamicDrawUsage)
       this.scene.add(instancedMeshObject)
 
       let instancedMeshNameCCW: string = autoInstance.identity + 'InstancedMeshCCW'
-      this.objects[instancedMeshNameCCW] = new InstancedMesh(autoInstanceObject.geometry, autoInstanceObject.materials, autoInstance.count)
+      this.graph.meshes[instancedMeshNameCCW] = new InstancedMesh(autoInstanceObject.geometry, autoInstanceObject.materials, autoInstance.count)
       // shorthand to shutup linter
-      let instancedMeshObjectCCW = this.objects[instancedMeshNameCCW] as InstancedMesh
+      let instancedMeshObjectCCW = this.graph.meshes[instancedMeshNameCCW] as InstancedMesh
       instancedMeshObjectCCW.instanceMatrix.setUsage(DynamicDrawUsage)
 
       this.scene.add(instancedMeshObjectCCW)
@@ -290,11 +283,11 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
   update (ticks: number): void {
     if (this.kreise.autoplay.animation) {
-      this.objects.Bahn2.rotation.z = ticks * -0.00005
-      this.objects.Bahn3.rotation.z = ticks * -0.00005
+      this.graph.kreiseMeshes.Bahn2.rotation.z = ticks * -0.00005
+      this.graph.kreiseMeshes.Bahn3.rotation.z = ticks * -0.00005
 
-      this.objects.Bahn6.rotation.z = ticks * -0.00005
-      this.objects.Bahn7.rotation.z = ticks * -0.00005
+      this.graph.kreiseMeshes.Bahn6.rotation.z = ticks * -0.00005
+      this.graph.kreiseMeshes.Bahn7.rotation.z = ticks * -0.00005
     }
 
     const matrixDummy = new Object3D();
@@ -304,7 +297,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       let instancedMeshName: string = autoInstance.identity + 'InstancedMesh'
 
       // shorthand to shutup linter
-      let instancedMeshObject = this.objects[instancedMeshName] as InstancedMesh 
+      let instancedMeshObject = this.graph.meshes[instancedMeshName] as InstancedMesh 
 
       for (let i: number = 0 ; i < instancedMeshObject.count; i++ ) {
         //for (let i: number = 1 ; i <= 10; i++ ) {
@@ -335,7 +328,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
       // shorthand to shutup linter
       // @TODO find a faster way for update loops (filter objects before)
-      let instancedMeshObjectCCW = this.objects[instancedMeshNameCCW] as InstancedMesh 
+      let instancedMeshObjectCCW = this.graph.meshes[instancedMeshNameCCW] as InstancedMesh 
 
 
       for (let i: number = 0 ; i < instancedMeshObjectCCW.count; i++ ) {
@@ -393,7 +386,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
       if (ticks % 1000 === 0)
 
-        console.log(this.objects)
+        console.log(this.graph)
 
 
 

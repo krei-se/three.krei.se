@@ -1,15 +1,14 @@
 import { EventDispatcher, type Scene, type Camera, Clock } from 'three'
-import type Kreise from '../Kreise/Kreise.ts'
+import type Kreise from './Kreise.ts'
 
-import { ObjectRecordType, domElementType } from '../Kreise/Kreise.ts'
-import { KreiseTorus } from '../Kreise/KreiseTorus.ts'
+import { KreiseTorus } from './KreiseTorus.ts'
+import KreiseGraph from './KreiseGraph.ts'
 
 export default class KreiseEpisode extends EventDispatcher {
   kreise: Kreise
   scene: Scene
   camera: Camera
-  domElement: domElementType
-  objects: ObjectRecordType
+  graph: KreiseGraph
   clock: Clock
   // functions
 
@@ -17,28 +16,26 @@ export default class KreiseEpisode extends EventDispatcher {
   makeScene(): void {}
   addControls(): void {}
 
-  keydown (event: KeyboardEvent): void { event; return }    // stub this to console.log(event)
-  keyup (event: KeyboardEvent): void { event; return }      // stub this to console.log(event)
-  onPointerMove (event: MouseEvent): void { event; return } // stub this to console.log(event)
+  keydown (e: KeyboardEvent): void { e; return }    // stub this to console.log(event)
+  keyup (e: KeyboardEvent): void { e; return }      // stub this to console.log(event)
+  onPointerMove (e: MouseEvent): void { e; return } // stub this to console.log(event)
 
-  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: domElementType) {
+  constructor (kreise: Kreise, scene: Scene, camera: Camera) {
     super()
     this.kreise = kreise
     this.scene = scene
     this.camera = camera
-    this.domElement = domElement
-    this.objects = {}
+    this.graph = new KreiseGraph
     this.clock = new Clock(true) // @TODO start clock with episode.start()
 
     // Controls
-    this.keydown = function (event) {
-      switch (event.code) {
+    this.keydown = function (e: KeyboardEvent) {
+      switch (e.code) {
         case 'KeyU':
-          Object.entries(this.objects).forEach(([object]) => {
+          Object.entries(this.graph.kreiseMeshes).forEach((object) => {
             console.log(object)
-            if (this.objects[object] instanceof KreiseTorus) {
-              let objectshorthand = this.objects[object] as KreiseTorus
-              objectshorthand.materials.forEach((material) => {
+            if (object instanceof KreiseTorus) {
+              object.materials.forEach((material) => {
                 if (material !== null) {
                   material.wireframe = !material.wireframe
                 }

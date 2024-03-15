@@ -1,4 +1,4 @@
-import KreiseEpisode from './KreiseEpisode'
+import KreiseEpisode from '../Kreise/KreiseEpisode.ts'
 
 import {
   Scene,
@@ -22,7 +22,6 @@ import turboTextureImage from '../textures/turbo.png'
 
 import { ColorSchemes, flyCurveVectors } from '../Kreise/KreiseConsts'
 import type Kreise from '../Kreise/Kreise.ts'
-import { domElementType } from '../Kreise/Kreise.ts'
 
 export default class IntroEpisode extends KreiseEpisode {
   flyCurveTicks: number
@@ -30,12 +29,12 @@ export default class IntroEpisode extends KreiseEpisode {
   flyCurveNormal: Vector3
   colorScheme: string
 
-  keydown (event: KeyboardEvent): void { console.log(event) } // stub to shutup linter about event
-  keyup (event: KeyboardEvent): void { console.log(event) }
+  keydown (e: KeyboardEvent): void { console.log(e) } // stub to shutup linter about event
+  keyup (e: KeyboardEvent): void { console.log(e) }
 
   // remember the kreise scene is the main scene and this one is local to the episode :)
-  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: domElementType) {
-    super(kreise, scene, camera, domElement)
+  constructor (kreise: Kreise, scene: Scene, camera: Camera) {
+    super(kreise, scene, camera)
 
     this.colorScheme = kreise.ColorScheme // set this up in main.ts
 
@@ -44,11 +43,11 @@ export default class IntroEpisode extends KreiseEpisode {
     this.flyCurveNormal = new Vector3()
 
     // Controls
-    this.keydown = function (event) {
-      switch (event.code) {
+    this.keydown = function (e: KeyboardEvent) {
+      switch (e.code) {
         case 'KeyI':
           if (this.kreise.client.developerMode) {
-            this.objects.flyCurveMesh.visible = !this.objects.flyCurveMesh.visible
+            this.graph.meshes.flyCurveMesh.visible = !this.graph.meshes.flyCurveMesh.visible
           }
           break
       }
@@ -58,21 +57,16 @@ export default class IntroEpisode extends KreiseEpisode {
     const _keyup = this.keyup.bind(this)
     window.addEventListener('keydown', _keydown)
     window.addEventListener('keyup', _keyup)
+
   }
 
   dispose (): void {
-    /*
-    this.domElement.removeEventListener( 'contextmenu', _contextmenu );
-    this.domElement.removeEventListener( 'pointerdown', _pointerdown );
-    this.domElement.removeEventListener( 'pointermove', _pointermove );
-    this.domElement.removeEventListener( 'pointerup', _pointerup );
-    this.domElement.removeEventListener( 'pointercancel', _pointercancel );
-    */
 
     const _keydown = this.keydown.bind(this)
     const _keyup = this.keyup.bind(this)
     window.removeEventListener('keydown', _keydown)
     window.removeEventListener('keyup', _keyup)
+
   }
 
   makeScene (): void { // its stored in this.scene, get it from there
@@ -80,33 +74,33 @@ export default class IntroEpisode extends KreiseEpisode {
 
     
 
-    this.objects.TorusZero = new KreiseTorus({ identity: 'TorusZero', radius: 6, tube: 1.5, lod: 32,
+    this.graph.kreiseMeshes.TorusZero = new KreiseTorus({ identity: 'TorusZero', radius: 6, tube: 1.5, lod: 32,
       color: new Color(parseInt('0xffffff')), facing: 'inverse'
     })
     
-    this.objects.TorusOne = new KreiseTorus({ identity: 'TorusOne', radius: 6, tube: 0.8, lod: 24,
+    this.graph.kreiseMeshes.TorusOne = new KreiseTorus({ identity: 'TorusOne', radius: 6, tube: 0.8, lod: 24,
       color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][0])), facing: 'inverse'
     })
     
-    this.objects.TorusTwo = new KreiseTorus({ identity: 'TorusTwo', radius: 6, tube: 0.6, lod: 16,
+    this.graph.kreiseMeshes.TorusTwo = new KreiseTorus({ identity: 'TorusTwo', radius: 6, tube: 0.6, lod: 16,
       color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][1])), facing: 'normal'
     })
 
-    this.objects.TorusThree = new KreiseTorus({ identity: 'TorusThree', radius: 8, tube: 0.5, lod: 16,
+    this.graph.kreiseMeshes.TorusThree = new KreiseTorus({ identity: 'TorusThree', radius: 8, tube: 0.5, lod: 16,
       color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][2])), facing: 'inverse'
     })
 
-    this.objects.TorusFour = new KreiseTorus({ identity: 'TorusFour', radius: 9, tube: 0.5, lod: 16,
+    this.graph.kreiseMeshes.TorusFour = new KreiseTorus({ identity: 'TorusFour', radius: 9, tube: 0.5, lod: 16,
       color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][3])), facing: 'inverse'
     })
 
-    this.objects.TorusFive = new KreiseTorus({ identity: 'TorusFive', radius: 11, tube: 0.8, lod: 24,
+    this.graph.kreiseMeshes.TorusFive = new KreiseTorus({ identity: 'TorusFive', radius: 11, tube: 0.8, lod: 24,
       color: new Color(parseInt('0x' + ColorSchemes[this.kreise.ColorScheme][4])), facing: 'inverse'
     })
 
-    this.objects.KlavierTorus = new KlavierTorus() // identity is always KlavierTorus
+    this.graph.kreiseMeshes.KlavierTorus = new KlavierTorus() // identity is always KlavierTorus
 
-    this.objects.ShaderedTorus = new KreiseShaderedTorus({ identity: 'TorusSeven', radius: 6, tube: 1,
+    this.graph.kreiseMeshes.ShaderedTorus = new KreiseShaderedTorus({ identity: 'TorusSeven', radius: 6, tube: 1,
       tubularSegments: 256, radialSegments: 32
     })
 
@@ -115,7 +109,7 @@ export default class IntroEpisode extends KreiseEpisode {
     turboTexture.repeat.set(4, 1)
 
     // shorthand
-    const TorusFive = this.objects.TorusFive as KreiseTorus
+    const TorusFive = this.graph.kreiseMeshes.TorusFive as KreiseTorus
 
     // shorthand
     const materialshorthand = TorusFive.materials[0] as MeshPhongMaterial
@@ -125,7 +119,7 @@ export default class IntroEpisode extends KreiseEpisode {
     materialshorthand.map = turboTexture
     TorusFive.updateMesh()
 
-    const TorusOne = this.objects.TorusOne as KreiseTorus
+    const TorusOne = this.graph.kreiseMeshes.TorusOne as KreiseTorus
 
     let i: number = 0
     let rate: number = 0
@@ -139,7 +133,7 @@ export default class IntroEpisode extends KreiseEpisode {
     TorusOne.materials[0].transparent = true
     TorusOne.materials[0].opacity = 0.3
 
-    const TorusTwo = this.objects.TorusTwo as KreiseTorus
+    const TorusTwo = this.graph.kreiseMeshes.TorusTwo as KreiseTorus
 
     for (i = 0; i <= TorusTwo.tubularSegments; i++) {
       // from 0 to 1
@@ -151,8 +145,8 @@ export default class IntroEpisode extends KreiseEpisode {
     TorusTwo.materials[0].transparent = true
     TorusTwo.materials[0].opacity = 0.8
 
-    this.scene.add(this.objects.TorusZero, this.objects.TorusOne, this.objects.TorusTwo, this.objects.TorusThree, this.objects.TorusFour, this.objects.TorusFive)
-    this.scene.add(this.objects.KlavierTorus, this.objects.ShaderedTorus )
+    this.scene.add(this.graph.kreiseMeshes.TorusZero, this.graph.kreiseMeshes.TorusOne, this.graph.kreiseMeshes.TorusTwo, this.graph.kreiseMeshes.TorusThree, this.graph.kreiseMeshes.TorusFour, this.graph.kreiseMeshes.TorusFive)
+    this.scene.add(this.graph.kreiseMeshes.KlavierTorus, this.graph.kreiseMeshes.ShaderedTorus )
 
     // FlyCurve-Stuff
 
@@ -162,11 +156,11 @@ export default class IntroEpisode extends KreiseEpisode {
 
     const flyCurveGeometry: TubeGeometry = new TubeGeometry(flyCurveVectors, 500, 0.2, 16)
 
-    this.objects.flyCurveMesh = new Mesh(flyCurveGeometry, flyCurveMaterial)
-    this.objects.flyCurveMesh.name = 'flyCurveMesh'
-    this.objects.flyCurveMesh.visible = false
+    this.graph.meshes.flyCurveMesh = new Mesh(flyCurveGeometry, flyCurveMaterial)
+    this.graph.meshes.flyCurveMesh.name = 'flyCurveMesh'
+    this.graph.meshes.flyCurveMesh.visible = false
 
-    this.scene.add(this.objects.flyCurveMesh)
+    this.scene.add(this.graph.meshes.flyCurveMesh)
 
     // const flyCurveSegments: number = flyCurvePoints.length
     this.flyCurveTicks = Math.floor(Math.random() * 60000) + 900000 // how many ticks for one flythrough
@@ -179,29 +173,29 @@ export default class IntroEpisode extends KreiseEpisode {
 
   update (ticks: number): void {
 
-    this.objects.ShaderedTorus.rotation.x = ticks * 0.00001
-    this.objects.ShaderedTorus.rotation.z = ticks * 0.00001
+    this.graph.kreiseMeshes.ShaderedTorus.rotation.x = ticks * 0.00001
+    this.graph.kreiseMeshes.ShaderedTorus.rotation.z = ticks * 0.00001
 
-    this.objects.TorusZero.rotation.x = ticks * 0.00001
+    this.graph.kreiseMeshes.TorusZero.rotation.x = ticks * 0.00001
 
-    this.objects.TorusOne.rotation.x = ticks * 0.00001
-    this.objects.TorusOne.rotation.z = ticks * 0.0001
+    this.graph.kreiseMeshes.TorusOne.rotation.x = ticks * 0.00001
+    this.graph.kreiseMeshes.TorusOne.rotation.z = ticks * 0.0001
 
-    this.objects.TorusTwo.rotation.x = ticks * 0.00001
-    this.objects.TorusTwo.rotation.z = ticks * -0.0001
+    this.graph.kreiseMeshes.TorusTwo.rotation.x = ticks * 0.00001
+    this.graph.kreiseMeshes.TorusTwo.rotation.z = ticks * -0.0001
 
-    this.objects.TorusThree.rotation.x = ticks * 0.00002
-    this.objects.TorusThree.rotation.y = ticks * -0.00002
-    this.objects.TorusThree.rotation.z = ticks * 0.0001
+    this.graph.kreiseMeshes.TorusThree.rotation.x = ticks * 0.00002
+    this.graph.kreiseMeshes.TorusThree.rotation.y = ticks * -0.00002
+    this.graph.kreiseMeshes.TorusThree.rotation.z = ticks * 0.0001
 
-    this.objects.TorusFour.rotation.x = ticks * -0.00002
-    this.objects.TorusFour.rotation.y = ticks * 0.00002
+    this.graph.kreiseMeshes.TorusFour.rotation.x = ticks * -0.00002
+    this.graph.kreiseMeshes.TorusFour.rotation.y = ticks * 0.00002
 
-    this.objects.TorusFive.rotation.y = ticks * -0.00003
-    this.objects.TorusFive.rotation.z = ticks * -0.00015
+    this.graph.kreiseMeshes.TorusFive.rotation.y = ticks * -0.00003
+    this.graph.kreiseMeshes.TorusFive.rotation.z = ticks * -0.00015
 
-    this.objects.KlavierTorus.rotation.y = ticks * 0.00003
-    this.objects.KlavierTorus.rotation.z = ticks * 0.00015
+    this.graph.kreiseMeshes.KlavierTorus.rotation.y = ticks * 0.00003
+    this.graph.kreiseMeshes.KlavierTorus.rotation.z = ticks * 0.00015
 
     const flyCurveProgress: number = (ticks % this.flyCurveTicks) / this.flyCurveTicks
     const flyCurveProgressAhead: number = ((ticks + 500) % this.flyCurveTicks) / this.flyCurveTicks

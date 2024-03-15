@@ -18,27 +18,27 @@ import {
 } from 'three'
 import { KlavierTorus, KreiseShaderedTorus, KreiseTorus } from './KreiseTorus'
 
-export type LightsType = AmbientLight | PointLight | DirectionalLight | HemisphereLight
-export type LightsRecordType = Record<string, LightsType>
-
-export interface LightsInterface {
-  [key: string]: LightsType
-}
-
+export type GraphsType = KreiseGraph
+export type GraphsRecordType = Record<string, GraphsType>
 
 export type MeshesType = Mesh | InstancedMesh | Group
 export type MeshesRecordType = Record<string, MeshesType>
 
+export type LightsType = AmbientLight | PointLight | DirectionalLight | HemisphereLight
+export type LightsRecordType = Record<string, LightsType>
+
 export type HelpersType = AxesHelper | GridHelper | CameraHelper | MeshesType | DirectionalLightHelper | PointLightHelper | Box3Helper
 export type HelpersRecordType = Record<string, HelpersType>
 
-export type GraphsType = KreiseGraph
-export type GraphsRecordType = Record<string, GraphsType>
+export type CollisionHelpersType = Box3
+export type CollisionHelpersRecordType = Record<string, CollisionHelpersType>
 
+export type KreiseMeshesType = KreiseTorus | KreiseShaderedTorus | KlavierTorus
+export type KreiseMeshesRecordType = Record<string, KreiseMeshesType>
 
 
 //  Basic three type
-export type ObjectType = Array<any> | string | GraphsType | Object3D | MeshesType| Box3 | Fog | LightsType | HelpersType | KreiseTorus | KreiseShaderedTorus | KlavierTorus
+export type ObjectType = Array<any> | string | GraphsType | LightsType | MeshesType | LightsType | HelpersType | CollisionHelpersType | KreiseMeshesType | Object3D | Fog
 export type ObjectsRecordType = Record<string, ObjectType>
 
 export interface ObjectsInterface {
@@ -60,6 +60,7 @@ export default class KreiseGraph {
   // and sensors on any branch of the nerves)
   public lights: LightsRecordType = {}
   public meshes: MeshesRecordType = {}
+  public kreiseMeshes: KreiseMeshesRecordType = {}
   public helpers: HelpersRecordType = {}
   public objects: ObjectsInterface = {}
   public graphs: GraphsRecordType = {}

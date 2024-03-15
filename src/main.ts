@@ -20,7 +20,7 @@ import { getPageOverlayDiv, fadeoutDatenschutzAndInfoParagraphs, getVersionDiv, 
 
 // Episodes
 
-import KreiseEpisode from './episodes/KreiseEpisode.ts'
+import KreiseEpisode from './Kreise/KreiseEpisode.ts'
 import IntroEpisode from './episodes/Intro.ts'
 import AutobahnEpisode from './episodes/Autobahn.ts'
 import ChemnitzEpisode from './episodes/Chemnitz.ts'

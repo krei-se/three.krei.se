@@ -1,4 +1,4 @@
-import KreiseEpisode from './KreiseEpisode'
+import KreiseEpisode from '../Kreise/KreiseEpisode.ts'
 
 import {
   Scene,
@@ -12,17 +12,15 @@ import {
 import { KreiseTorus } from '../Kreise/KreiseTorus'
 
 import type Kreise from '../Kreise/Kreise.ts'
-import { domElementType } from '../Kreise/Kreise.ts'
-
 export default class ChemnitzEpisode extends KreiseEpisode {
 
   // remember the kreise scene is the main scene and this one is local to the episode :)
-  constructor (kreise: Kreise, scene: Scene, camera: Camera, domElement: domElementType) {
-    super(kreise, scene, camera, domElement)
+  constructor (kreise: Kreise, scene: Scene, camera: Camera) {
+    super(kreise, scene, camera)
 
     // Controls
-    this.keydown = function (event) {
-      switch (event.code) {
+    this.keydown = function (e: KeyboardEvent) {
+      switch (e.code) {
         case 'KeyO':
           if (this.kreise.client.developerMode) {
             if (this.kreise.autoplay.camera) {
@@ -48,24 +46,18 @@ export default class ChemnitzEpisode extends KreiseEpisode {
   }
 
   dispose (): void {
-    /*
-    this.domElement.removeEventListener( 'contextmenu', _contextmenu );
-    this.domElement.removeEventListener( 'pointerdown', _pointerdown );
-    this.domElement.removeEventListener( 'pointermove', _pointermove );
-    this.domElement.removeEventListener( 'pointerup', _pointerup );
-    this.domElement.removeEventListener( 'pointercancel', _pointercancel );
-    */
 
     const _keydown = this.keydown.bind(this)
     const _keyup = this.keyup.bind(this)
     window.removeEventListener('keydown', _keydown)
     window.removeEventListener('keyup', _keyup)
+
   }
 
   makeScene (): void { // its stored in this.scene, get it from there
   // Tori
 
-    this.objects.Lulatsch = new KreiseTorus({
+    this.graph.kreiseMeshes.Lulatsch = new KreiseTorus({
       identity: 'Lulatsch',
       radius: 16,
       tube: 8,
@@ -84,7 +76,7 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     const topgold = 0xEEE8AA
     // const black = 0x000000
 
-    const Lulatsch = this.objects.Lulatsch as KreiseTorus
+    const Lulatsch = this.graph.kreiseMeshes.Lulatsch as KreiseTorus
 
     let transparency: boolean
     let opacity: number
@@ -128,18 +120,18 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     Lulatsch.rotateX(Math.PI / 2)
     Lulatsch.rotateY(-Math.PI / 2)
 
-    this.scene.add(this.objects.Lulatsch)
+    this.scene.add(this.graph.kreiseMeshes.Lulatsch)
 
-    this.objects.pointLight = new PointLight('red', 800, 100, 1)
-    this.objects.pointLight.position.set(0, 0, 10)
-    this.scene.add(this.objects.pointLight)
+    this.graph.lights.pointLight = new PointLight('red', 800, 100, 1)
+    this.graph.lights.pointLight.position.set(0, 0, 10)
+    this.scene.add(this.graph.lights.pointLight)
 
-    this.objects.pointLightTwo = new PointLight('red', 800, 100, 1)
-    this.objects.pointLightTwo.position.set(0, 0, 10)
-    this.scene.add(this.objects.pointLightTwo)
+    this.graph.lights.pointLightTwo = new PointLight('red', 800, 100, 1)
+    this.graph.lights.pointLightTwo.position.set(0, 0, 10)
+    this.scene.add(this.graph.lights.pointLightTwo)
 
-    this.objects.pointLightHelper = new PointLightHelper(this.objects.pointLight, undefined, 'orange')
-    this.objects.pointLightHelperTwo = new PointLightHelper(this.objects.pointLightTwo, undefined, 'red')
+    this.graph.helpers.pointLightHelper = new PointLightHelper(this.graph.lights.pointLight, undefined, 'orange')
+    this.graph.helpers.pointLightHelperTwo = new PointLightHelper(this.graph.lights.pointLightTwo, undefined, 'red')
     
     // this.scene.add(this.objects.pointLightHelper)
     // this.scene.add(this.objects.pointLightHelperTwo)
@@ -157,37 +149,37 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     // 240 000 ticks (4 Minutes)
     if (this.kreise.autoplay.animation) {
 
-      this.objects.Lulatsch.rotation.z = Math.sin(Math.PI*2 * (ticks / 60000)) * 4
-      //this.objects.Lulatsch.rotation.y = 3 * Math.sin(ticks / 40000)
+      this.graph.kreiseMeshes.Lulatsch.rotation.z = Math.sin(Math.PI*2 * (ticks / 60000)) * 4
+      //this.graph.kreiseMeshes.Lulatsch.rotation.y = 3 * Math.sin(ticks / 40000)
             
       if (ticks > 0 && ticks < 30000) {
           // 0 to 1               PI is half a rotation, so quarter rotation is PI/2, subtract PI/2 from initial rotation
-      this.objects.Lulatsch.rotation.y = (((ticks - 0) / 30000) * (Math.PI/2)) - (Math.PI/2)
+      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 0) / 30000) * (Math.PI/2)) - (Math.PI/2)
       }
 
       if (ticks > 60000 && ticks < 90000) {
               // 0 to 1                PI is half rotation in rad, so quarter rotation is PI/2, current rotation is 0 rad
-      this.objects.Lulatsch.rotation.y = (((ticks - 60000) / 30000) * (Math.PI/2))
+      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 60000) / 30000) * (Math.PI/2))
       }
 
       if (ticks > 120000 && ticks < 150000) {
                 // 0 to 1               PI is half a rotation, so quarter rotation is PI/2, add PI/2 from previous rotation
-      this.objects.Lulatsch.rotation.y = (((ticks - 120000) / 30000) * (Math.PI/2)) + (Math.PI/2)
+      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 120000) / 30000) * (Math.PI/2)) + (Math.PI/2)
       }
 
       if (ticks > 180000 && ticks < 210000) {
         // 0 to 1                PI is half rotation in rad, so quarter rotation is PI/2, , ends in + half PI ?
-      this.objects.Lulatsch.rotation.y = (((ticks - 180000) / 30000) * (Math.PI/2)) + (Math.PI)
+      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 180000) / 30000) * (Math.PI/2)) + (Math.PI)
       }
 
-      this.objects.pointLight.position.x = 10 * Math.sin((ticks / 2000))
-      this.objects.pointLightTwo.position.x = -10 * Math.sin((ticks / 3000))
+      this.graph.lights.pointLight.position.x = 10 * Math.sin((ticks / 2000))
+      this.graph.lights.pointLightTwo.position.x = -10 * Math.sin((ticks / 3000))
 
     }
 
     else {
 
-      console.log(this.objects.Lulatsch.rotation)
+      console.log(this.graph.kreiseMeshes.Lulatsch.rotation)
 
     }
 
