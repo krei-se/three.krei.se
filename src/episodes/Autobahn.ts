@@ -8,7 +8,11 @@ import {
   Raycaster,
   Vector2,
   InstancedMesh,
-  DynamicDrawUsage
+  DynamicDrawUsage,
+  CylinderGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  BackSide
 } from 'three'
 
 import {
@@ -32,9 +36,6 @@ export default class AutobahnEpisode extends KreiseEpisode {
   keydown (e: KeyboardEvent): void { e; return }    // stub this to console.log(event)
   keyup (e: KeyboardEvent): void { e; return }      // stub this to console.log(event)
   onPointerMove (e: MouseEvent): void { e; return } // stub this to console.log(event)
-
-  raycaster: Raycaster = new Raycaster()
-  pointer: Vector2 = new Vector2()
 
   // remember the kreise scene is the main scene and this one is local to the episode :)
   constructor (kreise: Kreise, scene: Scene, camera: Camera) {
@@ -60,13 +61,6 @@ export default class AutobahnEpisode extends KreiseEpisode {
           console.log(this.camera.position)
           break
       }
-    }
-
-    this.onPointerMove = function (event) {
-      // calculate pointer position in normalized device coordinates
-      // (-1 to +1) for both components
-      this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
-      this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
     }
 
     const _keydown = this.keydown.bind(this)
@@ -164,7 +158,22 @@ export default class AutobahnEpisode extends KreiseEpisode {
       facing: 'normal'
     })
 
+    
+    const autoHitBoxGeometry: CylinderGeometry = new CylinderGeometry(20, 20, 3, 64, 2, true)
+    const autoHitBoxMaterial: MeshBasicMaterial = new MeshBasicMaterial({color: 'orange', side: BackSide})
+    this.graph.meshes.autoHitBox1 =  new Mesh (autoHitBoxGeometry, autoHitBoxMaterial)
+    this.graph.meshes.autoHitBox1.visible = true
+    this.graph.meshes.autoHitBox1.layers.set(18)
+    this.graph.meshes.autoHitBox1.position.x = -9
+    this.graph.meshes.autoHitBox1.rotateZ(Math.PI/2)
+    
+
+    this.scene.add(this.graph.meshes.autoHitBox1)
+
+    console.log(this.graph)
+    
     // Standstreifen
+
     this.graph.objects.standstreifen = [this.graph.kreiseMeshes.Bahn1, this.graph.kreiseMeshes.Bahn4, this.graph.kreiseMeshes.Bahn5, this.graph.kreiseMeshes.Bahn8]
 
     this.graph.objects.standstreifen.forEach((Bahn) => {
@@ -282,6 +291,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
 
   update (ticks: number): void {
+
     if (this.kreise.autoplay.animation) {
       this.graph.kreiseMeshes.Bahn2.rotation.z = ticks * -0.00005
       this.graph.kreiseMeshes.Bahn3.rotation.z = ticks * -0.00005
@@ -362,29 +372,11 @@ export default class AutobahnEpisode extends KreiseEpisode {
       this.camera.rotation.z = Math.sin(ticks / 5000) * .3
     }
 
-    // Raycaster
-
-    this.raycaster.setFromCamera(this.pointer, this.camera)
-
-    /*
-    // calculate objects intersecting the picking ray
-    const intersects = this.raycaster.intersectObjects(this.kreise.scene.children)
-
-    for (let i = 0; i < intersects.length; i++) {
-      if (!isUndef(intersects[i].object.materials)) {
-        if (intersects[i].object.materials.length >= 1) {
-          intersects[i].object.materials.forEach(item => {
-            item.color.set(0xffff00)
-          })
-        }
-      }
-    }
-    */
 
     // debug
     if (this.kreise.client.developerMode) {
 
-      if (ticks % 1000 === 0)
+      if (Math.floor(ticks) % 5000 === 0)
 
         console.log(this.graph)
 

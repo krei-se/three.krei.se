@@ -92,22 +92,22 @@ let ticks: number = 0
 
 let episodes: any[] = ['Intro', 'Autobahn', 'Chemnitz']
 
-// episodes = ['Chemnitz']
+// episodes = ['Autobahn']
 
 const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Math.random is inclusively 0 but never 1
 
 console.log(EpisodeRand)
 
-let episode: KreiseEpisode = new KreiseEpisode(kreise, new Scene(), kreise.camera, window)
+let episode: KreiseEpisode = new KreiseEpisode(kreise, new Scene(), kreise.camera)
 kreise.brightness = 0
 if (EpisodeRand === 'Intro') {
-  episode = new IntroEpisode(kreise, new Scene(), kreise.camera, window)
+  episode = new IntroEpisode(kreise, new Scene(), kreise.camera)
 }
 if (EpisodeRand === 'Autobahn') {
-  episode = new AutobahnEpisode(kreise, new Scene(), kreise.camera, window)
+  episode = new AutobahnEpisode(kreise, new Scene(), kreise.camera)
 }
 if (EpisodeRand === 'Chemnitz') {
-  episode = new ChemnitzEpisode(kreise, new Scene(), kreise.camera, window)
+  episode = new ChemnitzEpisode(kreise, new Scene(), kreise.camera)
 }
 
 episode.makeScene()
@@ -131,6 +131,7 @@ let cronInterval: number = 60
 kreise.renderer.setAnimationLoop(function () {
   const timeDelta = clock.getDelta()
 
+  // remember that ticks is a float
   ticks += (timeDelta * 1000)
 
   // Crons  
@@ -145,6 +146,10 @@ kreise.renderer.setAnimationLoop(function () {
     lastcron = ticks
   
   }
+
+  // 10 fps raycaster updates
+  kreise.client.raycaster.setFromCamera(kreise.client.pointer, kreise.camera)
+  kreise.client.updateRaycasterIntersects(episode.scene)
 
   // kreise.zeit.update()
 

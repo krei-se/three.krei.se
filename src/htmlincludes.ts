@@ -83,9 +83,9 @@ export function getSocialDiv (): HTMLDivElement {
 
   const sParagraph = document.createElement('p');
   sParagraph.style.cssText = 'vertical-align: middle;'
-  sParagraph.innerHTML = '<a href="https://paypal.me/rwachler"><img src="/paypal.svg" width="30" height="auto"/></a>&nbsp;&nbsp;&nbsp;<a href="https://mastodon.social/@kreise"><img src="/mastodon.svg" width="30" height="auto"/></a>'
+  sParagraph.innerHTML = '<a href="https://mastodon.social/@kreise"><img src="/mastodon.svg" width="30" height="auto"/></a>'
   
-  
+  // <a href="https://paypal.me/rwachler"><img src="/paypal.svg" width="30" height="auto"/></a>&nbsp;&nbsp;&nbsp;
   
   sDiv.append(sParagraph)
   sDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 1em;'
@@ -100,13 +100,15 @@ export function fadeoutDatenschutzAndInfoParagraphs (): void {
 
   const applyFadeOutElements = document.querySelectorAll('.applyFadeOut') as NodeListOf<HTMLElement>
 
-  applyFadeOutElements.forEach((element) => {
+  applyFadeOutElements.forEach((element: HTMLElement) => {
+
+    console.log(element)
     
     element.style.transition = 'opacity 60s'
     element.style.opacity = '0'
     
     window.setTimeout((element: HTMLElement) => {
-      element.parentNode!.removeChild (element)
+      document.removeChild(element)
     }, 10000)
 
   })

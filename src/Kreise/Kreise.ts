@@ -370,10 +370,12 @@ export class KreiseClient {
 
   }
 
-  updateRaycasterIntersects() {
+  updateRaycasterIntersects(scene: Scene ) {
 
-    this.kreise.graph.objects.selected = this.raycaster.intersectObjects(this.kreise.scene.children)
-    
+    // console.log(scene.children)
+    let intersects = this.raycaster.intersectObjects(scene.children)
+    if (intersects.length !== 0) console.log(this.pointerPx, intersects)
+
   }
 
 
@@ -397,8 +399,7 @@ export class KreiseClient {
   setupRaycaster() {
 
     this.raycaster.layers.set(18) // R is 18
-    this.raycaster.setFromCamera(this.pointer, this.kreise.camera)
-
+    
   }
 
 }

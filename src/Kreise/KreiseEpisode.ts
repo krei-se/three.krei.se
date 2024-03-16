@@ -32,12 +32,12 @@ export default class KreiseEpisode extends EventDispatcher {
     this.keydown = function (e: KeyboardEvent) {
       switch (e.code) {
         case 'KeyU':
-          Object.entries(this.graph.kreiseMeshes).forEach((object) => {
-            console.log(object)
+          Object.entries(this.graph.kreiseMeshes).forEach(([_, object]) => {
             if (object instanceof KreiseTorus) {
               object.materials.forEach((material) => {
                 if (material !== null) {
                   material.wireframe = !material.wireframe
+                  material.needsUpdate = true
                 }
               })
             }
