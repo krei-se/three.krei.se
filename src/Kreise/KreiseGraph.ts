@@ -64,7 +64,8 @@ export default class KreiseGraph {
   public helpers: HelpersRecordType = {}
   public objects: ObjectsInterface = {}
   public graphs: GraphsRecordType = {}
-  public repeat: number = 1000                    // how often do  we visit this node in a circular reference?
+  // 15 digits are enough for interplanetary travel
+  public repeat: number = 15                      // how often do  we visit this node in a circular reference?
   public visited: number = 0                      // how often did we visit this node in a circular reference?
 
   // mostly unused, useful for eva(input) and moving the goalpost in the base (start and ending) graph
