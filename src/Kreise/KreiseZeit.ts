@@ -7,6 +7,7 @@ export interface DirectionInterface { direction: keyof typeof Direction }
 
 export interface EpisodeTimeInterface { timeS: number, timeMs: number, startMs: number }
 
+// KreiseZeit richtet sich nach der genauen Uhrzeit, ist also nicht verschiebbar
 export default class KreiseZeit {
   interval: KreiseZeitInterval = []
   oldTime: number
@@ -54,4 +55,12 @@ export default class KreiseZeit {
       }
     })
   }
+}
+
+// Takte haben auch eine Richtung und Länge (wie Intervalle), sind aber verschiebbar
+export class KreiseTakt {
+
+  bpm: number = 120 // normaler 4/4 Takt. Das sind 30 Takte pro Minute (0,5)
+
+
 }

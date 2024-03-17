@@ -86,6 +86,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
   makeScene (): void { // its stored in this.scene, get it from there
   // Tori
 
+    /*
     this.graph.kreiseMeshes.Bahn1 = new KreiseTorus({
       identity: 'Bahn1',
       radius: 20,
@@ -158,6 +159,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       facing: 'normal'
     })
 
+    */
     
     const autoHitBoxGeometry: CylinderGeometry = new CylinderGeometry(20, 20, 3, 64, 2, true)
     const autoHitBoxMaterial: MeshBasicMaterial = new MeshBasicMaterial({color: 'orange', side: BackSide})
@@ -173,7 +175,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
     console.log(this.graph)
     
     // Standstreifen
-
+    /*
     this.graph.objects.standstreifen = [this.graph.kreiseMeshes.Bahn1, this.graph.kreiseMeshes.Bahn4, this.graph.kreiseMeshes.Bahn5, this.graph.kreiseMeshes.Bahn8]
 
     this.graph.objects.standstreifen.forEach((Bahn) => {
@@ -209,13 +211,16 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
       this.scene.add(this.graph.kreiseMeshes[BahnName])
     }
+    */
 
     let intensity: number = 1.2
+   
     /*
     if (this.kreise.brightness === 0) {
       intensity = 1
     }
     */
+
     const rotesRuecklicht = { toneMapped: false, color: 0x000000, shininess: 200, emissive: 0xa50132, emissiveIntensity: intensity }
     const rotesRuecklicht2 = { toneMapped: false, color: 0x000000, shininess: 150, emissive: 0xff2200, emissiveIntensity: intensity }
 
@@ -293,11 +298,15 @@ export default class AutobahnEpisode extends KreiseEpisode {
   update (ticks: number): void {
 
     if (this.kreise.autoplay.animation) {
+      /*
+
       this.graph.kreiseMeshes.Bahn2.rotation.z = ticks * -0.00005
       this.graph.kreiseMeshes.Bahn3.rotation.z = ticks * -0.00005
 
       this.graph.kreiseMeshes.Bahn6.rotation.z = ticks * -0.00005
       this.graph.kreiseMeshes.Bahn7.rotation.z = ticks * -0.00005
+    
+      */
     }
 
     const matrixDummy = new Object3D();
