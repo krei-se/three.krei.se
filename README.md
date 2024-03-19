@@ -6,7 +6,7 @@ This is the base krei.se n' Gin written in TS with (mainly) use of threejs
 
 Necessity is the mother of invention.
 
-The base idea is the structure of a directed cyclic graph that runs with a repeat-counter to "tire" a graph any time it accesses a connected graph. I got the number 15 repeats from the doublefloat pi precision and times 8 to account for the amount of entities a human can keep in his short term working memory (and both are great for time modulus :D).
+The base idea is the structure of a directed cyclic graph that runs with a repeat-counter to "tire" a graph any time it accesses a connected graph. I got the number 15 repeats from the doublefloat pi precision and 5-8 layers to account for the amount of entities a human can keep in his short term working memory (and both are great for time modulus :D).
 
 This solution allows infinite (brain and CNS neuron) or finite (motor and sensoric neurons) loops through subgraphs that point back to already visited graphs.
 
