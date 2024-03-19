@@ -311,11 +311,18 @@ export default class AutobahnEpisode extends KreiseEpisode {
           else { 
             radius = 20 
           }
+
+
     
           let progress: number = (i / instancedMesh1.count) // + autoInstance.offsetProgress
           matrixDummy.position.set (auto * 3, Math.cos(progress * (Math.PI * 2)) * radius, Math.sin(progress * (Math.PI * 2)) * radius)
           matrixDummy.rotation.x = 0
           matrixDummy.rotateX((Math.PI * 2) * progress)
+
+          if (auto < 0) { 
+            matrixDummy.rotateX(Math.PI)
+          }
+
           matrixDummy.updateMatrix();
     
           instancedMesh1.setMatrixAt(i, matrixDummy.matrix)
