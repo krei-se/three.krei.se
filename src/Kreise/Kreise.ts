@@ -384,17 +384,6 @@ export class KreiseClient {
 
     // console.log(scene.children)
     let intersects = this.raycaster.intersectObjects(scene.children)
-    if (intersects.length !== 0) {
-
-      // console.log(this.pointerPx, intersects)
-      intersects.forEach((intersectObject, _) => {
-
-        console.log(intersectObject.object.parent)
-
-        //this.kreise.graph.graphs.selected[intersectObject.object.name] = intersectObject.object
-
-      })
-    }
     
     this.kreise.intersects = intersects
       

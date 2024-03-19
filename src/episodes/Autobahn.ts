@@ -98,6 +98,120 @@ export default class AutobahnEpisode extends KreiseEpisode {
   }
 
   load (): void { // its stored in this.scene, get it from there
+
+
+// Tori
+
+    
+    this.graph.kreiseMeshes.Bahn1 = new KreiseTorus({
+      identity: 'Bahn1',
+      radius: 20,
+      tube: 0.3,
+      lod: 24,
+      color: new Color(parseInt('0xffffff')),
+      facing: 'normal'
+    })
+
+    this.graph.kreiseMeshes.Bahn2 = new KreiseTorus({
+      identity: 'Bahn2',
+      radius: 20,
+      tube: .2,
+      lod: 24,
+      color: new Color(0x000000),
+      facing: 'normal'
+    })
+
+    this.graph.kreiseMeshes.Bahn3 = new KreiseTorus({
+      identity: 'Bahn3',
+      radius: 20,
+      tube: .2,
+      lod: 24,
+      color: new Color(0x000000),
+      facing: 'normal'
+    })
+
+    this.graph.kreiseMeshes.Bahn4 = new KreiseTorus({
+      identity: 'Bahn4',
+      radius: 20,
+      tube: .2,
+      lod: 24,
+      color: new Color(0x000000),
+      facing: 'normal'
+    })
+
+    this.graph.kreiseMeshes.Bahn5 = new KreiseTorus({
+      identity: 'Bahn5',
+      radius: 20,
+      tube: .2,
+      lod: 24,
+      color: new Color(0x000000),
+      facing: 'normal'
+    })
+
+    this.graph.kreiseMeshes.Bahn6 = new KreiseTorus({
+      identity: 'Bahn6',
+      radius: 20,
+      tube: .2,
+      lod: 24,
+      color: new Color(0x000000),
+      facing: 'normal'
+    })
+
+    this.graph.kreiseMeshes.Bahn7 = new KreiseTorus({
+      identity: 'Bahn7',
+      radius: 20,
+      tube: .2,
+      lod: 24,
+      color: new Color(0x000000),
+      facing: 'normal'
+    })
+
+    this.graph.kreiseMeshes.Bahn8 = new KreiseTorus({
+      identity: 'Bahn8',
+      radius: 20,
+      tube: .2,
+      lod: 24,
+      color: new Color(0x000000),
+      facing: 'normal'
+    })
+
+    
+    // Standstreifen
+    this.graph.objects.standstreifen = [this.graph.kreiseMeshes.Bahn1, this.graph.kreiseMeshes.Bahn4, this.graph.kreiseMeshes.Bahn5, this.graph.kreiseMeshes.Bahn8]
+
+    this.graph.objects.standstreifen.forEach((Bahn) => {
+      if (Bahn instanceof KreiseTorus) {
+        Bahn.materials[0] = new MeshPhongMaterial({ color: 0xbbbb99, shininess: 300 })
+      }
+    })
+    // Leitlinien links
+    this.graph.objects.leitlinien = [this.graph.kreiseMeshes.Bahn2, this.graph.kreiseMeshes.Bahn3, this.graph.kreiseMeshes.Bahn6, this.graph.kreiseMeshes.Bahn7]
+
+    this.graph.objects.leitlinien.forEach((Bahn) => {
+      if (Bahn instanceof KreiseTorus) {
+        Bahn.materials[0] = new MeshPhongMaterial({ color: 0x000000, transparent: true, opacity: 0 });
+        Bahn.materials[1] = new MeshPhongMaterial({ color: 0xbbbb99, shininess: 150 })
+
+        // console.log(Bahn.geometry.groups)
+
+        for (let j: number = 0; j < Bahn.geometry.groups.length; j++) {
+          Bahn.geometry.groups[j].materialIndex = Math.floor(j / 10) % 2
+        }
+      }
+    })
+
+    // Und jetzt alle Linien!
+    for (let i: number = 1; i <= 8; i++) {
+      const BahnName = 'Bahn' + i
+      const Bahn: KreiseTorus = this.graph.kreiseMeshes[BahnName] as KreiseTorus
+      // rotate around Y so its in front and behind the camera
+      Bahn.rotateY(Math.PI / 2)
+
+      // Position
+      Bahn.position.x = -13.5 + (3 * i)
+
+      this.scene.add(this.graph.kreiseMeshes[BahnName])
+    }
   
 
     const rotesRuecklicht = { toneMapped: false, color: 0x000000, shininess: 200, emissive: 0xa50132, emissiveIntensity: 1.2 }
@@ -180,7 +294,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
     this.graph.createAutosRaycastHitBoxes = function() {
       
       this.autos.forEach((auto: number) => {
-        const autoRaycastGeometry: CylinderGeometry = new CylinderGeometry(20, 20, 2, 64, 2, true)
+        const autoRaycastGeometry: CylinderGeometry = new CylinderGeometry(20, 20, 3, 64, 2, true)
         const autoRaycastMaterial: MeshBasicMaterial = new MeshBasicMaterial({color: 'orange', side: BackSide})
     
         let autoRaycastHitBoxMesh: Mesh = new Mesh(autoRaycastGeometry, autoRaycastMaterial)
@@ -211,8 +325,6 @@ export default class AutobahnEpisode extends KreiseEpisode {
         instancedMesh1.name = auto + 'InstancedMesh2'
         instancedMesh2.instanceMatrix.setUsage(DynamicDrawUsage)
 
-        console.log(instancedMesh1)
-
         this.groups[auto].add(instancedMesh1)
         this.groups[auto].add(instancedMesh2)
 
@@ -222,13 +334,9 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     this.graph.createAutosInstancedMeshes()
 
-    console.log(this.graph)
-
     Object.entries(this.graph.groups).forEach(([_, group]) => {
       this.scene.add(group)
     })
-
-    console.log(this.scene)
 
     this.camera.position.set(0, -16.5, 0)
     this.camera.lookAt(0, -16.5, 0)
@@ -245,15 +353,15 @@ export default class AutobahnEpisode extends KreiseEpisode {
     this.ticks = ticks
 
     if (this.kreise.autoplay.animation) {
-      /*
+      
 
-      this.graph.kreiseMeshes.Bahn2.rotation.z = ticks * -0.00005
-      this.graph.kreiseMeshes.Bahn3.rotation.z = ticks * -0.00005
+      this.graph.kreiseMeshes.Bahn2.rotation.z = ticks * -0.00007
+      this.graph.kreiseMeshes.Bahn3.rotation.z = ticks * -0.00007
 
-      this.graph.kreiseMeshes.Bahn6.rotation.z = ticks * -0.00005
-      this.graph.kreiseMeshes.Bahn7.rotation.z = ticks * -0.00005
+      this.graph.kreiseMeshes.Bahn6.rotation.z = ticks * -0.00007
+      this.graph.kreiseMeshes.Bahn7.rotation.z = ticks * -0.00007
     
-      */
+      
     }
 
     // catch car lane ray cast intersects
@@ -277,12 +385,9 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
         this.kreise.intersects.forEach((intersect, _) => {
 
-          console.log(intersect)
           selectedAutos.push(parseInt(intersect.object.parent!.name))
 
         })
-
-        console.log(selectedAutos)
 
     }
 
@@ -299,7 +404,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
         //for (let i: number = 1 ; i <= 10; i++ ) {
 
           if (selectedAutos.includes(auto)) {
-            radius = 20.5
+            radius = 20.4
             if ((ticks > this.lastSound + 20 && auto != this.lastTone) || ticks > this.lastSound + 100) {
               let synth: Synth = new Synth().toDestination();
               synth.triggerAttackRelease(toneMap[auto], '8n')
@@ -363,122 +468,3 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
 
 
-
-
-
-// Tori
-
-    /*
-    this.graph.kreiseMeshes.Bahn1 = new KreiseTorus({
-      identity: 'Bahn1',
-      radius: 20,
-      tube: 0.3,
-      lod: 24,
-      color: new Color(parseInt('0xffffff')),
-      facing: 'normal'
-    })
-
-    this.graph.kreiseMeshes.Bahn2 = new KreiseTorus({
-      identity: 'Bahn2',
-      radius: 20,
-      tube: .2,
-      lod: 24,
-      color: new Color(0x000000),
-      facing: 'normal'
-    })
-
-    this.graph.kreiseMeshes.Bahn3 = new KreiseTorus({
-      identity: 'Bahn3',
-      radius: 20,
-      tube: .2,
-      lod: 24,
-      color: new Color(0x000000),
-      facing: 'normal'
-    })
-
-    this.graph.kreiseMeshes.Bahn4 = new KreiseTorus({
-      identity: 'Bahn4',
-      radius: 20,
-      tube: .2,
-      lod: 24,
-      color: new Color(0x000000),
-      facing: 'normal'
-    })
-
-    this.graph.kreiseMeshes.Bahn5 = new KreiseTorus({
-      identity: 'Bahn5',
-      radius: 20,
-      tube: .2,
-      lod: 24,
-      color: new Color(0x000000),
-      facing: 'normal'
-    })
-
-    this.graph.kreiseMeshes.Bahn6 = new KreiseTorus({
-      identity: 'Bahn6',
-      radius: 20,
-      tube: .2,
-      lod: 24,
-      color: new Color(0x000000),
-      facing: 'normal'
-    })
-
-    this.graph.kreiseMeshes.Bahn7 = new KreiseTorus({
-      identity: 'Bahn7',
-      radius: 20,
-      tube: .2,
-      lod: 24,
-      color: new Color(0x000000),
-      facing: 'normal'
-    })
-
-    this.graph.kreiseMeshes.Bahn8 = new KreiseTorus({
-      identity: 'Bahn8',
-      radius: 20,
-      tube: .2,
-      lod: 24,
-      color: new Color(0x000000),
-      facing: 'normal'
-    })
-
-    */
-    
-    
-    // Standstreifen
-    /*
-    this.graph.objects.standstreifen = [this.graph.kreiseMeshes.Bahn1, this.graph.kreiseMeshes.Bahn4, this.graph.kreiseMeshes.Bahn5, this.graph.kreiseMeshes.Bahn8]
-
-    this.graph.objects.standstreifen.forEach((Bahn) => {
-      if (Bahn instanceof KreiseTorus) {
-        Bahn.materials[0] = new MeshPhongMaterial({ color: 0xeeeeee, shininess: 300 })
-      }
-    })
-    // Leitlinien links
-    this.graph.objects.leitlinien = [this.graph.kreiseMeshes.Bahn2, this.graph.kreiseMeshes.Bahn3, this.graph.kreiseMeshes.Bahn6, this.graph.kreiseMeshes.Bahn7]
-
-    this.graph.objects.leitlinien.forEach((Bahn) => {
-      if (Bahn instanceof KreiseTorus) {
-        Bahn.materials[0] = new MeshPhongMaterial({ color: 0x000000, transparent: true, opacity: 0 });
-        Bahn.materials[1] = new MeshPhongMaterial({ color: 0xdddddd, shininess: 150 })
-
-        // console.log(Bahn.geometry.groups)
-
-        for (let j: number = 0; j < Bahn.geometry.groups.length; j++) {
-          Bahn.geometry.groups[j].materialIndex = Math.floor(j / 10) % 2
-        }
-      }
-    })
-
-    // Und jetzt alle Linien!
-    for (let i: number = 1; i <= 8; i++) {
-      const BahnName = 'Bahn' + i
-      const Bahn: KreiseTorus = this.graph.kreiseMeshes[BahnName] as KreiseTorus
-      // rotate around Y so its in front and behind the camera
-      Bahn.rotateY(Math.PI / 2)
-
-      // Position
-      Bahn.position.x = -13.5 + (3 * i)
-
-      this.scene.add(this.graph.kreiseMeshes[BahnName])
-    }
-    */
