@@ -1,7 +1,7 @@
 {
   "name": "three.krei.se",
   "private": true,
-  "version": "0.1.1 ·RayCaster·",
+  "version": "0.1.2 ·Streetar·",
   "type": "module",
   "scripts": {
     "dev": "vite",
