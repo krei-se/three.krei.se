@@ -300,7 +300,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
           if (selectedAutos.includes(auto)) {
             radius = 20.5
-            if (ticks > this.lastSound + 100 && auto != this.lastTone) {
+            if ((ticks > this.lastSound + 20 && auto != this.lastTone) || ticks > this.lastSound + 100) {
               let synth: Synth = new Synth().toDestination();
               synth.triggerAttackRelease(toneMap[auto], '8n')
               this.lastTone = auto
