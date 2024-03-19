@@ -12,8 +12,8 @@ export default class KreiseEpisode extends EventDispatcher {
   clock: Clock
   // functions
 
+  load(): void {}
   update (ticks: number): void { console.log(ticks) } // stub to shutup linter
-  makeScene(): void {}
   addControls(): void {}
 
   keydown (e: KeyboardEvent): void { e; return }    // stub this to console.log(event)

@@ -110,7 +110,7 @@ if (EpisodeRand === 'Chemnitz') {
   episode = new ChemnitzEpisode(kreise, new Scene(), kreise.camera)
 }
 
-episode.makeScene()
+episode.load()
 // episode.addControls()
 
 kreise.scene.add(episode.scene)
@@ -122,6 +122,11 @@ kreise.zeit.interval[300].direction = 'ccw'
 kreise.zeit.interval[60].direction = 'ccw'
 
 kreise.updateBrightness()
+
+if (episode instanceof AutobahnEpisode) {
+
+
+}
 
 let lastcron: number = 0
 let cronInterval: number = 60

@@ -7,9 +7,12 @@ import {
   Color, 
   EventDispatcher, 
   GridHelper, 
+  Intersection, 
   Mesh, 
   MeshBasicMaterial, 
   MeshLambertMaterial, 
+  Object3D, 
+  Object3DEventMap, 
   PCFSoftShadowMap, 
   PerspectiveCamera, 
   PlaneGeometry, 
@@ -25,7 +28,7 @@ import {
 import { toggleFullScreen } from '../helpers/fullscreen'
 import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 import KreiseZeit from './KreiseZeit'
-import KreiseGraph from './KreiseGraph'
+import KreiseGraph, { ObjectType, ObjectsRecordType } from './KreiseGraph'
 
 export interface AutoplayOptionsInterface { camera: boolean, animation: boolean }
 export interface DebugOptionsInterface { helperObjects: boolean, helperInterface: boolean }
@@ -47,6 +50,7 @@ export default class Kreise extends EventDispatcher {
 
   graph: KreiseGraph = new KreiseGraph()
   scene: Scene
+  intersects: Intersection<Object3D<Object3DEventMap>>[] = []
   camera: CameraType
 
   autoplay: AutoplayOptionsInterface
@@ -355,6 +359,12 @@ export class KreiseClient {
 
   }
 
+  getDeviceAbilitiesArray() {
+
+
+
+  }
+
   detectAndSetClientDeviceType() {
 
   }
@@ -374,8 +384,20 @@ export class KreiseClient {
 
     // console.log(scene.children)
     let intersects = this.raycaster.intersectObjects(scene.children)
-    if (intersects.length !== 0) console.log(this.pointerPx, intersects)
+    if (intersects.length !== 0) {
 
+      // console.log(this.pointerPx, intersects)
+      intersects.forEach((intersectObject, _) => {
+
+        console.log(intersectObject.object.parent)
+
+        //this.kreise.graph.graphs.selected[intersectObject.object.name] = intersectObject.object
+
+      })
+    }
+    
+    this.kreise.intersects = intersects
+      
   }
 
 

@@ -18,11 +18,11 @@ import {
 } from 'three'
 import { KlavierTorus, KreiseShaderedTorus, KreiseTorus } from './KreiseTorus'
 
-export type GraphsType = KreiseGraph
-export type GraphsRecordType = Record<string, GraphsType>
 
 export type MeshesType = Mesh | InstancedMesh | Group
 export type MeshesRecordType = Record<string, MeshesType>
+
+export type GroupRecordType = Record<string, Group>
 
 export type LightsType = AmbientLight | PointLight | DirectionalLight | HemisphereLight
 export type LightsRecordType = Record<string, LightsType>
@@ -36,15 +36,29 @@ export type CollisionHelpersRecordType = Record<string, CollisionHelpersType>
 export type KreiseMeshesType = KreiseTorus | KreiseShaderedTorus | KlavierTorus
 export type KreiseMeshesRecordType = Record<string, KreiseMeshesType>
 
-
-//  Basic three type
 export type ObjectType = Array<any> | string | GraphsType | LightsType | MeshesType | LightsType | HelpersType | CollisionHelpersType | KreiseMeshesType | Object3D | Fog
 export type ObjectsRecordType = Record<string, ObjectType>
+
+
+
+export type GraphsType = KreiseGraph
+export type GraphsRecordType = Record<string, GraphsType>
+
+export interface GraphsInterface {
+  [key: string]: GraphsType
+  [key: symbol]: GraphsType
+}
 
 export interface ObjectsInterface {
   [key: string]: ObjectType
   [key: symbol]: ObjectType
 }
+
+export interface MethodsInterface {
+  [key: string]: Function
+  [key: symbol]: Function
+}
+
 
 /*
 export type edgeType = KreiseGraph | void
@@ -60,10 +74,16 @@ export default class KreiseGraph {
   // and sensors on any branch of the nerves)
   public lights: LightsRecordType = {}
   public meshes: MeshesRecordType = {}
+  public groups: GroupRecordType = {}
   public kreiseMeshes: KreiseMeshesRecordType = {}
   public helpers: HelpersRecordType = {}
+
   public objects: ObjectsInterface = {}
-  public graphs: GraphsRecordType = {}
+  public methods: MethodsInterface = {}
+  // please limit connected graphs to 5 - 9 (best value 8) to keep any layer
+  // human explainable (Millersche Zahl)
+  public graphs: GraphsInterface = {}
+
   // 15 digits are enough for interplanetary travel
   public repeat: number = 15                      // how often do  we visit this node in a circular reference?
   public visited: number = 0                      // how often did we visit this node in a circular reference?
@@ -91,15 +111,23 @@ export default class KreiseGraph {
           else if (property in target.objects) {
             return target.objects[property]
           }
+          else if (property in target.methods) {
+            return target.methods[property]
+          }
           return undefined
         },
         set(target: KreiseGraph, property, value) { // (, receiver)
           if (property in target) {
+            console.log(typeof property)
             target[property] = value
           }
           else {
-            // add everything else into _objects
-            target.objects[property] = value
+            // add properties into objects
+            if (typeof value === 'function')
+              target.methods[property] = value
+            // add functions into methods
+            else
+              target.objects[property] = value
           }
           return true
         },

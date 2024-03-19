@@ -54,7 +54,7 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
   }
 
-  makeScene (): void { // its stored in this.scene, get it from there
+  load (): void { // its stored in this.scene, get it from there
   // Tori
 
     this.graph.kreiseMeshes.Lulatsch = new KreiseTorus({

@@ -10,6 +10,7 @@
     "host": "vite --host"
   },
   "dependencies": {
+    "ammojs": "^0.0.2",
     "lil-gui": "^0.19.1",
     "resolve-package-path": "^4.0.3",
     "suncalc": "^1.9.0",

@@ -69,7 +69,7 @@ export default class IntroEpisode extends KreiseEpisode {
 
   }
 
-  makeScene (): void { // its stored in this.scene, get it from there
+  load (): void { // its stored in this.scene, get it from there
   // Tori
 
     
