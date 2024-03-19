@@ -16,9 +16,10 @@ Neural networks also loop (attention), but loop through the whole graph until ou
 
 Any tree-structured property (body maps f.e. or whatever directory you add) can be queried infinite times without raising the counter, so you don't have to worry to tire a graph by accident just because you query a property multiple times. ONLY accessing connected graphs raise the counter.
 
-eva()-method is a placeholder, im still building virtual bodies with sensors to train the network on capsulated methods embedding category theory categories. Define any methods you like!
+eva()-method is a placeholder and you can add any function() in .methods. I'm still building virtual bodies with sensors to train the network on capsulated methods embedding category theory categories. Define any methods you like!
 
 ```
+
 export default class KreiseGraph {
 
   // add any typed objects you would like to use,
@@ -27,15 +28,18 @@ export default class KreiseGraph {
   // and sensors on any branch of the nerves)
   public lights: LightsRecordType = {}
   public meshes: MeshesRecordType = {}
+  public groups: GroupRecordType = {}
   public kreiseMeshes: KreiseMeshesRecordType = {}
   public helpers: HelpersRecordType = {}
 
   public objects: ObjectsInterface = {}
   public methods: MethodsInterface = {}
+  // please limit connected graphs to 5 - 9 (best value 8) to keep any layer
+  // human explainable (Millersche Zahl)
   public graphs: GraphsInterface = {}
-  
+
   // 15 digits are enough for interplanetary travel
-  public repeat: number = 15 * 8                  // how often do  we visit this node in a circular reference?
+  public repeat: number = 15                      // how often do  we visit this node in a circular reference?
   public visited: number = 0                      // how often did we visit this node in a circular reference?
 
   // mostly unused, useful for eva(input) and moving the goalpost in the base (start and ending) graph
@@ -68,15 +72,16 @@ export default class KreiseGraph {
         },
         set(target: KreiseGraph, property, value) { // (, receiver)
           if (property in target) {
+            console.log(typeof property)
             target[property] = value
           }
           else {
             // add properties into objects
-            if (typeof property !== 'function')
-              target.objects[property] = value
+            if (typeof value === 'function')
+              target.methods[property] = value
             // add functions into methods
             else
-              target.methods[property] = value
+              target.objects[property] = value
           }
           return true
         },
