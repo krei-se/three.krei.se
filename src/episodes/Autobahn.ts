@@ -5,8 +5,6 @@ import {
   Camera,
   Object3D,
   MeshPhongMaterial,
-  Raycaster,
-  Vector2,
   InstancedMesh,
   DynamicDrawUsage,
   CylinderGeometry,
@@ -14,9 +12,8 @@ import {
   Mesh,
   BackSide,
   Group,
-  ArcCurve,
   EllipseCurve,
-  BufferGeometry
+  Matrix4,
 } from 'three'
 
 import {
@@ -28,9 +25,20 @@ import { KreiseTorus } from '../Kreise/KreiseTorus'
 
 import type Kreise from '../Kreise/Kreise.ts'
 import { Synth } from 'tone'
-import { Tone } from 'tone/build/esm/core/Tone'
 
 interface autoInstancesInterface { identity: string, count: number, material1: any, material2: any, offsetX: number, offsetProgress: number, speed: number }
+
+interface soundPlayStackInterface {
+
+
+
+}
+
+interface autoplayInterface {
+  [key: number]: {
+
+  }
+}
 
 export default class AutobahnEpisode extends KreiseEpisode {
   flyCurveTicks: number
@@ -38,10 +46,11 @@ export default class AutobahnEpisode extends KreiseEpisode {
   flyCurveNormal: Vector3
   colorScheme: string
   autoInstances: Array<autoInstancesInterface>
-  ticks: number // used for onClick
+  ticks: number = 0 // used for onClick
   lastSound: number = 0
   lastTone: number = 0
-  synth: Synth = new Synth().toDestination();
+  synth: Synth = new Synth().toDestination()
+  enableTone: boolean
 
   keydown (e: KeyboardEvent): void { e; return }    // stub this to console.log(event)
   keyup (e: KeyboardEvent): void { e; return }      // stub this to console.log(event)
@@ -58,6 +67,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
     this.flyCurveDirection = new Vector3()
     this.flyCurveNormal = new Vector3()
     this.autoInstances = []
+    this.enableTone = false
 
     // Controls
     this.keydown = (e: KeyboardEvent) => {
@@ -74,10 +84,9 @@ export default class AutobahnEpisode extends KreiseEpisode {
       }
     }
 
-    this.onClick = function(e: MouseEvent) {
-      console.log(e)
+    this.onClick = (e: MouseEvent) => {
 
-
+      this.enableTone = true
 
     }
 
@@ -225,40 +234,68 @@ export default class AutobahnEpisode extends KreiseEpisode {
       identity: 'redXenon',
       radius: 1,
       tube: 0.25,
-      lod: 1,
-      tubularSegments: 32,
-      radialSegments: 8,
+      lod: 12,
+      facing: 'normal',
+      geogrouping: 'horizontal'
+    })
+
+    this.graph.kreiseMeshes.redXenonHD = new KreiseTorus({
+      identity: 'redXenon',
+      radius: 1,
+      tube: 0.25,
+      lod: 48,
       facing: 'normal',
       geogrouping: 'horizontal'
     })
 
     let redXenonKreiseTorus = this.graph.kreiseMeshes.redXenon as KreiseTorus
+    let redXenonKreiseTorusHD = this.graph.kreiseMeshes.redXenonHD as KreiseTorus
 
     redXenonKreiseTorus.materials[1] = new MeshPhongMaterial(rotesRuecklicht)
     redXenonKreiseTorus.materials[0] = new MeshPhongMaterial(xenonFrontlicht)
+    redXenonKreiseTorusHD.materials[1] = new MeshPhongMaterial(rotesRuecklicht)
+    redXenonKreiseTorusHD.materials[0] = new MeshPhongMaterial(xenonFrontlicht)
     
     for (let k: number = 0; k < redXenonKreiseTorus.geometry.groups.length; k++) {
-      redXenonKreiseTorus.geometry.groups[k].materialIndex = Math.floor(k / 4) % 2 // alternate material every four geometry groups (its 8 radial segments)
+      redXenonKreiseTorus.geometry.groups[k].materialIndex = Math.floor(k / (redXenonKreiseTorus.geometry.groups.length / 2)) % 2 // alternate material every four geometry groups (its 8 radial segments)
+    }
+
+    for (let k: number = 0; k < redXenonKreiseTorusHD.geometry.groups.length; k++) {
+      redXenonKreiseTorusHD.geometry.groups[k].materialIndex = Math.floor(k / (redXenonKreiseTorusHD.geometry.groups.length / 2)) % 2 // alternate material every four geometry groups (its 8 radial segments)
     }
 
     this.graph.kreiseMeshes.red2Normal = new KreiseTorus({
       identity: 'red2Normal',
       radius: 1,
       tube: 0.25,
-      lod: 1,
-      tubularSegments: 32,
-      radialSegments: 8,
+      lod: 12,
+      facing: 'normal',
+      geogrouping: 'horizontal'
+    })
+
+    this.graph.kreiseMeshes.red2NormalHD = new KreiseTorus({
+      identity: 'red2Normal',
+      radius: 1,
+      tube: 0.25,
+      lod: 48,
       facing: 'normal',
       geogrouping: 'horizontal'
     })
 
     let red2NormalKreiseTorus = this.graph.kreiseMeshes.red2Normal as KreiseTorus
+    let red2NormalKreiseTorusHD = this.graph.kreiseMeshes.red2NormalHD as KreiseTorus
 
     red2NormalKreiseTorus.materials[1] = new MeshPhongMaterial(rotesRuecklicht2)
     red2NormalKreiseTorus.materials[0] = new MeshPhongMaterial(normalFrontlicht)
+    red2NormalKreiseTorusHD.materials[1] = new MeshPhongMaterial(rotesRuecklicht2)
+    red2NormalKreiseTorusHD.materials[0] = new MeshPhongMaterial(normalFrontlicht)
     
     for (let k: number = 0; k < red2NormalKreiseTorus.geometry.groups.length; k++) {
-      red2NormalKreiseTorus.geometry.groups[k].materialIndex = Math.floor(k / 4) % 2 // alternate material every four geometry groups (its 8 radial segments)
+      red2NormalKreiseTorus.geometry.groups[k].materialIndex = Math.floor(k / (red2NormalKreiseTorus.geometry.groups.length / 2)) % 2 // alternate material every four geometry groups (its 8 radial segments)
+    }
+
+    for (let k: number = 0; k < red2NormalKreiseTorusHD.geometry.groups.length; k++) {
+      red2NormalKreiseTorusHD.geometry.groups[k].materialIndex = Math.floor(k / (red2NormalKreiseTorusHD.geometry.groups.length / 2)) % 2 // alternate material every four geometry groups (its 8 radial segments)
     }
 
 
@@ -322,11 +359,22 @@ export default class AutobahnEpisode extends KreiseEpisode {
         instancedMesh1.name = auto + 'InstancedMesh1'
         instancedMesh1.instanceMatrix.setUsage(DynamicDrawUsage)
         let instancedMesh2 = new InstancedMesh(red2NormalKreiseTorus.geometry, red2NormalKreiseTorus.materials, count)
-        instancedMesh1.name = auto + 'InstancedMesh2'
+        instancedMesh2.name = auto + 'InstancedMesh2'
         instancedMesh2.instanceMatrix.setUsage(DynamicDrawUsage)
 
-        this.groups[auto].add(instancedMesh1)
-        this.groups[auto].add(instancedMesh2)
+        //this.groups[auto].add(instancedMesh1)
+        //this.groups[auto].add(instancedMesh2)
+
+        let instancedMesh1HD = new InstancedMesh(redXenonKreiseTorusHD.geometry, redXenonKreiseTorusHD.materials, count)
+        instancedMesh1HD.name = auto + 'InstancedMesh1HD'
+        instancedMesh1HD.instanceMatrix.setUsage(DynamicDrawUsage)
+        let instancedMesh2HD = new InstancedMesh(red2NormalKreiseTorusHD.geometry, red2NormalKreiseTorusHD.materials, count)
+        instancedMesh2HD.name = auto + 'InstancedMesh2HD'
+        instancedMesh2HD.instanceMatrix.setUsage(DynamicDrawUsage)
+
+        this.groups[auto].add(instancedMesh1HD)
+        this.groups[auto].add(instancedMesh2HD)
+
 
       })
 
@@ -346,6 +394,10 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     
     //this.camera.rotateZ(-Math.PI / 10)
+
+
+    console.log(this.graph)
+
   }
 
   update (ticks: number): void {
@@ -367,9 +419,12 @@ export default class AutobahnEpisode extends KreiseEpisode {
     // catch car lane ray cast intersects
 
     const matrixDummy = new Object3D();
-
+    const emptyMatrix4 = new Object3D();
+    emptyMatrix4.position.set(10000,10000,10000)
+    emptyMatrix4.updateMatrix()
 
     let radius: number = 20
+    let distance: number = 0
 
     let selectedAutos: number[] = []
     let toneMap: { [index: number]: any } = {
@@ -397,17 +452,19 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     this.graph.autos.forEach((auto: number) => {
 
-      let instancedMesh1 = this.graph.groups[auto].children[1] as InstancedMesh
-      let instancedMesh2 = this.graph.groups[auto].children[2] as InstancedMesh
+      //let instancedMesh1 = this.graph.groups[auto].children[1] as InstancedMesh
+      //let instancedMesh2 = this.graph.groups[auto].children[2] as InstancedMesh
+      let instancedMesh1HD = this.graph.groups[auto].children[1] as InstancedMesh
+      let instancedMesh2HD = this.graph.groups[auto].children[2] as InstancedMesh
       
-      for (let i: number = 0 ; i < instancedMesh1.count; i++ ) {
+      for (let i: number = 0 ; i < instancedMesh1HD.count; i++ ) {
         //for (let i: number = 1 ; i <= 10; i++ ) {
 
           if (selectedAutos.includes(auto)) {
+           // console.log(this.enableTone)
             radius = 20.4
-            if ((ticks > this.lastSound + 20 && auto != this.lastTone) || ticks > this.lastSound + 100) {
-              let synth: Synth = new Synth().toDestination();
-              synth.triggerAttackRelease(toneMap[auto], '8n')
+            if (this.enableTone === true && ((ticks > this.lastSound + 50 && auto != this.lastTone) || ticks > this.lastSound + 100)) {
+              this.synth.triggerAttackRelease(toneMap[auto], '8n')
               this.lastTone = auto
             }
             this.lastSound = ticks
@@ -417,9 +474,8 @@ export default class AutobahnEpisode extends KreiseEpisode {
             radius = 20 
           }
 
-
     
-          let progress: number = (i / instancedMesh1.count) // + autoInstance.offsetProgress
+          let progress: number = (i / instancedMesh1HD.count) // + autoInstance.offsetProgress
           matrixDummy.position.set (auto * 3, Math.cos(progress * (Math.PI * 2)) * radius, Math.sin(progress * (Math.PI * 2)) * radius)
           matrixDummy.rotation.x = 0
           matrixDummy.rotateX((Math.PI * 2) * progress)
@@ -429,18 +485,50 @@ export default class AutobahnEpisode extends KreiseEpisode {
           }
 
           matrixDummy.updateMatrix();
+
+
+          distance = this.kreise.camera.position.distanceTo(matrixDummy.position)
+
+          if (distance < 30) {
+
+          //  instancedMesh1.setMatrixAt(i, emptyMatrix4.matrix)
+          //  instancedMesh2.setMatrixAt(i, emptyMatrix4.matrix)
+
+            instancedMesh1HD.setMatrixAt(i, matrixDummy.matrix)
+            instancedMesh2HD.setMatrixAt(i, matrixDummy.matrix)
     
-          instancedMesh1.setMatrixAt(i, matrixDummy.matrix)
-          instancedMesh2.setMatrixAt(i, matrixDummy.matrix)
+          }
+
+          else {
+
+          //  instancedMesh1.setMatrixAt(i, matrixDummy.matrix)
+          //  instancedMesh2.setMatrixAt(i, matrixDummy.matrix)
+
+          instancedMesh1HD.setMatrixAt(i, matrixDummy.matrix)
+          instancedMesh2HD.setMatrixAt(i, matrixDummy.matrix)
+  
+
+  //          instancedMesh1HD.setMatrixAt(i, emptyMatrix4.matrix)
+    //        instancedMesh2HD.setMatrixAt(i, emptyMatrix4.matrix)
+
+          }
+
     
         }
+
+
+        //instancedMesh1.rotation.x = ticks * (3 / auto) * 0.00008
+        //instancedMesh2.rotation.x = ticks * (3 / auto) * 0.00008 + (Math.PI / (12 * auto))
+        instancedMesh1HD.rotation.x = ticks * (3 / auto) * 0.00008
+        instancedMesh2HD.rotation.x = ticks * (3 / auto) * 0.00008 + (Math.PI / (12 * auto))
     
-        instancedMesh1.rotation.x = ticks * (3 / auto) * 0.00008
-        instancedMesh2.rotation.x = ticks * (3 / auto) * 0.00008 + (Math.PI / (12 * auto))
+
+        instancedMesh1HD.instanceMatrix.needsUpdate = true;
+        instancedMesh2HD.instanceMatrix.needsUpdate = true;
+        //instancedMesh1.instanceMatrix.needsUpdate = true;
+        //instancedMesh2.instanceMatrix.needsUpdate = true;
     
-        // only needed if we change the color
-        instancedMesh1.instanceMatrix.needsUpdate = true;
-        instancedMesh2.instanceMatrix.needsUpdate = true;
+
 
     })
 

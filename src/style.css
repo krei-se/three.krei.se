@@ -23,7 +23,6 @@
 
   --page-background: #FFFFFF;
 
-  color-scheme: light dark; /* light dark */
   color: rgba(0, 0,0 , 0.87);
   background-color: var(--page-background);
 
@@ -70,21 +69,6 @@ button:focus-visible {
 }
 
 */
-
-/* Light mode */
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: var(--page-background);
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
 
 body {
   margin: 0;

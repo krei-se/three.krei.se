@@ -6,7 +6,9 @@ import {
   MeshPhongMaterial,
   PointLight,
   PointLightHelper,
-  MeshStandardMaterial
+  MeshStandardMaterial,
+  TorusGeometry,
+  CircleGeometry
 } from 'three'
 
 import { KreiseTorus } from '../Kreise/KreiseTorus'
@@ -75,7 +77,7 @@ export default class ChemnitzEpisode extends KreiseEpisode {
     const verkehrsgelb = 0xF0C900
     const topgold = 0xEEE8AA
     // const black = 0x000000
-
+    
     const Lulatsch = this.graph.kreiseMeshes.Lulatsch as KreiseTorus
 
     let transparency: boolean
