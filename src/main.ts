@@ -25,6 +25,7 @@ import IntroEpisode from './episodes/Intro.ts'
 import AutobahnEpisode from './episodes/Autobahn.ts'
 import ChemnitzEpisode from './episodes/Chemnitz.ts'
 import KreiseGraph from './Kreise/KreiseGraph.ts'
+import JewelEpisode from './episodes/Jewel.ts'
 
 //
 // End of imports
@@ -92,7 +93,7 @@ let ticks: number = 0
 
 let episodes: any[] = ['Intro', 'Autobahn', 'Chemnitz']
 
-if (kreise.client.developerMode) episodes = ['Autobahn']
+if (kreise.client.developerMode) episodes = ['Jewel']
 
 const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Math.random is inclusively 0 but never 1
 
@@ -108,6 +109,9 @@ if (EpisodeRand === 'Autobahn') {
 }
 if (EpisodeRand === 'Chemnitz') {
   episode = new ChemnitzEpisode(kreise, new Scene(), kreise.camera)
+}
+if (EpisodeRand === 'Jewel') {
+  episode = new JewelEpisode(kreise, new Scene(), kreise.camera)
 }
 
 episode.load()
@@ -174,6 +178,12 @@ kreise.renderer.setAnimationLoop(function () {
       ticks = ticks - (60000 * 4)
     episode.update(ticks)
   }
+
+  // EPISODE 3: JEWEL
+  if (episode instanceof JewelEpisode) {
+    episode.update(ticks)
+  }
+
 
   if (!kreise.autoplay.camera) {
     cameraControls.update(timeDelta)

@@ -24,6 +24,7 @@ import { KreiseTorus } from '../Kreise/KreiseTorus'
 
 import type Kreise from '../Kreise/Kreise.ts'
 import KreiseGraph from '../Kreise/KreiseGraph.ts'
+import KreiseRing from '../Kreise/KreiseRing.ts'
 
 export default class JewelEpisode extends KreiseEpisode {
 
@@ -60,6 +61,12 @@ export default class JewelEpisode extends KreiseEpisode {
   load (): void { // its stored in this.scene, get it from there
   
     this.jewel.repeat = 16 * 9
+
+    this.graph.CircleTest1 = new KreiseRing({ thickness: 0, thetaSegments: 360 })
+
+    this.scene.add(this.graph.CircleTest1)
+
+    console.log(this.scene)
     
   }
 

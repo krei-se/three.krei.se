@@ -5,7 +5,14 @@ import {
   Group,
   DoubleSide,
   FrontSide,
-  BackSide
+  BackSide,
+  Float32BufferAttribute,
+  Material,
+  MeshPhongMaterial,
+  Mesh,
+  Line,
+  Vector2,
+  LineBasicMaterial
 } from 'three'
 
 // import turboTextureImage from './textures/turbo.png'
@@ -39,6 +46,7 @@ export interface KreiseRingParameters {
   geometryOrder?: 'theta' | 'phi'
   geogroupsCount?: number
 
+  material?: Material
   color?: Color
 
 }
@@ -69,7 +77,8 @@ export const defaultKreiseRingParameters: KreiseRingParameters = {
   geometryOrder: 'phi',
   geogroupsCount: 0,
 
-  color: new Color('white'),
+  material: new MeshPhongMaterial(),
+  color: new Color('white')
 
 }
 
@@ -78,6 +87,7 @@ export default class KreiseRing extends Group {
   private parameters: KreiseRingParameters
   
   name: string
+  material: Material
 
   geometryBB: BufferGeometry
   geometryDP: BufferGeometry
@@ -86,6 +96,11 @@ export default class KreiseRing extends Group {
     super()
 
     this.parameters = { ...defaultKreiseRingParameters, ...parameters }
+
+    // Error handling
+    if (this.parameters.thetaSegments! < 3) new Error("Theta Segments need to be at least 3")
+
+
     
     this.name = this.parameters.name!
     
@@ -95,6 +110,12 @@ export default class KreiseRing extends Group {
     // use the display LOD for the display geometry
     this.geometryDP = new KreiseRingGeometry({...this.parameters, lod: this.parameters.lodDisplay})
   
+    this.material = this.parameters.material!
+
+    this.material = new LineBasicMaterial({color: 'black'})
+
+    this.add(new Line(this.geometryBB, this.material))
+
   }
 
 }
@@ -103,13 +124,13 @@ export class KreiseRingGeometry extends BufferGeometry {
   
   type: string
   parameters: KreiseRingParameters
-  tubularSegmentIndices: any
 
-  indices: any
-  vertices: any
-  normals: any
-  uvs: any
-  verticesIndex: any
+  // buffers
+
+  indices: number[] = []
+  vertices: number[] = []
+  normals: number[] = []
+  uvs: number[] = []
 
   constructor (parameters: KreiseRingParameters = {}) {
     
@@ -129,9 +150,56 @@ export class KreiseRingGeometry extends BufferGeometry {
     const centerForRadial = new Vector3()
     const vertex = new Vector3()
     const normal = new Vector3() // always the vertex rotated by skew
+    const uv = new Vector2()
+
+    const {radius = 1, thickness = 0, extend = 0, thetaSegments = 16, thetaLength = Math.PI*2, thetaStart = Math.PI/2} = this.parameters
 
     // :)
 
+    // draw a circle
+    if (thickness === 0) {
+      
+      for (let s = 0; s < thetaSegments!; s++) {
+
+          const segment: number = thetaStart! + s / thetaSegments * thetaLength
+
+          vertex.x = radius * Math.cos(segment)
+          vertex.y = radius * Math.sin(segment)
+          vertex.z = 0
+
+          console.log(s, vertex)
+
+          this.vertices.push(vertex.x, vertex.y, vertex.z)
+          this.normals.push(0, 0, 1)
+
+          uv.x = ( this.vertices[ (s+1) * 3 ] / radius + 1 ) / 2;
+          uv.y = ( this.vertices[ (s + 2) * 3 ] / radius + 1 ) / 2;
+    
+          this.uvs.push( uv.x, uv.y );
+
+          this.indices.push(s, (s+1) % thetaSegments)
+
+      }
+
+      this.indices.push(thetaSegments-1, 0)
+
+      this.setIndex(this.indices)
+
+      console.log(this.vertices)
+
+      this.setAttribute('position', new Float32BufferAttribute(this.vertices, 3))
+      //this.setAttribute('normal', new Float32BufferAttribute(this.normals, 3))
+      //this.setAttribute('uv', new Float32BufferAttribute(this.uvs, 2))
+
+
+
+    }
+
+    else {
+
+
+
+    }
 
   }
 
