@@ -60,11 +60,23 @@ export default class JewelEpisode extends KreiseEpisode {
 
   load (): void { // its stored in this.scene, get it from there
   
+    this.kreise.camera.fov = 90
+    this.kreise.camera.position.set(-10,0,0)
+    this.kreise.camera.lookAt(0,0,0)
+
     this.jewel.repeat = 16 * 9
 
+    /*
     this.graph.CircleTest1 = new KreiseRing({ thickness: 0, thetaSegments: 360 })
+    this.graph.CircleTest1.position.z = -5
 
     this.scene.add(this.graph.CircleTest1)
+    */
+
+    this.graph.CircleTest2 = new KreiseRing({ radius: 5, thickness: 2, phiSegments: 6, thetaSegments: 360, thetaLength: 2 })
+    this.graph.CircleTest2.rotateY(-Math.PI/2)
+
+    this.scene.add(this.graph.CircleTest2)
 
     console.log(this.scene)
     

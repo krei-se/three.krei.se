@@ -6,9 +6,7 @@ import {
   MeshPhongMaterial,
   PointLight,
   PointLightHelper,
-  MeshStandardMaterial,
-  TorusGeometry,
-  CircleGeometry
+  MeshStandardMaterial
 } from 'three'
 
 import { KreiseTorus } from '../Kreise/KreiseTorus'

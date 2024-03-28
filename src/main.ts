@@ -1,9 +1,6 @@
 import './style.css'
 
-import {
-  Clock,
-  Scene
-} from 'three'
+import { Clock, Scene } from 'three'
 
 // GLOBALS
 import Kreise from './Kreise/Kreise.ts'
@@ -15,7 +12,12 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 
 import { resizeRendererToDisplaySize } from './helpers/responsiveness'
 
-import { getPageOverlayDiv, fadeoutDatenschutzAndInfoParagraphs, getVersionDiv, getSocialDiv } from './htmlincludes.ts'
+import {
+  getPageOverlayDiv,
+  fadeoutDatenschutzAndInfoParagraphs,
+  getVersionDiv,
+  getSocialDiv
+} from './htmlincludes.ts'
 // import * as Tone from 'tone'
 
 // Episodes
@@ -36,7 +38,8 @@ document.title = 'Krei·se'
 
 const kreise = new Kreise() // sets up main scene, camera, globals like brightness and client device
 
-const removeMeDiv: HTMLDivElement = document.querySelector('#removeMe') ?? document.createElement('div')
+const removeMeDiv: HTMLDivElement =
+  document.querySelector('#removeMe') ?? document.createElement('div')
 document.body.removeChild(removeMeDiv)
 document.body.append(getPageOverlayDiv())
 document.body.append(getVersionDiv())
@@ -44,8 +47,7 @@ document.body.append(getSocialDiv())
 
 setTimeout(fadeoutDatenschutzAndInfoParagraphs, 5000)
 
-let testGraph = new KreiseGraph()
-
+const testGraph = new KreiseGraph()
 
 testGraph.graphs.subGraph = new KreiseGraph()
 
@@ -77,10 +79,12 @@ if (kreise.client.developerMode) {
 
 kreise.makeMainScene()
 
-
 // ===== 🕹️ CONTROLS =====
 
-const cameraControls: FlyControls = new FlyControls(kreise.camera, kreise.canvas)
+const cameraControls: FlyControls = new FlyControls(
+  kreise.camera,
+  kreise.canvas
+)
 cameraControls.dragToLook = true
 cameraControls.movementSpeed = 5
 cameraControls.autoForward = false
@@ -99,7 +103,11 @@ const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Mat
 
 console.log(EpisodeRand)
 
-let episode: KreiseEpisode = new KreiseEpisode(kreise, new Scene(), kreise.camera)
+let episode: KreiseEpisode = new KreiseEpisode(
+  kreise,
+  new Scene(),
+  kreise.camera
+)
 kreise.brightness = 0
 if (EpisodeRand === 'Intro') {
   episode = new IntroEpisode(kreise, new Scene(), kreise.camera)
@@ -128,8 +136,6 @@ kreise.zeit.interval[60].direction = 'ccw'
 kreise.updateBrightness()
 
 if (episode instanceof AutobahnEpisode) {
-
-
 }
 
 let lastcron: number = 0
@@ -141,19 +147,19 @@ kreise.renderer.setAnimationLoop(function () {
   const timeDelta = clock.getDelta()
 
   // remember that ticks is a float
-  ticks += (timeDelta * 1000)
+  ticks += timeDelta * 1000
 
-  // Crons  
-  
-  if (ticks > (lastcron + (cronInterval * 1000))) {  // every 60 seconds, update brightness
+  // Crons
+
+  if (ticks > lastcron + cronInterval * 1000) {
+    // every 60 seconds, update brightness
 
     kreise.updateBrightness()
     console.log(ticks)
     console.log(lastcron)
-    
+
     console.log(kreise.brightness)
     lastcron = ticks
-  
   }
 
   // 10 fps raycaster updates
@@ -174,8 +180,9 @@ kreise.renderer.setAnimationLoop(function () {
 
   // EPISODE 2: CHEMNITZ
   if (episode instanceof ChemnitzEpisode) {
-    if (ticks > 60000 * 4) // 4 minutes = 360 Episoden / Songs
-      ticks = ticks - (60000 * 4)
+    if (ticks > 60000 * 4)
+      // 4 minutes = 360 Episoden / Songs
+      ticks = ticks - 60000 * 4
     episode.update(ticks)
   }
 
@@ -183,7 +190,6 @@ kreise.renderer.setAnimationLoop(function () {
   if (episode instanceof JewelEpisode) {
     episode.update(ticks)
   }
-
 
   if (!kreise.autoplay.camera) {
     cameraControls.update(timeDelta)
@@ -198,15 +204,15 @@ kreise.renderer.setAnimationLoop(function () {
   }
 
   if (resizeRendererToDisplaySize(kreise.renderer)) {
-
     kreise.updateCamera()
 
-    kreise.composer.setSize(kreise.canvas.clientWidth, kreise.canvas.clientHeight)
+    kreise.composer.setSize(
+      kreise.canvas.clientWidth,
+      kreise.canvas.clientHeight
+    )
 
     if (kreise.brightness === 0) {
       //kreise.composer.passes[1] = new UnrealBloomPass(new Vector2(kreise.canvas.clientWidth / 2, kreise.canvas.clientHeight / 2), 0.3, 0.05, 0)
     }
   }
-  
-
 })
