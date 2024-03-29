@@ -6,7 +6,8 @@ import {
   MeshPhongMaterial,
   PointLight,
   PointLightHelper,
-  MeshStandardMaterial
+  MeshStandardMaterial,
+  TorusGeometry
 } from 'three'
 
 import { KreiseTorus } from '../Kreise/KreiseTorus'
@@ -35,6 +36,8 @@ export default class ChemnitzEpisode extends KreiseEpisode {
           break
       }
     }
+
+    let bla = new TorusGeometry
 
     const _keydown = this.keydown.bind(this)
     const _keyup = this.keyup.bind(this)

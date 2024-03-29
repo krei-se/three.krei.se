@@ -61,24 +61,38 @@ export default class JewelEpisode extends KreiseEpisode {
   load (): void { // its stored in this.scene, get it from there
   
     this.kreise.camera.fov = 90
-    this.kreise.camera.position.set(-10,0,0)
+    this.kreise.camera.position.set(-7,0,0)
     this.kreise.camera.lookAt(0,0,0)
 
     this.jewel.repeat = 16 * 9
 
-    /*
-    this.graph.CircleTest1 = new KreiseRing({ thickness: 0, thetaSegments: 360 })
-    this.graph.CircleTest1.position.z = -5
+
+    this.graph.CircleTest1 = new KreiseRing({ thickness: 0.4, thetaSegments: 36, lodDisplay: 4, thetaLength: 2.33 })
+    this.graph.CircleTest1.position.z = -3
+    this.graph.CircleTest1.rotateY(-Math.PI/2)
 
     this.scene.add(this.graph.CircleTest1)
-    */
-
-    this.graph.CircleTest2 = new KreiseRing({ radius: 5, thickness: 2, phiSegments: 6, thetaSegments: 360, thetaLength: 2 })
+    
+    this.graph.CircleTest2 = new KreiseRing({ radius: 1, thickness: 0, phiSegments: 2, thetaSegments: 12, lodDisplay: 1, thetaLength: Math.PI * 1.87 })
+    this.graph.CircleTest2.position.z = 0
     this.graph.CircleTest2.rotateY(-Math.PI/2)
 
     this.scene.add(this.graph.CircleTest2)
 
-    console.log(this.scene)
+    this.graph.CircleTest3 = new KreiseRing({ radius: 1, thickness: 0, phiSegments: 2, thetaSegments: 12, lodDisplay: 1, thetaLength: Math.PI * 2 })
+    this.graph.CircleTest3.position.z = 3
+    this.graph.CircleTest3.rotateY(-Math.PI/2)
+
+    this.scene.add(this.graph.CircleTest3)
+
+
+    this.graph.CircleTest0 = new KreiseRing({ thickness: .2, thetaSegments: 12, phiSegments: 3, lodDisplay: 1})
+    this.graph.CircleTest0.position.z = -3
+    this.graph.CircleTest0.position.y = 3
+    this.graph.CircleTest0.rotateY(-Math.PI/2)
+
+    this.scene.add(this.graph.CircleTest0)
+
     
   }
 

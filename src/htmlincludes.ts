@@ -101,13 +101,11 @@ export function fadeoutDatenschutzAndInfoParagraphs (): void {
 
   applyFadeOutElements.forEach((element: HTMLElement) => {
 
-    console.log(element)
-    
     element.style.transition = 'opacity 60s'
     element.style.opacity = '0'
     
-    window.setTimeout((element: HTMLElement) => {
-      document.removeChild(element)
+    window.setTimeout(() => {
+      document.querySelectorAll('.applyFadeOut').forEach(e => e.remove())
     }, 10000)
 
   })
