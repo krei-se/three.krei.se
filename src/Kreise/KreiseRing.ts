@@ -126,10 +126,11 @@ export default class KreiseRing extends Group {
  
     } else {
 
-      this.material = new MeshLambertMaterial({color: this.parameters.color!, wireframe: true})
+      this.material = new MeshLambertMaterial({color: this.parameters.color!, wireframe: false})
+      let debugMaterial = new MeshLambertMaterial({color: this.parameters.color!, wireframe: true})
 
-      this.add(new Mesh(this.geometryBB, this.material))
-      //this.add(new Mesh(this.geometryDP, this.material))
+      this.add(new Mesh(this.geometryBB, debugMaterial))
+      this.add(new Mesh(this.geometryDP, this.material))
 
     }
 
@@ -177,12 +178,12 @@ export class KreiseRingGeometry extends BufferGeometry {
 
     // round segments to int
     thetaSegments = Math.floor(thetaSegments) * Math.floor(lod)
-    console.log('thetaSegmentsRounded', thetaSegments) 
+    // console.log('thetaSegmentsRounded', thetaSegments) 
     phiSegments = Math.floor(phiSegments) * Math.floor(lod)
 
     // cut theta segments down to thetaLength
     let thetaSegmentsDisplay = thetaSegments * (thetaLength / (Math.PI*2))
-    console.log('thetaSegmentsDisplay', thetaSegmentsDisplay)
+    // console.log('thetaSegmentsDisplay', thetaSegmentsDisplay)
 
     // :)
     let segmentRad: number = 0
@@ -211,15 +212,12 @@ export class KreiseRingGeometry extends BufferGeometry {
 
       }
 
-      console.log(this.vertices.length/3, this.vertices)
-      console.log(this.indices)
-
       // close loop on full circle
       if (thetaLength == Math.PI*2) this.indices.push(thetaSegments-1, 0);
 
       this.setIndex(this.indices)
 
-      console.log(this.vertices)
+      //console.log(this.vertices)
 
       this.setAttribute('position', new Float32BufferAttribute(this.vertices, 3))
       //this.setAttribute('normal', new Float32BufferAttribute(this.normals, 3))
@@ -281,15 +279,14 @@ export class KreiseRingGeometry extends BufferGeometry {
           nextOuterIndex  = ((t+1)  * (phiSegments+1)) + (p+1)
 
           console.log(t + "/" + thetaSegmentsDisplay, p + "/" + phiSegments, this.vertices.length / 3, vertex)
-          console.log(prevInnerIndex, prevOuterIndex, innerIndex, outerIndex, nextInnerIndex, nextOuterIndex)
+          //console.log(prevInnerIndex, prevOuterIndex, innerIndex, outerIndex, nextInnerIndex, nextOuterIndex)
 
           if (p < phiSegments) {
 
-            // connect to next segment if there will be one
             if (t < thetaSegmentsDisplay) {
-            
+
+              // connect to next segment if there will be one
               if (t < thetaSegmentsDisplay-1) {
-              console.log('fired')
               this.indices.push(innerIndex, outerIndex, nextInnerIndex)
               }
               // connect previous segment if there is one
@@ -313,8 +310,6 @@ export class KreiseRingGeometry extends BufferGeometry {
 
       }
 
-      console.log (this.vertices.length/3, this.vertices)
-      console.log (this.indices)
       this.setIndex (this.indices)
       this.setAttribute('position', new Float32BufferAttribute(this.vertices, 3))
       this.setAttribute('normal', new Float32BufferAttribute(this.normals, 3))

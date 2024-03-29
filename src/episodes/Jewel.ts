@@ -67,6 +67,14 @@ export default class JewelEpisode extends KreiseEpisode {
     this.jewel.repeat = 16 * 9
 
 
+    this.graph.CircleTest0 = new KreiseRing({ thickness: .2, thetaSegments: 12, phiSegments: 3, lodDisplay: 3})
+    this.graph.CircleTest0.position.z = -3
+    this.graph.CircleTest0.position.y = 3
+    this.graph.CircleTest0.rotateY(-Math.PI/2)
+
+    this.scene.add(this.graph.CircleTest0)
+
+
     this.graph.CircleTest1 = new KreiseRing({ thickness: 0.4, thetaSegments: 36, lodDisplay: 4, thetaLength: 2.33 })
     this.graph.CircleTest1.position.z = -3
     this.graph.CircleTest1.rotateY(-Math.PI/2)
@@ -85,13 +93,14 @@ export default class JewelEpisode extends KreiseEpisode {
 
     this.scene.add(this.graph.CircleTest3)
 
+    this.graph.CircleTest4 = new KreiseRing({ radius: 1, thickness: 2, phiSegments: 2, thetaSegments: 12, lodDisplay: 3, thetaLength: Math.PI * 2 })
+    this.graph.CircleTest4.position.z = 3
+    this.graph.CircleTest4.position.y = 3
 
-    this.graph.CircleTest0 = new KreiseRing({ thickness: .2, thetaSegments: 12, phiSegments: 3, lodDisplay: 1})
-    this.graph.CircleTest0.position.z = -3
-    this.graph.CircleTest0.position.y = 3
-    this.graph.CircleTest0.rotateY(-Math.PI/2)
+    this.graph.CircleTest4.rotateY(-Math.PI/2)
 
-    this.scene.add(this.graph.CircleTest0)
+    this.scene.add(this.graph.CircleTest4)
+
 
     
   }

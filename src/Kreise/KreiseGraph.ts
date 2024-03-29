@@ -118,7 +118,6 @@ export default class KreiseGraph {
         },
         set(target: KreiseGraph, property, value) { // (, receiver)
           if (property in target) {
-            console.log(typeof property)
             target[property] = value
           }
           else {
