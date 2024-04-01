@@ -12,7 +12,7 @@ Take a look at the brain structure of a german language speaker vs. arabic:
 
 That's because in arabic you have to "fill in" words in sentences usually only made from nouns (i think) and use the speech center in unison with the spatial processing to make sense of what others say / write.
 
-!! Warning: Using the Krei.se Choord-System in your brain WILL have you lose/alter some aspects of social life! !!
+!! Warning: Using the Krei.se Choord-System in your brain WILL have you lose/alter some aspects of social life and language processing! !!
 
 The normal coordinate system used in schools will have you use the right hemisphere for spatial processing / to construct shapes in the plus range of X and Y.
 
