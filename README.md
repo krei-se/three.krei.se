@@ -27,7 +27,7 @@ Krei.se uses a different representation internally that takes into account your 
 
 ![X directed Coordinates](https://krei.se/img/gitReadme/XDirected.png)
 
-X is in front of the viewer, -X behind. This is especially useful to have functions that map X on time be "in front" of you. If you think hard about it, you already think of time in a way that has before on the left and future on the right - but this is not really useful. The past is "behind" you and the future is "ahead".
+X is in front of the viewer, -X behind. This is especially useful for functions that map X on time be "in front" of you. If you think hard about it, you already think of time in a way that has before on the left and future on the right - but this is not really useful. The past is "behind" you and the future is "ahead".
 
 Y is up, -Y is down. (this is actually the only axis every convention agrees on)
 
@@ -35,7 +35,7 @@ Z is plus on the left side and minus on the right side. (this is due to most peo
 
 ![Klimadiagramm Chemnitz](https://krei.se/img/gitReadme/Klimadiagramm.png)
 
-Any time you come across a shape that maps time from left to right you should rotate the information 90 degrees to back and front.
+Any time you come across a shape that maps time from left to right or up and down you should rotate the information 90 degrees to back and front.
 
 This way any X and Y graph you visualize internally will use both hemispheres and stop you from going skewed, insane and f*ck up your eyes until you need glasses.
 
