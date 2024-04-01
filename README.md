@@ -14,6 +14,11 @@ The normal coordinate system used in schools will have you use the right hemisph
 
 ![Wrong directed Coordinates](https://krei.se/img/gitReadme/WrongDirected.png)
 
+While anatomy uses a way saner approach:
+
+![Anatomy Terms](https://krei.se/img/gitReadme/anatomyTerms.jpg)
+
+
 Krei.se uses a different representation internally that takes into account your (german / anglistic) brain structure and enforces use of both hemispheres for ambidextruity and better inner-ear balance:
 
 ![X directed Coordinates](https://krei.se/img/gitReadme/XDirected.png)
