@@ -264,9 +264,10 @@ export class KreiseRingGeometry extends BufferGeometry {
           vertex.z = 0
 
           // skip vertex creation on last segment for full circles
-          if (t < thetaSegments || thetaLength != Math.PI*2) {
+          if (t < Math.ceil(thetaSegmentsDisplay) || thetaLength != Math.PI*2) {
             this.vertices.push(vertex.x, vertex.y, vertex.z)
             this.normals.push (0,0,1)
+            console.log('vertex pushed')
           }
 
           prevInnerIndex  = ((t-1)  * (phiSegments+1)) + p
@@ -283,10 +284,10 @@ export class KreiseRingGeometry extends BufferGeometry {
 
           if (p < phiSegments) {
 
-            if (t < thetaSegmentsDisplay) {
+            if (t < Math.ceil(thetaSegmentsDisplay)) {
 
               // connect to next segment if there will be one
-              if (t < thetaSegmentsDisplay-1) {
+              if (t < (Math.ceil(thetaSegmentsDisplay)-1)) {
               this.indices.push(innerIndex, outerIndex, nextInnerIndex)
               }
               // connect previous segment if there is one

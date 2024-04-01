@@ -155,10 +155,12 @@ kreise.renderer.setAnimationLoop(function () {
     // every 60 seconds, update brightness
 
     kreise.updateBrightness()
+    /*
     console.log(ticks)
     console.log(lastcron)
 
     console.log(kreise.brightness)
+    */
     lastcron = ticks
   }
 
@@ -196,7 +198,7 @@ kreise.renderer.setAnimationLoop(function () {
   }
 
   kreise.composer.render()
-  //kreise.renderer.render(kreise.scene, kreise.camera)
+  // kreise.renderer.render(kreise.scene, kreise.camera)
 
   if (kreise.client.developerMode) {
     stats.update()

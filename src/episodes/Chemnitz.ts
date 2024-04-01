@@ -39,6 +39,7 @@ export default class ChemnitzEpisode extends KreiseEpisode {
 
     let bla = new TorusGeometry
 
+
     const _keydown = this.keydown.bind(this)
     const _keyup = this.keyup.bind(this)
     const _onPointerMove = this.onPointerMove.bind(this)

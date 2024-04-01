@@ -2,7 +2,7 @@
 
 import { defineConfig } from 'vite';
 import packageJson from './package.json'
-
+import eslint from 'vite-plugin-eslint'
 
 export default defineConfig((configEnv) => {
   return {
@@ -10,6 +10,7 @@ export default defineConfig((configEnv) => {
         outDir: '/mnt/cloud/a1/www/krei.se/',
         emptyOutDir: true
     },
+    // plugins: [eslint()],
     resolve: {
       alias: {
         src: "/src",
