@@ -24,7 +24,12 @@ Y is up, -Y is down. (this is actually the only axis every convention agrees on)
 
 Z is plus on the left side and minus on the right side. (this is due to most people being right-handed which will be fixed by this)
 
-This way any X and Y graph you visualize internally will use both hemispheres and stop you from going skewed.
+![Klimadiagramm Chemnitz](https://krei.se/img/gitReadme/Klimadiagramm.png)
+
+Any time you come across a shape that maps time from left to right you should rotate the information 90 degrees to back and front.
+
+This way any X and Y graph you visualize internally will use both hemispheres and stop you from going skewed, insane and f*ck up your eyes until you need glasses.
+
 As a plus you have 8 different 3D quadrants to construct shapes in your head while with a normal orientation there is only 1 spatial construction possible (usually you construct a bit over and right of your right eye).
 
 (WIP)
