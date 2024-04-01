@@ -2,21 +2,25 @@
 
 This is the base krei.se n' Gin written in TS with (mainly) use of threejs
 
-## KreiseKoord / Konventionen
+## KreiseChoord / Konventionen
 
 Doing 3D graphics while studying medicine / neuroscience / anatomy will make your head spin if you don't use some coordinate system that actually represents your body and brain. Left hand / right hand coordinate systems are all over the place in 3D engines / hardware and i simply export to those formats while preserving my sanity.
 
 Take a look at the brain structure of a german language speaker vs. arabic:
 
-![Language Brain Networks](http://krei.se/img/gitReadme/Grafik_Muttersprachen_Hirn_MPI_dt.webp)
+![Language Brain Networks](https://krei.se/img/gitReadme/Grafik_Muttersprachen_Hirn_MPI_dt.webp)
 
-The normal coordinate system used in schools will have you use mostly the right hemisphere of your visual center to construct mostly in the plus range of X and Y.
+The normal coordinate system used in schools will have you use the right hemisphere for spatial processing / to construct shapes in the plus range of X and Y.
 
-Krei.se uses a different representation internally that takes into account your brain structure:
+![Wrong directed Coordinates](https://krei.se/img/gitReadme/WrongDirected.png)
 
-X is in front of the viewer, -X behind.
-Y is up, -Y is down.
-Z is plus on the left side and minus on the right side.
+Krei.se uses a different representation internally that takes into account your (german / anglistic) brain structure and enforces use of both hemispheres for ambidextruity and better inner-ear balance:
+
+![X directed Coordinates](https://krei.se/img/gitReadme/XDirected.png)
+
+X is in front of the viewer, -X behind. This is especially useful to have function that map on time be "in front" of you.
+Y is up, -Y is down. (this is actually the only axis every convention agrees on)
+Z is plus on the left side and minus on the right side. (this is due to most people being right-handed which will be fixed by this)
 
 This way any X and Y graph you visualize internally will use both hemispheres and stop you from going skewed.
 
