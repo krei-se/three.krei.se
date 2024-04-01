@@ -25,6 +25,7 @@ Y is up, -Y is down. (this is actually the only axis every convention agrees on)
 Z is plus on the left side and minus on the right side. (this is due to most people being right-handed which will be fixed by this)
 
 This way any X and Y graph you visualize internally will use both hemispheres and stop you from going skewed.
+As a plus you have 8 different 3D quadrants to construct shapes in your head while with a normal orientation there is only 1 spatial construction possible (usually you construct a bit over and right of your right eye).
 
 (WIP)
 
