@@ -10,7 +10,7 @@ Take a look at the brain structure of a german language speaker vs. arabic:
 
 ![Language Brain Networks](https://krei.se/img/gitReadme/Grafik_Muttersprachen_Hirn_MPI_dt.webp)
 
-That's because in arabic you have to "fill in" words in sentences usually only made from nouns (i think) and use the speech center in unison with the spatial processing to make sense of what others say / write.
+That's because in arabic you have to "fill in the gaps" between words in sentences usually only made from nouns (i think) and use the speech center in unison with the spatial processing to make sense of what others say / write. Some languages write from right to left, some from left to right. Which one is correct? None or both actually... this is asking the wrong questions. 
 
 !! Warning: Using the Krei.se Choord-System in your brain WILL have you lose/alter some aspects of social life and language processing! !!
 
