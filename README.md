@@ -41,6 +41,10 @@ This way any X and Y graph you visualize internally will use both hemispheres an
 
 As a plus you have 8 different 3D quadrants to construct shapes in your head while keeping all 4 extremeties in sync with past and future. With a normal orientation there is only 1 spatial construction possible (usually you construct a bit over and right of your right eye).
 
+![Tesseract](https://en.wikipedia.org/wiki/Tesseract#/media/File:8-cell-orig.gif)
+
+Can't imagine the 8-cell? Now you can!
+
 (WIP)
 
 ## KreiseGraph structure
