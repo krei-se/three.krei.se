@@ -3,9 +3,6 @@ import {
   Color,
   Vector3,
   Group,
-  DoubleSide,
-  FrontSide,
-  BackSide,
   Float32BufferAttribute,
   Material,
   MeshPhongMaterial,
@@ -13,8 +10,13 @@ import {
   Line,
   Vector2,
   LineBasicMaterial,
-  MeshBasicMaterial,
   MeshLambertMaterial
+} from 'three'
+
+import type {
+  DoubleSide,
+  FrontSide,
+  BackSide
 } from 'three'
 
 // import turboTextureImage from './textures/turbo.png'
@@ -23,15 +25,14 @@ export type KreiseRingSideType = typeof FrontSide | typeof BackSide | typeof Dou
 export type KreiseRingExtendType = -1 | 0 | 1
 
 export interface KreiseRingParameters {
-  name?: string,
-  
+  name?: string
   // this is always the radius without any thickness. We need the radius be like that so a skewed ring has expected radia
-  radius?: number,
+  radius?: number
 
-  thickness?: number,
-  extend?: -1 | 0 | 1,       // in, center or out extension by thickness to radius
+  thickness?: number
+  extend?: -1 | 0 | 1       // in, center or out extension by thickness to radius
 
-  skew?: number,             // flat ring, takes radians to rotate, so half pi makes a cylinder
+  skew?: number            // flat ring, takes radians to rotate, so half pi makes a cylinder
   side?: KreiseRingSideType  // 0, 1 or 2
 
   // radialSegments
@@ -43,8 +44,8 @@ export interface KreiseRingParameters {
   thetaLength?: number
 
   lod?: number           // defines how many subsegments for the bounding box and raycaster detection 
-  lodDisplay?: number,  // defines how many segments we render in the end. 2 means 4 squares per segment, 3 means 9, etc.
-  
+  lodDisplay?: number  // defines how many segments we render in the end. 2 means 4 squares per segment, 3 means 9, etc.
+
   geometryOrder?: 'theta' | 'phi'
   geogroupsCount?: number
 
@@ -54,7 +55,6 @@ export interface KreiseRingParameters {
 }
 
 export const defaultKreiseRingParameters: KreiseRingParameters = {
-
   name: 'KreiseRing',
 
   radius: 1,
@@ -81,13 +81,11 @@ export const defaultKreiseRingParameters: KreiseRingParameters = {
 
   material: new MeshPhongMaterial(),
   color: new Color('green')
-
 }
 
 export default class KreiseRing extends Group {
+  readonly parameters: KreiseRingParameters
 
-  private parameters: KreiseRingParameters
-  
   name: string
   material: Material
 
@@ -99,49 +97,39 @@ export default class KreiseRing extends Group {
 
     this.parameters = { ...defaultKreiseRingParameters, ...parameters }
 
+    const { thetaSegments = 16, phiSegments = 1, name = 'KreiseRing', material = new Material() } = this.parameters
+
     // Error handling
-    if (this.parameters.thetaSegments! < 3) new Error("Theta Segments need to be at least 3")
-    if (this.parameters.phiSegments! < 1) new Error("Phi Segments need to be at least 1")
+    if (thetaSegments < 3) throw new Error('Theta Segments need to be at least 3')
+    if (phiSegments < 1) throw new Error('Phi Segments need to be at least 1')
 
+    this.name = name
 
-    
-    this.name = this.parameters.name!
-    
     // use the default LOD for the bounding box
-    this.geometryBB = new KreiseRingGeometry({...this.parameters, lod: this.parameters.lod})
+    this.geometryBB = new KreiseRingGeometry({ ...this.parameters, lod: this.parameters.lod })
 
     // use the display LOD for the display geometry
-    this.geometryDP = new KreiseRingGeometry({...this.parameters, lod: this.parameters.lodDisplay})
-  
-    this.material = this.parameters.material!
+    this.geometryDP = new KreiseRingGeometry({ ...this.parameters, lod: this.parameters.lodDisplay })
 
-    //this.material = new MeshLambertMaterial({color: 'black', emissive: 'orange', wireframe: false, side: 2})
+    this.material = material
+
+    // this.material = new MeshLambertMaterial({color: 'black', emissive: 'orange', wireframe: false, side: 2})
 
     if (this.parameters.thickness === 0) {
-
       this.material = new LineBasicMaterial({color: this.parameters.color!})
-
       this.add(new Line(this.geometryBB, this.material))
       this.add(new Line(this.geometryDP, this.material))
- 
     } else {
-
       this.material = new MeshLambertMaterial({color: this.parameters.color!, wireframe: false})
       let debugMaterial = new MeshLambertMaterial({color: this.parameters.color!, wireframe: true})
 
       this.add(new Mesh(this.geometryBB, debugMaterial))
       this.add(new Mesh(this.geometryDP, this.material))
-
     }
-
-    
-
   }
-
 }
 
 export class KreiseRingGeometry extends BufferGeometry {
-  
   type: string
   parameters: KreiseRingParameters
   // buffers
@@ -152,7 +140,6 @@ export class KreiseRingGeometry extends BufferGeometry {
   uvs: number[] = []
 
   constructor (parameters: KreiseRingParameters = {}) {
-    
     super()
 
     this.type = 'KreiseRingGeometry'
@@ -211,6 +198,7 @@ export class KreiseRingGeometry extends BufferGeometry {
         if (t < Math.ceil(thetaSegmentsDisplay)) this.indices.push(t, (t+1))
 
       }
+      
 
       // close loop on full circle
       if (thetaLength == Math.PI*2) this.indices.push(thetaSegments-1, 0);
@@ -230,8 +218,8 @@ export class KreiseRingGeometry extends BufferGeometry {
     // draw mesh
     else {
 
-      let innerRadius = radius - thickness/2
-      let outerRadius = radius + thickness/2
+      let innerRadius = radius - thickness / 2
+      let outerRadius = radius + thickness / 2
 
       let prevInnerIndex: number
       let prevOuterIndex: number
@@ -242,11 +230,12 @@ export class KreiseRingGeometry extends BufferGeometry {
 
       // we want <= loops and skip vertex creation when full circle, so the last segment end is the first segment start
       for (let t = 0; t <= Math.ceil(thetaSegmentsDisplay); t++) {
-                // start at 12    + (current segment / all segments) * Math.PI*2
+        // start at 12    + (current segment / all segments) * Math.PI*2
         // full segments:
         if (thetaSegmentsDisplay - t >= 1) {
           segmentRad = thetaStart + t / thetaSegments * Math.PI*2
         }
+
         // part segment
         else {                      // use the last segment as base and add partial
           segmentRad = thetaStart + (t - 1 + (thetaSegmentsDisplay-t)) / thetaSegments * Math.PI*2
@@ -257,7 +246,6 @@ export class KreiseRingGeometry extends BufferGeometry {
 
         // we want <= loops because f.e. 5 segments are 6 points from inner to outer
         for (let p = 0; p <= phiSegments; p++) {
-
           // inner vertex
           vertex.x = (innerRadius + (p * segmentThickness)) * Math.cos(segmentRad)
           vertex.y = (innerRadius + (p * segmentThickness)) * Math.sin(segmentRad)
@@ -280,7 +268,7 @@ export class KreiseRingGeometry extends BufferGeometry {
           nextOuterIndex  = ((t+1)  * (phiSegments+1)) + (p+1)
 
           console.log(t + "/" + thetaSegmentsDisplay, p + "/" + phiSegments, this.vertices.length / 3, vertex)
-          //console.log(prevInnerIndex, prevOuterIndex, innerIndex, outerIndex, nextInnerIndex, nextOuterIndex)
+          //      console.log(prevInnerIndex, prevOuterIndex, innerIndex, outerIndex, nextInnerIndex, nextOuterIndex)
 
           if (p < phiSegments) {
 

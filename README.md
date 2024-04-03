@@ -10,7 +10,9 @@ Take a look at the brain structure of a german language speaker vs. arabic:
 
 ![Language Brain Networks](https://krei.se/img/gitReadme/Grafik_Muttersprachen_Hirn_MPI_dt.webp)
 
-That's because in arabic you have to "fill in the gaps" between words in sentences usually only made from nouns (i think) and use the speech center in unison with the spatial processing to make sense of what others say / write. Some languages write from right to left, some from left to right. Which one is correct? None or both actually... this is asking the wrong questions. 
+That's because in arabic you have to "fill in the gaps" between words in sentences made from words that share the same root sillables and use the speech center in unison with the spatial processing to make sense of what others say / write. Some languages write from right to left, some from left to right. Which one is correct? None or both actually... this is asking the wrong questions. In Romania you call different people father - depending on your location and context. Trees. Context. There is also german grammar and latin structure. How to fit these ideas in your head without going mental?
+
+Fear not - i took this walk for you.
 
 !! Warning: Using the Krei.se Choord-System in your brain WILL have you lose/alter some aspects of social life and language processing! !!
 
@@ -44,6 +46,8 @@ As a plus you have 8 different 3D quadrants to construct shapes in your head whi
 ![Tesseract](https://krei.se/img/gitReadme/8-cell.gif)
 
 Can't imagine the 8-cell? Now you can!
+
+Look even further with the 11-cell - a symmetric entity made from 11 "Mobius-Band-like twisted both inside and outside half cut dodecaeder-cells": ![Hendecachoron](https://en.wikipedia.org/wiki/11-cell)
 
 (WIP)
 

@@ -1,25 +1,28 @@
 module.exports = {
-  env: {
-    browser: true,
-    es2021: true
+  "env": {
+    "browser": true,
+    "es2021": true
   },
-  extends: 'standard-with-typescript',
-  overrides: [{
-    env: {
-      node: true
-    },
-    files: [
-      '.eslintrc.{js,cjs}'
-    ],
-    parserOptions: {
-      sourceType: 'script'
+  "extends": "standard-with-typescript",
+  "overrides": [
+    {
+      "env": {
+        "node": true
+      },
+      "files": [
+        ".eslintrc.{js,cjs}"
+      ],
+      "parserOptions": {
+        "sourceType": "script"
+      }
     }
-  }],
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module'
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
   },
-  rules: {
-    'no-multi-spaces': ['error', { ignoreEOLComments: true }]
+  "rules": {
+    "no-multi-spaces": ["error", { ignoreEOLComments: true, exceptions: { VariableDeclarator: true } }],
+    "padded-blocks": ["error", "never"]
   }
 }
