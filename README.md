@@ -12,14 +12,13 @@ Take a look at the brain structure of a german language speaker vs. arabic:
 
 That's because in arabic you have to "fill in the gaps" between words in sentences made from words that share the same root syllables and use the speech center in unison with the spatial processing to make sense of what others say / write. Some languages write from right to left, some from left to right. Which one is correct? None or both actually... this is asking the wrong questions.
 
-In Romania you call different people father - depending on your location and context.
+In Romania you call different people father, mother or boss - depending on your location and context.
 
-Trees. Context. There is also german grammar and latin structure. How to fit these ideas in your head without going mental?
-
+Trees of words. Same words meaning something else depending on context. There is also german grammar and latin structure. How to fit these ideas in your head without going mental?
 
 Fear not - i took this walk for you.
 
-!! Warning: Using the Krei.se Choord-System in your brain WILL have you lose/alter some aspects of social life and language processing! !!
+!! Warning: Using the Krei.se Choord and Graph System in your brain WILL have you lose/alter some aspects of social life and language processing! !!
 
 The normal coordinate system used in schools will have you use the right hemisphere for spatial processing / to construct shapes in the plus range of X and Y.
 
