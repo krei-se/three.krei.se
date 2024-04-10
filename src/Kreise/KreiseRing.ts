@@ -122,8 +122,13 @@ export default class KreiseRing extends Group {
       this.material = new MeshLambertMaterial({ color: color, wireframe: false })
       const debugMaterial = new MeshLambertMaterial({ color: color, wireframe: true })
 
-      this.add(new Mesh(this.geometryBB, debugMaterial))
-      this.add(new Mesh(this.geometryDP, this.material))
+      let BBMesh = new Mesh(this.geometryBB, debugMaterial)
+      BBMesh.name = this.name + "_BB"
+      let DPMesh = new Mesh(this.geometryDP, this.material)
+      DPMesh.name = this.name + "_DP"
+
+      this.add(BBMesh, DPMesh)
+
     }
   }
 }
@@ -239,9 +244,14 @@ export class KreiseRingGeometry extends BufferGeometry {
           segmentRad = thetaStart + t / thetaSegments * Math.PI * 2
         }
 
-        // part segment
+        // part or last segment
         else {                      // use the last segment as base and add partial
+          if (Math.ceil(thetaSegmentsDraw) === thetaSegmentsDraw) {
+          segmentRad = thetaStart + t / thetaSegments * Math.PI * 2
+        }
+          else {
           segmentRad = thetaStart + (t - 1 + (thetaSegmentsDraw-t)) / thetaSegments * Math.PI*2
+        }
         }
 
         let segmentThickness: number = 0
@@ -307,6 +317,8 @@ export class KreiseRingGeometry extends BufferGeometry {
           }
 
         }
+
+        this.addGroup(t * 6 * phiSegments, 6 * phiSegments)
 
       }
 

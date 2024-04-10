@@ -81,23 +81,14 @@ export default class JewelEpisode extends KreiseEpisode {
 
     this.scene.add(this.graph.CircleTest1)
     
-    
     // Part Ring Fraction Segment Test
     this.graph.CircleTest2 = new KreiseRing({ radius: 1, thickness: .2, phiSegments: 2, thetaSegments: 12, lodDisplay: 1, thetaLength: Math.PI * 1.87 })
     this.graph.CircleTest2.position.z = 0
     this.graph.CircleTest2.rotateY(-Math.PI/2)
 
-
-    this.graph.CircleTest2.geometryDP.materials.push(new MeshPhongMaterial({ color: 0x000000, shininess: 200 }))
-    this.graph.CircleTest2.geometryDP.groups[1].materialIndex = 1
-    this.graph.CircleTest2.geometryDP.groups[3].materialIndex = 1
-    this.graph.CircleTest2.geometryDP.groups[5].materialIndex = 1
-
     this.scene.add(this.graph.CircleTest2)
 
-/*
-    
-
+    /*
     this.graph.CircleTest3 = new KreiseRing({ radius: 1, thickness: 0, phiSegments: 2, thetaSegments: 12, lodDisplay: 1, thetaLength: Math.PI * 2 })
     this.graph.CircleTest3.position.z = 3
     this.graph.CircleTest3.rotateY(-Math.PI/2)
@@ -120,6 +111,7 @@ export default class JewelEpisode extends KreiseEpisode {
 
     this.scene.add(this.graph.CircleTest5)
     */
+
 
     
   }
