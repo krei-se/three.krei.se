@@ -58,12 +58,12 @@ export function getVersionDiv (): HTMLDivElement {
   vDiv.id = 'vDiv'
 
   vDiv.classList.add('applyInvertFilter')
-  vDiv.classList.add('applyFaceOut')
+  vDiv.classList.add('applyFadeOut')
   
 
   const vParagraph = document.createElement('p');
   vParagraph.style.cssText = 'vertical-align: middle;'
-  vParagraph.innerHTML = '<a href="https://github.com/krei-se/three.krei.se"><img src="/github-mark.svg" width=30 height="auto"/> Krei.se ' + import.meta.env.PACKAGE_VERSION + '</a>'
+  vParagraph.innerHTML = '<a href="https://github.com/krei-se/three.krei.se"><img src="/github-mark.svg" width="50" height="auto"/> Krei.se ' + import.meta.env.PACKAGE_VERSION + '</a>'
   
   vDiv.append(vParagraph)
   vDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; left: 1em;'
@@ -78,12 +78,12 @@ export function getSocialDiv (): HTMLDivElement {
   sDiv.id = 'sDiv'
 
   sDiv.classList.add('applyInvertFilter')
-  sDiv.classList.add('applyFaceOut')
+  sDiv.classList.add('applyFadeOut')
   
 
   const sParagraph = document.createElement('p');
   sParagraph.style.cssText = 'vertical-align: middle;'
-  sParagraph.innerHTML = '<a href="https://paypal.me/rwachler"><img src="/paypal.svg" width="30" height="auto"/></a>&nbsp;&nbsp;&nbsp;<a href="https://mastodon.social/@kreise"><img src="/mastodon.svg" width="30" height="auto"/></a>'
+  sParagraph.innerHTML = '<a href="https://paypal.me/rwachler"><img src="/paypal.svg" width="50" height="auto"/></a>&nbsp;&nbsp;&nbsp;<a href="https://mastodon.social/@kreise"><img src="/mastodon.svg" width="50" height="auto"/></a>'
 
   
   sDiv.append(sParagraph)
@@ -106,8 +106,31 @@ export function fadeoutDatenschutzAndInfoParagraphs (): void {
     
     window.setTimeout(() => {
       document.querySelectorAll('.applyFadeOut').forEach(e => e.remove())
-    }, 10000)
+    }, 60000)
 
   })
 
 }
+
+
+export function getSBSDiv (): HTMLDivElement {
+
+  let sbsDiv = document.createElement('div')
+  sbsDiv.id = 'sbsDiv'
+
+  sbsDiv.classList.add('applyInvertFilter')
+  sbsDiv.classList.add('applyFadeOut')
+  
+
+  const sbsParagraph = document.createElement('p');
+  sbsParagraph.style.cssText = 'vertical-align: middle;'
+  sbsParagraph.innerHTML = '<a href="#"><img src="/sbs.svg" width="50" height="auto"/></a>'
+
+  
+  sbsDiv.append(sbsParagraph)
+  sbsDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 50%; transform: translate(50%);'
+
+  return sbsDiv
+
+}
+

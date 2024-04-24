@@ -16,7 +16,8 @@ import {
   getPageOverlayDiv,
   fadeoutDatenschutzAndInfoParagraphs,
   getVersionDiv,
-  getSocialDiv
+  getSocialDiv,
+  getSBSDiv
 } from './htmlincludes.ts'
 // import * as Tone from 'tone'
 
@@ -44,6 +45,7 @@ document.body.removeChild(removeMeDiv)
 document.body.append(getPageOverlayDiv())
 document.body.append(getVersionDiv())
 document.body.append(getSocialDiv())
+document.body.append(getSBSDiv())
 
 setTimeout(fadeoutDatenschutzAndInfoParagraphs, 5000)
 
@@ -85,6 +87,7 @@ const cameraControls: FlyControls = new FlyControls(
   kreise.camera,
   kreise.canvas
 )
+
 cameraControls.dragToLook = true
 cameraControls.movementSpeed = 5
 cameraControls.autoForward = false

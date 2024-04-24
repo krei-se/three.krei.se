@@ -20,6 +20,7 @@ import {
   Raycaster, 
   Scene, 
   SphereGeometry, 
+  StereoCamera, 
   Vector2, 
   WebGLRenderTarget, 
   WebGLRenderer
@@ -33,7 +34,7 @@ import KreiseGraph, { ObjectType, ObjectsRecordType } from './KreiseGraph'
 export interface AutoplayOptionsInterface { camera: boolean, animation: boolean }
 export interface DebugOptionsInterface { helperObjects: boolean, helperInterface: boolean }
 
-export type CameraType = PerspectiveCamera // | StereoCamera | Camera
+export type CameraType = PerspectiveCamera | StereoCamera | Camera
 
 
 export default class Kreise extends EventDispatcher {
@@ -370,7 +371,7 @@ export class KreiseClient {
   }
 
 
-  onPointerMove = (e: MouseEvent) => { // needs to be arrow function for this. to work
+  onMousePointerMove = (e: MouseEvent) => { // needs to be arrow function for this. to work
 
     this.pointer.x = ( e.offsetX / window.innerWidth ) * 2 - 1; // from -1 to 1
     this.pointer.y = - ( e.offsetY / window.innerHeight ) * 2 + 1; // from -1 to 1
@@ -395,7 +396,7 @@ export class KreiseClient {
     if (this.clientDeviceType === 'desktop') {
 
       this.pointerSource = 'documentMouseEvent'
-      document.addEventListener('pointermove', this.onPointerMove)
+      document.addEventListener('pointermove', this.onMousePointerMove)
 
     }
 
