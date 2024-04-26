@@ -9,6 +9,7 @@ Doing 3D graphics while studying medicine / neuroscience / anatomy will make you
 Take a look at the brain structure of a german language speaker vs. arabic:
 
 ![Language Brain Networks](https://krei.se/img/gitReadme/Grafik_Muttersprachen_Hirn_MPI_dt.webp)
+© MAX-PLANCK-INSTITUT FÜR KOGNITIONS- UND NEUROWISSENSCHAFTEN (MPI CBS); DT. BEARBEITUNG: SPEKTRUM DER WISSENSCHAFT (AUSSCHNITT)
 
 [Original Article from Spektrum.de](https://www.spektrum.de/news/typisch-deutsch-verschaltet-die-muttersprache-praegt-das-gehirn/2125008)
 
