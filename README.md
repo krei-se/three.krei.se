@@ -8,8 +8,8 @@ Doing 3D graphics while studying medicine / neuroscience / anatomy will make you
 
 Take a look at the brain structure of a german language speaker vs. arabic:
 
-<!-- ![Language Brain Networks](https://krei.se/img/gitReadme/Grafik_Muttersprachen_Hirn_MPI_dt.webp) -->
-(Image removed until Copyright is cleared)
+![Language Brain Networks](https://krei.se/img/gitReadme/Grafik_Muttersprachen_Hirn_MPI_dt.webp)
+
 [Original Article from Spektrum.de](https://www.spektrum.de/news/typisch-deutsch-verschaltet-die-muttersprache-praegt-das-gehirn/2125008)
 
 That's because in arabic you have to "fill in the gaps" between words in sentences made from words that share the same root syllables and use the speech center in unison with the spatial processing to make sense of what others say / write. Some languages write from right to left, some from left to right. Which one is correct? None or both actually... this is asking the wrong questions.
