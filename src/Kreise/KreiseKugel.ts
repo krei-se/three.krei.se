@@ -18,20 +18,12 @@ import type {
   BackSide
 } from 'three'
 
-// import turboTextureImage from './textures/turbo.png'
+export type KreiseKugelSideType = typeof FrontSide | typeof BackSide | typeof DoubleSide
 
-export type KreiseRingSideType = typeof FrontSide | typeof BackSide | typeof DoubleSide
-export type KreiseRingExtendType = -1 | 0 | 1
-
-export interface KreiseRingParameters {
+export interface KreiseKugelParameters {
   name?: string
-  // this is always the radius without any thickness. We need the radius be like that so a skewed ring has expected radia
   radius?: number
 
-  thickness?: number
-  extend?: -1 | 0 | 1       // in, center or out extension by thickness to radius
-
-  skew?: number            // flat ring, takes radians to rotate, so half pi makes a cylinder
   side?: KreiseRingSideType  // 0, 1 or 2
 
   // radialSegments

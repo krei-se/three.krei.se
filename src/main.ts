@@ -17,7 +17,8 @@ import {
   fadeoutDatenschutzAndInfoParagraphs,
   getVersionDiv,
   getSocialDiv,
-  getSBSDiv
+  getSBSDiv,
+  getPayPalDiv
 } from './htmlincludes.ts'
 // import * as Tone from 'tone'
 
@@ -43,9 +44,15 @@ const removeMeDiv: HTMLDivElement =
   document.querySelector('#removeMe') ?? document.createElement('div')
 document.body.removeChild(removeMeDiv)
 document.body.append(getPageOverlayDiv())
+document.body.append(getPayPalDiv())
 document.body.append(getVersionDiv())
 document.body.append(getSocialDiv())
-document.body.append(getSBSDiv())
+
+/*
+if (kreise.client.developerMode) {
+  document.body.append(getSBSDiv())
+}
+*/
 
 setTimeout(fadeoutDatenschutzAndInfoParagraphs, 5000)
 
@@ -100,7 +107,7 @@ let ticks: number = 0
 
 let episodes: any[] = ['Intro', 'Autobahn', 'Chemnitz']
 
-if (kreise.client.developerMode) episodes = ['Jewel']
+if (kreise.client.developerMode) episodes = ['Intro']
 
 const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Math.random is inclusively 0 but never 1
 
@@ -209,6 +216,9 @@ kreise.renderer.setAnimationLoop(function () {
   }
 
   if (resizeRendererToDisplaySize(kreise.renderer)) {
+
+
+    
     kreise.updateCamera()
 
     kreise.composer.setSize(

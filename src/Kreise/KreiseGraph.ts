@@ -37,6 +37,8 @@ export type KreiseMeshesType = KreiseTorus | KreiseShaderedTorus | KlavierTorus
 export type KreiseMeshesRecordType = Record<string, KreiseMeshesType>
 
 export type ObjectType = Array<any> | string | GraphsType | LightsType | MeshesType | LightsType | HelpersType | CollisionHelpersType | KreiseMeshesType | Object3D | Fog
+
+// @TODO this is unused / deprecated
 export type ObjectsRecordType = Record<string, ObjectType>
 
 

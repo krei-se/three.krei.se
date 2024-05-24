@@ -42,7 +42,7 @@ export function getPageOverlayDiv (): HTMLDivElement {
 
   const datenschutzLink: HTMLAnchorElement = document.createElement('a')
   datenschutzLink.setAttribute('href', 'datenschutz.html')
-  datenschutzLink.innerHTML = 'Impressum · Datenschutz'
+  datenschutzLink.innerHTML = 'Kontakt · Impressum · Datenschutz'
 
   datenschutzParagraph.append(datenschutzLink)
 
@@ -51,6 +51,29 @@ export function getPageOverlayDiv (): HTMLDivElement {
 
   return pageOverlayDiv
 }
+
+
+export function getPayPalDiv (): HTMLDivElement {
+
+  let pDiv = document.createElement('div')
+  pDiv.id = 'pDiv'
+
+  pDiv.classList.add('applyInvertFilter')
+  pDiv.classList.add('applyFadeOut')
+  
+
+  const pParagraph = document.createElement('p');
+  pParagraph.style.cssText = 'vertical-align: middle;'
+  pParagraph.innerHTML = '<a href="https://paypal.me/rwachler"><img src="/paypal.svg" width="50" height="auto"/><br>F&ouml;rdern</a>'
+
+  
+  pDiv.append(pParagraph)
+  pDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; left: 2em;'
+
+  return pDiv
+
+}
+
 
 export function getVersionDiv (): HTMLDivElement {
 
@@ -63,10 +86,10 @@ export function getVersionDiv (): HTMLDivElement {
 
   const vParagraph = document.createElement('p');
   vParagraph.style.cssText = 'vertical-align: middle;'
-  vParagraph.innerHTML = '<a href="https://github.com/krei-se/three.krei.se"><img src="/github-mark.svg" width="50" height="auto"/> Krei.se ' + import.meta.env.PACKAGE_VERSION + '</a>'
+  vParagraph.innerHTML = '<a href="https://github.com/krei-se/three.krei.se"><img src="/github-mark.svg" width="50" height="auto"/><br>' + import.meta.env.PACKAGE_VERSION + '</a>'
   
   vDiv.append(vParagraph)
-  vDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; left: 1em;'
+  vDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 50%; transform: translate(50%);'
 
   return vDiv
 
@@ -83,11 +106,11 @@ export function getSocialDiv (): HTMLDivElement {
 
   const sParagraph = document.createElement('p');
   sParagraph.style.cssText = 'vertical-align: middle;'
-  sParagraph.innerHTML = '<a href="https://paypal.me/rwachler"><img src="/paypal.svg" width="50" height="auto"/></a>&nbsp;&nbsp;&nbsp;<a href="https://mastodon.social/@kreise"><img src="/mastodon.svg" width="50" height="auto"/></a>'
+  sParagraph.innerHTML = '<a href="https://mastodon.social/@kreise"><img src="/mastodon.svg" width="50" height="auto"/><br>Blog</a>'
 
   
   sDiv.append(sParagraph)
-  sDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 1em;'
+  sDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 2em;'
 
   return sDiv
 
@@ -101,12 +124,12 @@ export function fadeoutDatenschutzAndInfoParagraphs (): void {
 
   applyFadeOutElements.forEach((element: HTMLElement) => {
 
-    element.style.transition = 'opacity 60s'
+    element.style.transition = 'opacity 300s'
     element.style.opacity = '0'
     
     window.setTimeout(() => {
       document.querySelectorAll('.applyFadeOut').forEach(e => e.remove())
-    }, 60000)
+    }, 300000)
 
   })
 

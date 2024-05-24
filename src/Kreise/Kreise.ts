@@ -4,6 +4,7 @@ import type { GetSunPositionResult, GetTimesResult } from 'suncalc'
 import { 
   AmbientLight, 
   AxesHelper, 
+  Camera, 
   Color, 
   EventDispatcher, 
   GridHelper, 
@@ -29,12 +30,12 @@ import {
 import { toggleFullScreen } from '../helpers/fullscreen'
 import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 import KreiseZeit from './KreiseZeit'
-import KreiseGraph, { ObjectType, ObjectsRecordType } from './KreiseGraph'
+import KreiseGraph from './KreiseGraph'
 
 export interface AutoplayOptionsInterface { camera: boolean, animation: boolean }
 export interface DebugOptionsInterface { helperObjects: boolean, helperInterface: boolean }
 
-export type CameraType = PerspectiveCamera | StereoCamera | Camera
+export type CameraType = PerspectiveCamera | StereoCamera | KreiseCamera
 
 
 export default class Kreise extends EventDispatcher {
@@ -321,6 +322,12 @@ export default class Kreise extends EventDispatcher {
     this.scene.background = new Color('rgb(' + this.brightness + ', ' + this.brightness + ', ' + this.brightness + ')')
     
   }
+
+}
+
+export class KreiseCamera extends Camera {
+
+
 
 }
 

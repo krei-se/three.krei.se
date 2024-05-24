@@ -125,7 +125,7 @@ export default class IntroEpisode extends KreiseEpisode {
     let rate: number = 0
     for (i = 0; i <= TorusOne.tubularSegments; i++) {
       // from 0 to 1
-      rate = (i / 96) // anything 48
+      rate = (i / 48) // anything 48
       rate = Math.sin(rate * Math.PI * 2) + Math.cos(rate * Math.PI * 2)
       TorusOne.pulseTubularLine(i, rate * 0.1)
     }

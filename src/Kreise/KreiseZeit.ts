@@ -63,5 +63,6 @@ export class KreiseTakt {
   bpm: number = 120 // normaler 4/4 Takt. Das sind 30 Takte pro Minute (0,5)
   offset: number = 0
   
+  
 
 }
