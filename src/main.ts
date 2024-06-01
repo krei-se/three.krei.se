@@ -18,7 +18,9 @@ import {
   getVersionDiv,
   getSocialDiv,
   getSBSDiv,
-  getPayPalDiv
+  getServicesDiv,
+  getPayPalDiv,
+  getServicesOverlayDiv
 } from './htmlincludes.ts'
 // import * as Tone from 'tone'
 
@@ -46,7 +48,12 @@ document.body.removeChild(removeMeDiv)
 document.body.append(getPageOverlayDiv())
 document.body.append(getPayPalDiv())
 document.body.append(getVersionDiv())
+document.body.append(getServicesDiv())
 document.body.append(getSocialDiv())
+
+document.body.append(getServicesOverlayDiv())
+
+
 
 /*
 if (kreise.client.developerMode) {
@@ -107,7 +114,7 @@ let ticks: number = 0
 
 let episodes: any[] = ['Intro', 'Autobahn', 'Chemnitz']
 
-if (kreise.client.developerMode) episodes = ['Intro']
+if (kreise.client.developerMode) episodes = ['Autobahn']
 
 const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Math.random is inclusively 0 but never 1
 

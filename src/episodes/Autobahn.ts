@@ -428,12 +428,12 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     let selectedAutos: number[] = []
     let toneMap: { [index: number]: any } = {
-      [-3]: 'D3', // E2
-      [-2]: 'G3', // A2
-      [-1]: 'A3', // D3
-      [1]: 'B3', // G3
-      [2]: 'D4', // B3
-      [3]: 'G4' // E4
+      [-3]: 'C3', // E2
+      [-2]: 'D3', // A2
+      [-1]: 'E3', // D3
+      [1]: 'F3', // G3
+      [2]: 'G3', // B3
+      [3]: 'B3' // E4
     }
 
     if (Object.keys(this.kreise.intersects).length !== 0) {

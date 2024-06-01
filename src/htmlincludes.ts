@@ -14,6 +14,35 @@ export function getPageOverlayDiv (): HTMLDivElement {
   logoLink.setAttribute('href', 'https://krei.se')
 
   introDiv.append(logoLink)
+  introDiv.onmouseover = () => {
+
+    const applyFadeOutElements = document.querySelectorAll('.applyFadeOut') as NodeListOf<HTMLElement>
+
+    applyFadeOutElements.forEach((element: HTMLElement) => {
+  
+      if (parseFloat(element.style.opacity) < 1) {
+
+      element.style.opacity = '1'
+      element.style.transition = 'opacity 2s'
+      
+      /*
+      window.setTimeout(() => {
+        document.querySelectorAll('.applyFadeOut').forEach(e => e.remove())
+      }, 300000)
+      */
+  
+      }
+
+      else {
+
+        element.style.transition = 'opacity 300s'
+        element.style.opacity = '0'
+
+      }
+
+    })
+
+  }
 
   const logoImg: HTMLImageElement = document.createElement('img')
   logoImg.setAttribute('src', kreiseLogo)
@@ -89,9 +118,29 @@ export function getVersionDiv (): HTMLDivElement {
   vParagraph.innerHTML = '<a href="https://github.com/krei-se/three.krei.se"><img src="/github-mark.svg" width="50" height="auto"/><br>' + import.meta.env.PACKAGE_VERSION + '</a>'
   
   vDiv.append(vParagraph)
-  vDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 50%; transform: translate(50%);'
+  vDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; left: 33%; transform: translate(50%);'
 
   return vDiv
+
+}
+
+export function getServicesDiv(): HTMLDivElement {
+
+  let servicesDiv = document.createElement('div')
+  servicesDiv.id = 'servicesDiv'
+
+  servicesDiv.classList.add('applyInvertFilter')
+  servicesDiv.classList.add('applyFadeOut')
+  
+
+  const servicesParagraph = document.createElement('p');
+  servicesParagraph.style.cssText = 'vertical-align: middle;'
+  servicesParagraph.innerHTML = '<a href="#"><img src="/services.svg" width="50" height="auto"/><br>Leistungen</a>'
+  
+  servicesDiv.append(servicesParagraph)
+  servicesDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 33%; transform: translate(50%);'
+
+  return servicesDiv
 
 }
 
@@ -112,9 +161,34 @@ export function getSocialDiv (): HTMLDivElement {
   sDiv.append(sParagraph)
   sDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 2em;'
 
+  sDiv.onclick = () => {
+
+  }
+
   return sDiv
 
 }
+
+export function getServicesOverlayDiv (): HTMLDivElement {
+
+  let servicesOverlayDiv = document.createElement('div')
+  servicesOverlayDiv.id = 'servicesOverlayDiv'
+
+  servicesOverlayDiv.classList.add('applyInvertFilter')
+  
+
+
+  const servicesOverlayParagraphHeader = document.createElement('h3');
+  // servicesOverlayParagraphHeader.style.cssText = 'vertical-align: middle;'
+  servicesOverlayParagraphHeader.innerHTML = 'Leistungen'
+  
+  servicesOverlayDiv.append(servicesOverlayParagraphHeader)
+  servicesOverlayDiv.style.cssText = 'vertical-align: middle; opacity: 0; font-size: 11pt; position: fixed; bottom: 5em; top: 10em; right: 3em; left: 3em; background-color: rbga(0.7,0.7,0.7,0.7)'
+
+  return servicesOverlayDiv
+
+}
+
 
 
 
@@ -124,12 +198,29 @@ export function fadeoutDatenschutzAndInfoParagraphs (): void {
 
   applyFadeOutElements.forEach((element: HTMLElement) => {
 
-    element.style.transition = 'opacity 300s'
-    element.style.opacity = '0'
+
+    element.style.transition = 'opacity 5s'
+    element.style.opacity = '1'
     
+    /*
     window.setTimeout(() => {
       document.querySelectorAll('.applyFadeOut').forEach(e => e.remove())
     }, 300000)
+    */
+
+  })
+
+  applyFadeOutElements.forEach((element: HTMLElement) => {
+
+
+    element.style.transition = 'opacity 300s'
+    element.style.opacity = '0'
+    
+    /*
+    window.setTimeout(() => {
+      document.querySelectorAll('.applyFadeOut').forEach(e => e.remove())
+    }, 300000)
+    */
 
   })
 

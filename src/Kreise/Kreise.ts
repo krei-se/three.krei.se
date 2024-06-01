@@ -31,6 +31,7 @@ import { toggleFullScreen } from '../helpers/fullscreen'
 import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 import KreiseZeit from './KreiseZeit'
 import KreiseGraph from './KreiseGraph'
+import KreiseRing from './KreiseRing'
 
 export interface AutoplayOptionsInterface { camera: boolean, animation: boolean }
 export interface DebugOptionsInterface { helperObjects: boolean, helperInterface: boolean }
