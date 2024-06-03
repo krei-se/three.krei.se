@@ -203,15 +203,19 @@ export function getServicesOverlayDiv (): HTMLDivElement {
     <h3>Leistungen</h3>
     Alle Leistungen erfolgen als Freiberufler
     <h4>Informationstechnologie</h4>
+    · Bau vollintegrierter Systeme<br>
     · Einrichtung ergonomischer Arbeitspl&auml;tze<br>
     · Absicherung Ihrer IT auf Netzwerkebene<br>
     · Automatische Backups<br>
-    · OpenSource Heimautomatisierung<br><br>
+    · OpenSource Heimautomatisierung<br>
+    <br>
+    Alle Leistungen beinhalten Weiterbildung<br>
+    <br>
     <a href="mailto:auftrag@krei.se">Mail</a>
     `
   
   servicesOverlayDiv.append(servicesOverlayParagraphHeader)
-  servicesOverlayDiv.style.cssText = 'vertical-align: middle; transition: opacity 3s; visibility: hidden; font-size: 11pt; font-weight: 300; position: fixed; bottom: 5em; top: 10em; right: 3em; left: 3em; background-color: rbga(192,192,192,0.7)'
+  servicesOverlayDiv.style.cssText = 'vertical-align: middle; transition: opacity 3s; visibility: hidden; font-size: 11pt; font-weight: 300; position: fixed; top: 50%; right: 50%; width: 50em; height: 30em; transform: translate(50%,-50%); background-color: rgba(192,192,192,0.8)'
 
   return servicesOverlayDiv
 

@@ -433,7 +433,7 @@ export default class AutobahnEpisode extends KreiseEpisode {
       [-1]: 'E3', // D3
       [1]: 'F3', // G3
       [2]: 'G3', // B3
-      [3]: 'B3' // E4
+      [3]: 'A3' // E4
     }
 
     if (Object.keys(this.kreise.intersects).length !== 0) {
