@@ -158,22 +158,22 @@ export default class ChemnitzEpisode extends KreiseEpisode {
             
       if (ticks > 0 && ticks < 30000) {
           // 0 to 1               PI is half a rotation, so quarter rotation is PI/2, subtract PI/2 from initial rotation
-      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 0) / 30000) * (Math.PI/2)) - (Math.PI/2)
+      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 0) / 30000) * (-Math.PI/2)) - (Math.PI/2)
       }
 
       if (ticks > 60000 && ticks < 90000) {
               // 0 to 1                PI is half rotation in rad, so quarter rotation is PI/2, current rotation is 0 rad
-      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 60000) / 30000) * (Math.PI/2))
+      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 60000) / 30000) * (-Math.PI/2))
       }
 
       if (ticks > 120000 && ticks < 150000) {
                 // 0 to 1               PI is half a rotation, so quarter rotation is PI/2, add PI/2 from previous rotation
-      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 120000) / 30000) * (Math.PI/2)) + (Math.PI/2)
+      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 120000) / 30000) * (-Math.PI/2)) + (Math.PI/2)
       }
 
       if (ticks > 180000 && ticks < 210000) {
         // 0 to 1                PI is half rotation in rad, so quarter rotation is PI/2, , ends in + half PI ?
-      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 180000) / 30000) * (Math.PI/2)) + (Math.PI)
+      this.graph.kreiseMeshes.Lulatsch.rotation.y = (((ticks - 180000) / 30000) * (-Math.PI/2)) + (Math.PI)
       }
 
       this.graph.lights.pointLight.position.x = 10 * Math.sin((ticks / 2000))

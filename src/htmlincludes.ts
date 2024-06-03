@@ -35,7 +35,7 @@ export function getPageOverlayDiv (): HTMLDivElement {
 
       else {
 
-        element.style.transition = 'opacity 300s'
+        element.style.transition = 'opacity 600s'
         element.style.opacity = '0'
 
       }
@@ -140,6 +140,25 @@ export function getServicesDiv(): HTMLDivElement {
   servicesDiv.append(servicesParagraph)
   servicesDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 33%; transform: translate(50%);'
 
+  servicesDiv.onclick = () => {
+    let servicesOverlayDiv = document.querySelector('#servicesOverlayDiv') as HTMLDivElement ?? document.createElement('div')
+    
+    if (servicesOverlayDiv.style.visibility === 'hidden') {
+      servicesOverlayDiv.style.visibility = 'visible'
+      servicesOverlayDiv.style.transition = 'opacity 3s'
+      servicesOverlayDiv.style.opacity = '1'
+      
+
+    }
+    else {
+      servicesOverlayDiv.style.opacity = '0'
+      // servicesOverlayDiv.style.transition = 'opacity 3s'
+      window.setTimeout(() => { servicesOverlayDiv.style.visibility = 'hidden' }, 3000)
+
+    }
+    console.log(servicesOverlayDiv)
+  }
+
   return servicesDiv
 
 }
@@ -178,12 +197,21 @@ export function getServicesOverlayDiv (): HTMLDivElement {
   
 
 
-  const servicesOverlayParagraphHeader = document.createElement('h3');
+  const servicesOverlayParagraphHeader = document.createElement('p');
   // servicesOverlayParagraphHeader.style.cssText = 'vertical-align: middle;'
-  servicesOverlayParagraphHeader.innerHTML = 'Leistungen'
+  servicesOverlayParagraphHeader.innerHTML = `
+    <h3>Leistungen</h3>
+    Alle Leistungen erfolgen als Freiberufler
+    <h4>Informationstechnologie</h4>
+    · Einrichtung ergonomischer Arbeitspl&auml;tze<br>
+    · Absicherung Ihrer IT auf Netzwerkebene<br>
+    · Automatische Backups<br>
+    · OpenSource Heimautomatisierung<br><br>
+    <a href="mailto:auftrag@krei.se">Mail</a>
+    `
   
   servicesOverlayDiv.append(servicesOverlayParagraphHeader)
-  servicesOverlayDiv.style.cssText = 'vertical-align: middle; opacity: 0; font-size: 11pt; position: fixed; bottom: 5em; top: 10em; right: 3em; left: 3em; background-color: rbga(0.7,0.7,0.7,0.7)'
+  servicesOverlayDiv.style.cssText = 'vertical-align: middle; transition: opacity 3s; visibility: hidden; font-size: 11pt; font-weight: 300; position: fixed; bottom: 5em; top: 10em; right: 3em; left: 3em; background-color: rbga(192,192,192,0.7)'
 
   return servicesOverlayDiv
 
@@ -213,7 +241,7 @@ export function fadeoutDatenschutzAndInfoParagraphs (): void {
   applyFadeOutElements.forEach((element: HTMLElement) => {
 
 
-    element.style.transition = 'opacity 300s'
+    element.style.transition = 'opacity 600s'
     element.style.opacity = '0'
     
     /*

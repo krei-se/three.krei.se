@@ -60,6 +60,11 @@ export default class PlayGroundEpisode extends KreiseEpisode {
 
   load (): void { // its stored in this.scene, get it from there
   
+    
+
+
+    /*
+
     this.kreise.camera.fov = 90
     this.kreise.camera.position.set(7,0,0)
     this.kreise.camera.lookAt(0,0,0)
@@ -93,10 +98,7 @@ export default class PlayGroundEpisode extends KreiseEpisode {
     this.graph.CircleTest2.geometryDP.groups[3].materialIndex = 1
     this.graph.CircleTest2.geometryDP.groups[5].materialIndex = 1
 
-    this.scene.add(this.graph.CircleTest2)
-
-/*
-    
+    this.scene.add(this.graph.CircleTest2)    
 
     this.graph.CircleTest3 = new KreiseRing({ radius: 1, thickness: 0, phiSegments: 2, thetaSegments: 12, lodDisplay: 1, thetaLength: Math.PI * 2 })
     this.graph.CircleTest3.position.z = 3
