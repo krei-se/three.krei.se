@@ -44,8 +44,8 @@ export default class IntroEpisode extends KreiseEpisode {
 
     // Controls
     this.keydown = function (e: KeyboardEvent) {
-      switch (e.code) {
-        case 'KeyI':
+      switch (e.key) {
+        case 'i':
           if (this.kreise.client.developerMode) {
             this.graph.meshes.flyCurveMesh.visible = !this.graph.meshes.flyCurveMesh.visible
           }

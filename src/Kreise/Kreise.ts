@@ -152,29 +152,46 @@ export default class Kreise extends EventDispatcher {
 
     // Main Controls
     this.keydown = function (e: KeyboardEvent) {
-      switch (e.code) {
-          case 'KeyI':
-            if (this.client.developerMode) {
-              this.switchHelpers()
-            }
-            break
-          case 'KeyO': // usually for autoplay camera, defined in KreiseEpisode
-            if (this.client.developerMode) {
-              this.autoplay.camera = !this.autoplay.camera
-              this.graph.helpers.cameraEyeHelper.visible = !this.graph.helpers.cameraEyeHelper.visible;
-            }
-            break
-          case 'KeyP':
-            if (this.client.developerMode) {
-              this.autoplay.animation = !this.autoplay.animation
-            }
-            break    
-          case 'KeyM':
-            this.updateBrightness(this.brightness + 10)
-            break
-          case 'KeyN':
-            this.updateBrightness(this.brightness - 10)
-            break    
+      
+      if (this.client.developerMode) {
+        console.log(e.key)
+      }
+
+      switch (e.key) {
+        case 'i':
+          if (this.client.developerMode) {
+            this.switchHelpers()
+          }
+        break
+        case 'o': // usually for autoplay camera, defined in KreiseEpisode
+        if (this.client.developerMode) {
+          this.autoplay.camera = !this.autoplay.camera
+          this.graph.helpers.cameraEyeHelper.visible = !this.graph.helpers.cameraEyeHelper.visible;
+        }
+        break
+        case 'p':
+        if (this.client.developerMode) {
+          this.autoplay.animation = !this.autoplay.animation
+        }
+        break    
+        case 'm':
+          this.updateBrightness(this.brightness + 10)
+        break
+        case 'n':
+          this.updateBrightness(this.brightness - 10)
+        break    
+        case '+':
+          if (this.client.developerMode) {
+            this.client.timeScale += 1000
+          console.log(this.client.timeScale)
+          }
+        break
+        case '-':
+          if (this.client.developerMode) {
+            this.client.timeScale -= 1000
+            console.log(this.client.timeScale)
+          }
+        break
       }
     }
 
@@ -338,6 +355,7 @@ export class KreiseClient {
   hasGamepad: boolean
   orientation: string
   developerMode: boolean
+  timeScale: number
   kreise: Kreise
   raycaster: Raycaster = new Raycaster()
   pointer: Vector2 = new Vector2()      // normalized position from -1 to 1
@@ -353,6 +371,7 @@ export class KreiseClient {
     this.hasGyro = false
     this.hasGamepad = false
     this.developerMode = import.meta.env.DEV
+    this.timeScale = 0
 
     if (this.clientDeviceType === 'desktop') {
       window.addEventListener('dblclick', (e: MouseEvent) => {

@@ -71,8 +71,8 @@ export default class AutobahnEpisode extends KreiseEpisode {
 
     // Controls
     this.keydown = (e: KeyboardEvent) => {
-      switch (e.code) {
-        case 'KeyO':
+      switch (e.key) {
+        case 'o':
           if (this.kreise.client.developerMode) {
             if (this.kreise.autoplay.camera) {
               this.camera.position.set(0, -16.5, 0)

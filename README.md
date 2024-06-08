@@ -61,6 +61,17 @@ Look even further with the 11-cell - a symmetric entity made from 11 "Mobius-Ban
 
 (WIP)
 
+## KreiseRing object
+
+KreiseRing enables you to construct optimized Ring-Structures with no extra vertex spared.
+Constructing a full circle has no seam, circle-parts are perfect up to 15 decimal points
+
+![Tesseract](https://krei.se/img/gitReadme/KreiseRing.png)
+
+
+(WIP)
+
+
 ## KreiseGraph structure
 
 Necessity is the mother of invention.

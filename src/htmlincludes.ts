@@ -97,7 +97,7 @@ export function getPayPalDiv (): HTMLDivElement {
 
   
   pDiv.append(pParagraph)
-  pDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; left: 2em;'
+  pDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; left: 20%; transform: translate(-50%);'
 
   return pDiv
 
@@ -118,7 +118,7 @@ export function getVersionDiv (): HTMLDivElement {
   vParagraph.innerHTML = '<a href="https://github.com/krei-se/three.krei.se"><img src="/github-mark.svg" width="50" height="auto"/><br>' + import.meta.env.PACKAGE_VERSION + '</a>'
   
   vDiv.append(vParagraph)
-  vDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; left: 33%; transform: translate(50%);'
+  vDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; left: 40%; transform: translate(-50%);'
 
   return vDiv
 
@@ -138,7 +138,7 @@ export function getServicesDiv(): HTMLDivElement {
   servicesParagraph.innerHTML = '<a href="#"><img src="/services.svg" width="50" height="auto"/><br>Leistungen</a>'
   
   servicesDiv.append(servicesParagraph)
-  servicesDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 33%; transform: translate(50%);'
+  servicesDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; left: 60%; transform: translate(-50%);'
 
   servicesDiv.onclick = () => {
     let servicesOverlayDiv = document.querySelector('#servicesOverlayDiv') as HTMLDivElement ?? document.createElement('div')
@@ -178,7 +178,7 @@ export function getSocialDiv (): HTMLDivElement {
 
   
   sDiv.append(sParagraph)
-  sDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; right: 2em;'
+  sDiv.style.cssText = 'vertical-align: middle; font-size: 10pt; position: fixed; bottom: 0; left: 80%;  transform: translate(-50%);'
 
   sDiv.onclick = () => {
 
@@ -201,21 +201,20 @@ export function getServicesOverlayDiv (): HTMLDivElement {
   // servicesOverlayParagraphHeader.style.cssText = 'vertical-align: middle;'
   servicesOverlayParagraphHeader.innerHTML = `
     <h3>Leistungen</h3>
-    Alle Leistungen erfolgen als Freiberufler
-    <h4>Informationstechnologie</h4>
-    · Bau vollintegrierter Systeme<br>
-    · Einrichtung ergonomischer Arbeitspl&auml;tze<br>
-    · Absicherung Ihrer IT auf Netzwerkebene<br>
-    · Automatische Backups<br>
-    · OpenSource Heimautomatisierung<br>
+    Alle Leistungen erfolgen als Freiberufler<br>
+    und beinhalten Weiterbildung
+    <h4>Vollintegrierte Systemarchitektur</h4>
+    · Programmierung in geeigneter Sprache ·<br>
+    · Errichtung ergonomischer Arbeitspl&auml;tze ·<br>
+    · Absicherung Ihrer IT auf Netzwerkebene ·<br>
+    · Automatische Backups offsite / cloudfrei ·<br>
+    · OpenSource Heimautomatisierung ·<br>
     <br>
-    Alle Leistungen beinhalten Weiterbildung<br>
-    <br>
-    <a href="mailto:auftrag@krei.se">Mail</a>
+    <a href="mailto:angebot@krei.se?subject=Angebotsanfrage&body=Bitte%20bedenken%20und%20nutzen%20Sie%20f%C3%BCr%20ein%20klares%20Angebot%20das%20S.I.E.-Prinzip%3A%0D%0A%0D%0ASoll-Zustand%3A%0D%0A%0D%0A-%20Welche%20Infrastruktur%20und%20Dienste%20sollen%20aufgebaut%20werden%3F%0D%0A-%20Welche%20Verbesserungen%20erhoffen%20Sie%20sich%3F%0D%0A-%20Wo%20haben%20Sie%20bereits%20mehrfach%20erfolglos%20Optimierungen%20angestrebt%3F%0D%0A%0D%0A...%0D%0A%0D%0AIst-Zustand%3A%0D%0A%0D%0A-%20Welche%20Hardware%20ist%20vorhanden%3F%0D%0A-%20Dienste%20und%20laufende%20Vertr%C3%A4ge%3F%0D%0A-%20Personal%3F%0D%0A-%20R%C3%A4umlichkeiten%3F%0D%0A%0D%0A...%0D%0A%0D%0AEnergiehaushalt%3A%0D%0A%0D%0A-%20Wieviel%20Zeit%20und%20Geld%20m%C3%B6chten%20Sie%20daf%C3%BCr%20ausgeben%3F%0D%0A-%20Welche%20Wartungsintervalle%20k%C3%B6nnen%20Sie%20tolerieren%3F%0D%0A%0D%0A...%0D%0A%0D%0ASie%20erhalten%20ein%20unverbindliches%20Angebot%20binnen%2024%20Stunden.">Angebot anfordern</a>
     `
   
   servicesOverlayDiv.append(servicesOverlayParagraphHeader)
-  servicesOverlayDiv.style.cssText = 'vertical-align: middle; transition: opacity 3s; visibility: hidden; font-size: 11pt; font-weight: 300; position: fixed; top: 50%; right: 50%; width: 50em; height: 30em; transform: translate(50%,-50%); background-color: rgba(192,192,192,0.8)'
+  servicesOverlayDiv.style.cssText = 'vertical-align: middle; transition: opacity 3s; visibility: hidden; font-size: 11pt; font-weight: 300; position: fixed; top: 50%; right: 50%; width: 50em; height: 26em; transform: translate(50%,-50%); background-color: rgba(192,192,192,0.8)'
 
   return servicesOverlayDiv
 

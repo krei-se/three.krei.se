@@ -22,9 +22,10 @@ export type KreiseKugelSideType = typeof FrontSide | typeof BackSide | typeof Do
 
 export interface KreiseKugelParameters {
   name?: string
+
   radius?: number
 
-  side?: KreiseRingSideType  // 0, 1 or 2
+  side?: KreiseKugelSideType  // 0, 1 or 2
 
   // radialSegments
   thetaSegments?: number
@@ -45,8 +46,8 @@ export interface KreiseKugelParameters {
 
 }
 
-export const defaultKreiseRingParameters: KreiseRingParameters = {
-  name: 'KreiseRing',
+export const defaultKreiseKugelParameters: KreiseKugelParameters = {
+  name: 'KreiseKugel',
 
   radius: 1,
 
@@ -74,8 +75,8 @@ export const defaultKreiseRingParameters: KreiseRingParameters = {
   color: new Color('green')
 }
 
-export default class KreiseRing extends Group {
-  readonly parameters: KreiseRingParameters
+export default class KreiseKugel extends Group {
+  readonly parameters: KreiseKugelParameters
 
   name: string
   material: Material
@@ -83,12 +84,12 @@ export default class KreiseRing extends Group {
   geometryBB: BufferGeometry
   geometryDP: BufferGeometry
 
-  constructor (parameters: KreiseRingParameters = {}) {
+  constructor (parameters: KreiseKugelParameters = {}) {
     super()
 
-    this.parameters = { ...defaultKreiseRingParameters, ...parameters }
+    this.parameters = { ...defaultKreiseKugelParameters, ...parameters }
 
-    const { thetaSegments = 16, phiSegments = 1, name = 'KreiseRing', material = new Material(), color = new Color('green') } = this.parameters
+    const { thetaSegments = 16, phiSegments = 1, name = 'KreiseKugel', material = new Material(), color = new Color('green') } = this.parameters
 
     // Error handling
     if (thetaSegments < 3) throw new Error('Theta Segments need to be at least 3')
@@ -97,10 +98,10 @@ export default class KreiseRing extends Group {
     this.name = name
 
     // use the default LOD for the bounding box
-    this.geometryBB = new KreiseRingGeometry({ ...this.parameters, lod: this.parameters.lod })
+    this.geometryBB = new KreiseKugelGeometry({ ...this.parameters, lod: this.parameters.lod })
 
     // use the display LOD for the display geometry
-    this.geometryDP = new KreiseRingGeometry({ ...this.parameters, lod: this.parameters.lodDisplay })
+    this.geometryDP = new KreiseKugelGeometry({ ...this.parameters, lod: this.parameters.lodDisplay })
 
     this.material = material
 
@@ -125,9 +126,9 @@ export default class KreiseRing extends Group {
   }
 }
 
-export class KreiseRingGeometry extends BufferGeometry {7
+export class KreiseKugelGeometry extends BufferGeometry {7
   type: string
-  parameters: KreiseRingParameters
+  parameters: KreiseKugelParameters
   // buffers
 
   indices: number[] = []
@@ -135,10 +136,10 @@ export class KreiseRingGeometry extends BufferGeometry {7
   normals: number[] = []
   uvs: number[] = []
 
-  constructor (parameters: KreiseRingParameters = {}) {
+  constructor (parameters: KreiseKugelParameters = {}) {
     super()
 
-    this.type = 'KreiseRingGeometry'
+    this.type = 'KreiseKugelGeometry'
 
     this.parameters = parameters
 
@@ -331,7 +332,7 @@ export class KreiseRingGeometry extends BufferGeometry {7
     return this
   }
 
-  static fromJSON (data: any): KreiseRingGeometry {
-    return new KreiseRingGeometry(data)
+  static fromJSON (data: any): KreiseKugelGeometry {
+    return new KreiseKugelGeometry(data)
   }
 }

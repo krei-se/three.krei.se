@@ -114,7 +114,7 @@ let ticks: number = 0
 
 let episodes: any[] = ['Intro', 'Autobahn', 'Chemnitz']
 
-if (kreise.client.developerMode) episodes = ['Chemnitz']
+//if (kreise.client.developerMode) episodes = ['Chemnitz']
 
 const EpisodeRand = episodes[Math.floor(Math.random() * episodes.length)] // Math.random is inclusively 0 but never 1
 
@@ -165,6 +165,7 @@ kreise.renderer.setAnimationLoop(function () {
 
   // remember that ticks is a float
   ticks += timeDelta * 1000
+  if (kreise.client.developerMode) ticks += timeDelta * kreise.client.timeScale
 
   // Crons
 
